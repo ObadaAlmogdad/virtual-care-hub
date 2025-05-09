@@ -11,14 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('doctors', function (Blueprint $table) {
+        Schema::create('bank_accounts', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained();
-            $table->string('bio');
-            $table->string('license');
-            $table->string('yearOfExper');
-            $table->string('activatePoint');
+            $table->unsignedBigInteger('user_id');
+            $table->string('bank_name');
+            $table->string('account_number');
+            $table->string('iban');
             $table->timestamps();
+
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 
@@ -27,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('doctors');
+        Schema::dropIfExists('bank_accounts');
     }
 };

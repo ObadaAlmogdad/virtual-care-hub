@@ -7,10 +7,11 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
+use App\Models\User;
 
 class UserService
 {
-    protected $userRepository;
+    protected UserRepositoryInterface $userRepository;
 
     public function __construct(UserRepositoryInterface $userRepository)
     {
@@ -27,25 +28,27 @@ class UserService
         return $this->userRepository->findById($id);
     }
 
-    public function createUser(array $data)
+    public function register(array $data, $role): User
     {
         $validator = Validator::make($data, [
             'fullName' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:6',
             'phoneNumber' => 'required|string|min:6',
-            'photoPath' => 'required|string',
-            'address' => 'required'
+            'address' => 'required',
+            'birthday' => 'required',
+            'gender' => 'required',
         ]);
 
         if ($validator->fails()) {
-            return ['success' => false, 'errors' => $validator->errors()];
+            throw new ValidationException($validator);
         }
 
         $data['password'] = Hash::make($data['password']);
-        $user = $this->userRepository->create($data);
+        $data['role'] = $role;
+        $data['isVerified'] = "false";
 
-        return ['success' => true, 'user' => $user];
+        return $this->userRepository->create($data);
     }
 
     public function updateUser($id, array $data)
@@ -81,7 +84,6 @@ class UserService
         return Auth::user();
     }
 
-
     public function login(array $data)
     {
         $user = $this->userRepository->findByEmail($data['email']);
@@ -95,7 +97,17 @@ class UserService
         $token = $user->createToken('auth_token')->plainTextToken;
         return [
             'token' => $token,
-            'user' => $user,  
+            'user' => $user,
         ];
     }
-} 
+
+    public function findByEmail(string $email): ?User
+    {
+        return $this->userRepository->findByEmail($email);
+    }
+
+    public function findById($id): ?User
+    {
+        return $this->userRepository->findById($id);
+    }
+}

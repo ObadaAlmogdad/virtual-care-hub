@@ -7,6 +7,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use App\Models\Document;
+use App\Models\BankAccount;
+use App\Models\ActivationRequest;
 
 class User extends Authenticatable
 {
@@ -24,4 +27,19 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    public function documents()
+    {
+        return $this->hasMany(Document::class);
+    }
+
+    public function bankAccount()
+    {
+        return $this->belongsTo(BankAccount::class, 'bank_account_id');
+    }
+
+    public function activationRequests()
+    {
+        return $this->hasMany(ActivationRequest::class);
+    }
 }

@@ -21,35 +21,29 @@ class UserRepository implements UserRepositoryInterface
         return $this->model->all();
     }
 
-    public function findById($id)
+    public function findById($id): ?User
     {
-        return $this->model->findOrFail($id);
+        return User::find($id);
     }
 
-    public function findByEmail($email)
+    public function findByEmail(string $email): ?User
     {
-        return Cache::remember("user:{$email}", 3600, function () use ($email) {
-            return User::where('email', $email)->first();
-        });
+        return User::where('email', $email)->first();
     }
 
-    public function create(array $data)
+    public function create(array $data): User
     {
-        return $this->model->create($data);
+        return User::create($data);
     }
 
-    public function update($id, array $data)
+    public function update(User $user, array $data): bool
     {
-        $user = $this->findById($id);
-        $user->update($data);
-        return $user;
+        return $user->update($data);
     }
 
-    public function delete($id)
+    public function delete(User $user): bool
     {
-        $user = $this->findById($id);
-        $user->delete();
-        return true;
+        return $user->delete();
     }
 
     public function createUser(array $data): User

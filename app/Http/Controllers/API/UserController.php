@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Services\UserService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\ValidationException;
 
 class UserController extends Controller
 {
@@ -22,18 +23,34 @@ class UserController extends Controller
         return response()->json(['users' => $users], 200);
     }
 
-    /**
-     * Store a newly created user in storage.
-     */
     public function register(Request $request)
     {
-        $result = $this->userService->createUser($request->all());
-
-        if (!$result['success']) {
-            return response()->json(['errors' => $result['errors']], 422);
+        try {
+            $user = $this->userService->register($request->all(), "Patient");
+            return response()->json(['user' => $user], 201);
+        } catch (ValidationException $e) {
+            return response()->json(['errors' => $e->errors()], 422);
         }
+    }
 
-        return response()->json(['user' => $result['user']], 201);
+    public function registerDuctor(Request $request)
+    {
+        try {
+            $user = $this->userService->register($request->all(), "Ductor");
+            return response()->json(['user' => $user], 201);
+        } catch (ValidationException $e) {
+            return response()->json(['errors' => $e->errors()], 422);
+        }
+    }
+
+    public function registerAdmin(Request $request)
+    {
+        try {
+            $user = $this->userService->register($request->all(), "Admin");
+            return response()->json(['user' => $user], 201);
+        } catch (ValidationException $e) {
+            return response()->json(['errors' => $e->errors()], 422);
+        }
     }
 
     public function login(Request $request)
@@ -59,7 +76,7 @@ class UserController extends Controller
 
     public function logout()
     {
-        auth()->user()->tokens()->delete();
+        //auth()->user()->tokens()->delete();
 
         return response()->json([
             "status" => 1,
