@@ -42,4 +42,15 @@ class User extends Authenticatable
     {
         return $this->hasMany(ActivationRequest::class);
     }
+
+    public function medicalHistory()
+    {
+        return $this->hasOne(MedicalHistory::class);
+    }
+
+    public function consultations()
+    {
+        return $this->hasMany(Consultation::class);
+    }
+
 }
