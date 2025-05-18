@@ -46,7 +46,7 @@ class UserService
 
         $data['password'] = Hash::make($data['password']);
         $data['role'] = $role;
-        $data['isVerified'] = "false";
+        $data['isVerified'] = false;
 
         return $this->userRepository->create($data);
     }
