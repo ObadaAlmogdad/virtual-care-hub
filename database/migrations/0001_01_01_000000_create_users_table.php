@@ -23,7 +23,7 @@ return new class extends Migration
             $table->date('birthday');
             $table->string('gender');
             $table->string('role');
-            $table->string('isVerified');
+            $table->boolean('isVerified');
 
             $table->rememberToken();
             $table->timestamps();

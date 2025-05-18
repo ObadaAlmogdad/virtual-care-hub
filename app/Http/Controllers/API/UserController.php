@@ -70,8 +70,10 @@ class UserController extends Controller
     public function profile()
     {
         return response()->json([
-            'user' => Auth::user()
-        ], 200);
+            "status" => 1,
+            "message" => "User Profile information",
+            "data" => auth()->user()
+        ]);
     }
 
     public function logout()
