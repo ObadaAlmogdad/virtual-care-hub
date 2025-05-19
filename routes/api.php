@@ -8,6 +8,7 @@ use App\Http\Controllers\API\BankAccountController;
 use App\Http\Controllers\API\ActivationRequestController;
 use App\Http\Controllers\API\AdminController;
 use App\Http\Controllers\API\MedicalHistoryController;
+use App\Http\Controllers\API\DoctorController;
 
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
@@ -53,5 +54,15 @@ Route::group(["middleware" => ["auth:sanctum"]], function () {
 
     Route::prefix('admin/')->group(function () {
         Route::patch("verification_account/{id}", [AdminController::class, "verficat"]);
+    });
+});
+
+// Doctor Routes
+Route::middleware('auth:sanctum')->group(function () {
+    Route::prefix('doctor')->group(function () {
+        Route::get('/profile', [DoctorController::class, 'getProfile']);
+        Route::put('/profile', [DoctorController::class, 'updateProfile']);
+        Route::post('/license', [DoctorController::class, 'uploadLicense']);
+        Route::delete('/license/{fileId}', [DoctorController::class, 'deleteLicense']);
     });
 });

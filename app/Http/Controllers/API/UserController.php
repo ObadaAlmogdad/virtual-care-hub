@@ -7,6 +7,7 @@ use App\Services\UserService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
 {
@@ -26,30 +27,83 @@ class UserController extends Controller
     public function register(Request $request)
     {
         try {
+            $validator = Validator::make($request->all(), [
+                'fullName' => 'required|string|max:255',
+                'email' => 'required|string|email|max:255|unique:users',
+                'password' => 'required|string|min:8',
+                'phoneNumber' => 'required|string',
+                'photo' => 'required|image|mimes:jpeg,png,jpg|max:2048',
+                'address' => 'required|string',
+                'birthday' => 'required|date',
+                'gender' => 'required|string',
+            ]);
+
+            if ($validator->fails()) {
+                return response()->json(['errors' => $validator->errors()], 422);
+            }
+
             $user = $this->userService->register($request->all(), "Patient");
             return response()->json(['user' => $user], 201);
         } catch (ValidationException $e) {
             return response()->json(['errors' => $e->errors()], 422);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'An error occurred while registering the user'], 500);
         }
     }
 
     public function registerDuctor(Request $request)
     {
         try {
+            $validator = Validator::make($request->all(), [
+                'fullName' => 'required|string|max:255',
+                'email' => 'required|string|email|max:255|unique:users',
+                'password' => 'required|string|min:8',
+                'phoneNumber' => 'required|string',
+                'photo' => 'required|image|mimes:jpeg,png,jpg|max:2048',
+                'address' => 'required|string',
+                'birthday' => 'required|date',
+                'gender' => 'required|string',
+                'bio' => 'required|string',
+                'yearOfExper' => 'required|string',
+            ]);
+
+            if ($validator->fails()) {
+                return response()->json(['errors' => $validator->errors()], 422);
+            }
+
             $user = $this->userService->register($request->all(), "Ductor");
             return response()->json(['user' => $user], 201);
         } catch (ValidationException $e) {
             return response()->json(['errors' => $e->errors()], 422);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'An error occurred while registering the doctor'], 500);
         }
     }
 
     public function registerAdmin(Request $request)
     {
         try {
+            $validator = Validator::make($request->all(), [
+                'fullName' => 'required|string|max:255',
+                'email' => 'required|string|email|max:255|unique:users',
+                'password' => 'required|string|min:8',
+                'phoneNumber' => 'required|string',
+                'photo' => 'required|image|mimes:jpeg,png,jpg|max:2048',
+                'address' => 'required|string',
+                'birthday' => 'required|date',
+                'gender' => 'required|string',
+            ]);
+
+            if ($validator->fails()) {
+                return response()->json(['errors' => $validator->errors()], 422);
+            }
+
             $user = $this->userService->register($request->all(), "Admin");
             return response()->json(['user' => $user], 201);
         } catch (ValidationException $e) {
             return response()->json(['errors' => $e->errors()], 422);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'An error occurred while registering the admin'], 500);
         }
     }
 
