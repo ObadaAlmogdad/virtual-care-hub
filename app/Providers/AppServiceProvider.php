@@ -7,6 +7,9 @@ use App\Repositories\Interfaces\UserRepositoryInterface;
 use App\Repositories\UserRepository;
 use App\Repositories\Interfaces\MedicalHistoryRepositoryInterface;
 use App\Repositories\MedicalHistoryRepository;
+use App\Repositories\Interfaces\DoctorRepositoryInterface;
+use App\Repositories\DoctorRepository;
+use App\Services\DoctorService;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -24,6 +27,10 @@ class AppServiceProvider extends ServiceProvider
             MedicalHistoryRepositoryInterface::class,
             MedicalHistoryRepository::class
         );
+        $this->app->bind(DoctorRepositoryInterface::class, DoctorRepository::class);
+        $this->app->singleton(DoctorService::class, function ($app) {
+            return new DoctorService($app->make(DoctorRepositoryInterface::class));
+        });
     }
 
     /**

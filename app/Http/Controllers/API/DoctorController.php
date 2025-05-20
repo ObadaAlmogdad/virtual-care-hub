@@ -9,33 +9,28 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use App\Models\DoctorSpecialty;
+use App\Services\DoctorService;
 
 class DoctorController extends Controller
 {
+    protected $doctorService;
+
+    public function __construct(DoctorService $doctorService)
+    {
+        $this->doctorService = $doctorService;
+    }
+
     public function updateProfile(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'bio' => 'required|string',
-            'yearOfExper' => 'required|string',
-            'activatePoint' => 'string',
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()], 422);
+        try {
+            $doctor = $this->doctorService->updateProfile(auth()->id(), $request->all());
+            return response()->json([
+                'message' => 'Profile updated successfully',
+                'doctor' => $doctor->load('licenses')
+            ]);
+        } catch (\Exception $e) {
+            return response()->json(['message' => $e->getMessage()], $e->getCode() ?: 500);
         }
-
-        $doctor = Doctor::where('user_id', auth()->id())->first();
-
-        if (!$doctor) {
-            return response()->json(['message' => 'Doctor not found'], 404);
-        }
-
-        $doctor->update($request->only(['bio', 'yearOfExper', 'activatePoint']));
-
-        return response()->json([
-            'message' => 'Profile updated successfully',
-            'doctor' => $doctor->load('licenses')
-        ]);
     }
 
     public function uploadLicense(Request $request)
@@ -74,15 +69,12 @@ class DoctorController extends Controller
 
     public function getProfile()
     {
-        $doctor = Doctor::where('user_id', auth()->id())
-            ->with(['user', 'licenses'])
-            ->first();
-
-        if (!$doctor) {
-            return response()->json(['message' => 'Doctor not found'], 404);
+        try {
+            $doctor = $this->doctorService->getProfile(auth()->id());
+            return response()->json(['doctor' => $doctor]);
+        } catch (\Exception $e) {
+            return response()->json(['message' => $e->getMessage()], $e->getCode() ?: 500);
         }
-
-        return response()->json(['doctor' => $doctor]);
     }
 
     public function deleteLicense($fileId)
@@ -117,139 +109,83 @@ class DoctorController extends Controller
 
     public function getSpecialties()
     {
-        $user = auth()->user();
-
-        $doctor = Doctor::where('user_id', $user->id)->first();
-
-        if (!$doctor) {
+        try {
+            $specialties = $this->doctorService->getSpecialties(auth()->id());
+            return response()->json([
+                'status' => 'success',
+                'data' => $specialties
+            ]);
+        } catch (\Exception $e) {
             return response()->json([
                 'status' => 'error',
-                'message' => 'Doctor not found'
-            ], 404);
+                'message' => $e->getMessage()
+            ], $e->getCode() ?: 500);
         }
-
-        $specialties = DoctorSpecialty::with('medicalTag')
-            ->where('doctor_id', $doctor->id)
-            ->where('is_active', true)
-            ->get();
-
-        return response()->json([
-            'status' => 'success',
-            'data' => $specialties
-        ]);
     }
 
     public function getDoctorSpecialties($doctor_id)
     {
-        $doctor = Doctor::where('user_id', $doctor_id)->first();
-
-        if (!$doctor) {
+        try {
+            $specialties = $this->doctorService->getDoctorSpecialties($doctor_id);
+            return response()->json([
+                'status' => 'success',
+                'data' => $specialties
+            ]);
+        } catch (\Exception $e) {
             return response()->json([
                 'status' => 'error',
-                'message' => 'Doctor not found'
-            ], 404);
+                'message' => $e->getMessage()
+            ], $e->getCode() ?: 500);
         }
-
-        $specialties = DoctorSpecialty::with('medicalTag')
-            ->where('doctor_id', $doctor->id)
-            ->where('is_active', true)
-            ->get();
-
-        return response()->json([
-            'status' => 'success',
-            'data' => $specialties
-        ]);
     }
 
     public function addSpecialty(Request $request)
     {
-        $userId = auth()->user()->id;
-
-        $doctor = Doctor::where('user_id', $userId)->first();
-
-        if (!$doctor) {
+        try {
+            $specialty = $this->doctorService->addSpecialty(auth()->id(), $request->all());
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Specialty added successfully',
+                'data' => $specialty
+            ], 201);
+        } catch (\Exception $e) {
             return response()->json([
                 'status' => 'error',
-                'message' => 'Doctor not found'
-            ], 404);
+                'message' => $e->getMessage()
+            ], $e->getCode() ?: 500);
         }
-
-        $validatedData = $request->validate([
-            'medical_tag_id' => 'required|exists:medical_tags,id',
-            'start_time' => 'required|date',
-            'end_time' => 'required|date|after:start_time',
-            'photo' => 'nullable|image|max:2048',
-            'consultation_fee' => 'required|numeric|min:0',
-            'description' => 'nullable|string|max:1000'
-        ]);
-
-        // دمج doctor_id مع البيانات الصحيحة
-        $validatedData['doctor_id'] = $doctor->id; // يُفضل استخدام doctor_id من الجدول doctors بدلاً من user_id
-
-        if ($request->hasFile('photo')) {
-            $validatedData['photo'] = $request->file('photo')->store('specialties', 'public');
-        }
-
-        // إنشاء التخصص مع جميع البيانات المدمجة
-        $specialty = DoctorSpecialty::create($validatedData);
-
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Specialty added successfully',
-            'data' => $specialty
-        ], 201);
     }
 
-    public function updateSpecialty(Request $request, $doctorId, $specialtyId)
+    public function updateSpecialty(Request $request, $specialtyId)
     {
-        $specialty = DoctorSpecialty::where('doctor_id', $doctorId)
-            ->where('id', $specialtyId)
-            ->firstOrFail();
-
-        $request->validate([
-            'medical_tag_id' => 'sometimes|exists:medical_tags,id',
-            'start_time' => 'sometimes|date',
-            'end_time' => 'sometimes|date|after:start_time',
-            'photo' => 'nullable|image|max:2048',
-            'consultation_fee' => 'sometimes|numeric|min:0',
-            'description' => 'nullable|string|max:1000',
-            'is_active' => 'sometimes|boolean'
-        ]);
-
-        $data = $request->all();
-
-        if ($request->hasFile('photo')) {
-            // Delete old photo if exists
-            if ($specialty->photo) {
-                Storage::disk('public')->delete($specialty->photo);
-            }
-            $data['photo'] = $request->file('photo')->store('specialties', 'public');
+        try {
+            $specialty = $this->doctorService->updateSpecialty(auth()->id(), $specialtyId, $request->all());
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Specialty updated successfully',
+                'data' => $specialty
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $e->getMessage()
+            ], $e->getCode() ?: 500);
         }
-
-        $specialty->update($data);
-
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Specialty updated successfully',
-            'data' => $specialty
-        ]);
     }
 
-    public function deleteSpecialty($doctorId, $specialtyId)
+    public function deleteSpecialty($specialtyId)
     {
-        $specialty = DoctorSpecialty::where('doctor_id', $doctorId)
-            ->where('id', $specialtyId)
-            ->firstOrFail();
-
-        if ($specialty->photo) {
-            Storage::disk('public')->delete($specialty->photo);
+        try {
+            $this->doctorService->deleteSpecialty(auth()->id(), $specialtyId);
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Specialty deleted successfully'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $e->getMessage()
+            ], $e->getCode() ?: 500);
         }
-
-        $specialty->delete();
-
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Specialty deleted successfully'
-        ]);
     }
 }
