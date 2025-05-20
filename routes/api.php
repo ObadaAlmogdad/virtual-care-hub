@@ -9,6 +9,7 @@ use App\Http\Controllers\API\ActivationRequestController;
 use App\Http\Controllers\API\AdminController;
 use App\Http\Controllers\API\MedicalHistoryController;
 use App\Http\Controllers\API\DoctorController;
+use App\Http\Controllers\API\QuestionController;
 
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
@@ -82,4 +83,17 @@ Route::middleware(['auth:sanctum'])->prefix('admin/medical-tags')->group(functio
     Route::post('/', [AdminController::class, 'addMedicalTag']);
     Route::put('/{id}', [AdminController::class, 'updateMedicalTag']);
     Route::delete('/{id}', [AdminController::class, 'deleteMedicalTag']);
+});
+
+// Question Routes
+Route::middleware(['auth:sanctum'])->prefix('questions')->group(function () {
+    Route::get('/', [QuestionController::class, 'index']);
+    Route::post('/', [QuestionController::class, 'store']);
+    Route::get('/{id}', [QuestionController::class, 'show']);
+    Route::put('/{id}', [QuestionController::class, 'update']);
+    Route::delete('/{id}', [QuestionController::class, 'destroy']);
+    Route::get('/medical-tag/{medicalTagId}', [QuestionController::class, 'getByMedicalTag']);
+    Route::post('/{id}/attach-tags', [QuestionController::class, 'attachMedicalTags']);
+    Route::post('/{id}/detach-tags', [QuestionController::class, 'detachMedicalTags']);
+    Route::post('/{id}/sync-tags', [QuestionController::class, 'syncMedicalTags']);
 });
