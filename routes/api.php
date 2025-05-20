@@ -66,3 +66,20 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::delete('/license/{fileId}', [DoctorController::class, 'deleteLicense']);
     });
 });
+
+// Doctor Specialties Routes
+Route::middleware(['auth:sanctum'])->prefix('doctor/specialties')->group(function () {
+    Route::get('/', [DoctorController::class, 'getSpecialties']);
+    Route::post('/', [DoctorController::class, 'addSpecialty']);
+    Route::put('/{specialtyId}', [DoctorController::class, 'updateSpecialty']);
+    Route::delete('/{specialtyId}', [DoctorController::class, 'deleteSpecialty']);
+});
+Route::get('doctor/{doctor_id}/specialties', [DoctorController::class, 'getDoctorSpecialties']);
+
+// Medical Tags Routes
+Route::middleware(['auth:sanctum'])->prefix('admin/medical-tags')->group(function () {
+    Route::get('/', [AdminController::class, 'getMedicalTags']);
+    Route::post('/', [AdminController::class, 'addMedicalTag']);
+    Route::put('/{id}', [AdminController::class, 'updateMedicalTag']);
+    Route::delete('/{id}', [AdminController::class, 'deleteMedicalTag']);
+});
