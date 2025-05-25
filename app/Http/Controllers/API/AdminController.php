@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Services\AdminService;
 use App\Models\MedicalTag;
+use App\Models\User;
 
 
 class AdminController extends Controller
@@ -98,9 +99,7 @@ class AdminController extends Controller
         ]);
     }
 
-    /**
-     * Delete a medical tag
-     */
+    // Delete a medical tag
     public function deleteMedicalTag($id)
     {
         $tag = MedicalTag::findOrFail($id);
@@ -121,4 +120,27 @@ class AdminController extends Controller
         ]);
     }
 
+    public function countUsersByRole()
+    {
+        try {
+            $counts = User::selectRaw('role, count(*) as count')
+                ->groupBy('role')
+                ->get()
+                ->pluck('count', 'role'); // تحويل النتيجة لـ key-value pairs
+
+            return response()->json([
+                'success' => true,
+                'data' => [
+                    'doctor' => $counts->get('Doctor', 0),
+                    'patient' => $counts->get('Patient', 0),
+                    'admin' => $counts->get('Admin', 0)
+                ]
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to retrieve user counts'
+            ], 500);
+        }
+    }
 }

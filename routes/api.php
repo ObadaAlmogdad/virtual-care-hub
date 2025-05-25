@@ -45,7 +45,6 @@ Route::get('/users/{user}/activation-status', [ActivationRequestController::clas
 
 
 
-
 Route::post('/register-ductor', [UserController::class, 'registerDuctor']);
 
 
@@ -96,4 +95,11 @@ Route::middleware(['auth:sanctum'])->prefix('questions')->group(function () {
     Route::post('/{id}/attach-tags', [QuestionController::class, 'attachMedicalTags']);
     Route::post('/{id}/detach-tags', [QuestionController::class, 'detachMedicalTags']);
     Route::post('/{id}/sync-tags', [QuestionController::class, 'syncMedicalTags']);
+});
+
+
+//some admin api
+Route::middleware(['auth:sanctum'])->prefix('admin')->group(function () {
+
+    Route::get('/users/count-by-role', [AdminController::class, 'countUsersByRole']);
 });
