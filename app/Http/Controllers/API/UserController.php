@@ -140,18 +140,12 @@ class UserController extends Controller
         ]);
     }
 
-    /**
-     * Display the specified user.
-     */
     public function getUserById($id)
     {
         $user = $this->userService->getUserById($id);
         return response()->json(['user' => $user], 200);
     }
 
-    /**
-     * Update the specified user in storage.
-     */
     public function update(Request $request, $id)
     {
         $result = $this->userService->updateUser($id, $request->all());
@@ -163,9 +157,6 @@ class UserController extends Controller
         return response()->json(['user' => $result['user']], 200);
     }
 
-    /**
-     * Remove the specified user from storage.
-     */
     public function destroy($id)
     {
         $this->userService->deleteUser($id);

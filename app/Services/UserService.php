@@ -76,7 +76,7 @@ class UserService
                     'activatePoint' => '0'
                 ];
                 
-                $this->doctorService->createDoctor($doctorData);
+                $this->doctorService->create($doctorData);
             }
 
             DB::commit();

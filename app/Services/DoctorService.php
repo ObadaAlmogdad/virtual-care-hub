@@ -36,6 +36,11 @@ class DoctorService
         return $this->doctorRepository->update($doctor->id, $data);
     }
 
+    public function create(array $data)
+    {
+        return $this->doctorRepository->create($data);
+    }
+
     public function getProfile($userId)
     {
         $doctor = $this->doctorRepository->findByUserId($userId);
@@ -130,4 +135,4 @@ class DoctorService
 
         return $this->doctorRepository->deleteSpecialty($doctor->id, $specialtyId);
     }
-} 
+}
