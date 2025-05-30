@@ -10,14 +10,18 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use App\Models\DoctorSpecialty;
 use App\Services\DoctorService;
+use App\Services\ConsultationService;
+use Illuminate\Support\Facades\Log;
 
 class DoctorController extends Controller
 {
     protected $doctorService;
+    protected $consultationService;
 
-    public function __construct(DoctorService $doctorService)
+    public function __construct(DoctorService $doctorService, ConsultationService $consultationService)
     {
         $this->doctorService = $doctorService;
+        $this->consultationService = $consultationService;
     }
 
     public function updateProfile(Request $request)
@@ -186,6 +190,84 @@ class DoctorController extends Controller
                 'status' => 'error',
                 'message' => $e->getMessage()
             ], $e->getCode() ?: 500);
+        }
+    }
+
+    public function getPendingConsultations()
+    {
+        try {
+            $consultations = $this->consultationService->getPendingConsultations(auth()->id());
+            return response()->json([
+                'status' => 'success',
+                'data' => $consultations
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'An error occurred while fetching pending consultations'
+            ], 500);
+        }
+    }
+
+    public function updateConsultationStatus(Request $request, $consultationId)
+    {
+        try {
+            $status = $request->input('status');
+            $result = $this->consultationService->updateConsultationStatus($consultationId, $status);
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Consultation status updated successfully',
+                'data' => $result
+            ]);
+        } catch (ValidationException $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Validation failed',
+                'errors' => $e->errors()
+            ], 422);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'An error occurred while updating consultation status'
+            ], 500);
+        }
+    }
+
+    public function scheduleConsultation(Request $request, $consultationId)
+    {
+        try {
+            $scheduledAt = $request->input('scheduled_at');
+            $reminderBeforeMinutes = $request->input('reminder_before_minutes', 30);
+
+            $result = $this->consultationService->scheduleConsultation(
+                $consultationId,
+                $scheduledAt,
+                $reminderBeforeMinutes
+            );
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Consultation scheduled successfully',
+                'data' => $result
+            ]);
+        } catch (ValidationException $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Validation failed',
+                'errors' => $e->errors()
+            ], 422);
+        }  catch (\Exception $e) {
+            Log::error('Schedule consultation error', [
+                'id' => $consultationId,
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+
+            return response()->json([
+                'status' => 'error',
+                'message' => 'An error occurred while scheduling the consultation'
+            ], 500);
         }
     }
 }

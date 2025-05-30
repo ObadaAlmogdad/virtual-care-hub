@@ -13,6 +13,11 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule): void
     {
         // $schedule->command('inspire')->hourly();
+
+        // Run consultation reminders every minute
+        $schedule->command('consultations:send-reminders')
+            ->everyFourMinutes() // أو أي فترة مناسبة
+            ->withoutOverlapping(); // لمنع التكرار
     }
 
     /**
@@ -20,7 +25,7 @@ class Kernel extends ConsoleKernel
      */
     protected function commands(): void
     {
-        $this->load(__DIR__.'/Commands');
+        $this->load(__DIR__ . '/Commands');
 
         require base_path('routes/console.php');
     }

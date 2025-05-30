@@ -13,6 +13,9 @@ use App\Services\DoctorService;
 use App\Repositories\Interfaces\QuestionRepositoryInterface;
 use App\Repositories\QuestionRepository;
 use App\Services\QuestionService;
+use App\Repositories\Interfaces\ConsultationRepositoryInterface;
+use App\Repositories\ConsultationRepository;
+use App\Services\ConsultationService;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -37,6 +40,10 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(QuestionRepositoryInterface::class, QuestionRepository::class);
         $this->app->singleton(QuestionService::class, function ($app) {
             return new QuestionService($app->make(QuestionRepositoryInterface::class));
+        });
+        $this->app->bind(ConsultationRepositoryInterface::class, ConsultationRepository::class);
+        $this->app->singleton(ConsultationService::class, function ($app) {
+            return new ConsultationService($app->make(ConsultationRepositoryInterface::class));
         });
     }
 

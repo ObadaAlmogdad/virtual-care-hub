@@ -79,6 +79,10 @@ Route::middleware(['auth:sanctum'])->prefix('admin')->group(function () {
     Route::get('/users/count-by-role', [AdminController::class, 'countUsersByRole']);
 });
 
+Route::middleware('auth:sanctum')->post('/payment/create-intent', [\App\Http\Controllers\Api\PaymentController::class, 'createIntent']);
+Route::post('/stripe/webhook', [\App\Http\Controllers\Api\StripeWebhookController::class, 'handle']);
+Route::middleware('auth:sanctum')->post('/refund/{paymentId}', [\App\Http\Controllers\Api\PaymentController::class, 'refund']);
+
 
 
 // Route::middleware(['auth:sanctum', 'verified'])->group(function () {
@@ -101,3 +105,15 @@ Route::middleware(['auth:sanctum'])->prefix('admin')->group(function () {
 //         Route::patch("verification_account/{id}", [AdminController::class, "verficat"]);
 //     });
 // });
+
+// User Consultation Routes
+Route::middleware('auth:sanctum')->group(function () {
+    // User routes
+    Route::post('/consultations', [UserController::class, 'createConsultation']);
+    Route::get('/consultations', [UserController::class, 'getUserConsultations']);
+
+    // Doctor routes
+    Route::get('/doctor/consultations/pending', [DoctorController::class, 'getPendingConsultations']);
+    Route::patch('/doctor/consultations/{consultationId}/status', [DoctorController::class, 'updateConsultationStatus']);
+    Route::post('/doctor/consultations/{consultationId}/schedule', [DoctorController::class, 'scheduleConsultation']);
+});

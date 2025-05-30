@@ -8,14 +8,18 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\Validator;
+use App\Services\ConsultationService;
+use Illuminate\Support\Facades\Storage;
 
 class UserController extends Controller
 {
     protected $userService;
+    protected $consultationService;
 
-    public function __construct(UserService $userService)
+    public function __construct(UserService $userService, ConsultationService $consultationService)
     {
         $this->userService = $userService;
+        $this->consultationService = $consultationService;
     }
 
     public function index()
@@ -161,5 +165,64 @@ class UserController extends Controller
     {
         $this->userService->deleteUser($id);
         return response()->json(null, 204);
+    }
+
+    public function createConsultation(Request $request)
+    {
+        try {
+            $data = $request->all();
+            $data['user_id'] = auth()->id();
+            
+            // Handle media files
+            if ($request->hasFile('media')) {
+                $data['media'] = $request->file('media');
+            }
+
+            $consultation = $this->consultationService->createConsultation($data);
+            
+            // Format the response to include media URLs
+            if ($consultation->media) {
+                $mediaPaths = explode(',', $consultation->media);
+                $mediaUrls = array_map(function($path) {
+                    return Storage::url($path);
+                }, $mediaPaths);
+                $consultation->media_urls = $mediaUrls;
+            }
+            
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Consultation created successfully',
+                'data' => $consultation
+            ], 201);
+        } catch (ValidationException $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Validation failed',
+                'errors' => $e->errors()
+            ], 422);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'An error occurred while creating the consultation',
+                'errors' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function getUserConsultations()
+    {
+        try {
+            $consultations = $this->consultationService->getUserConsultations(auth()->id());
+            return response()->json([
+                'status' => 'success',
+                'data' => $consultations
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'An error occurred while fetching consultations',
+                'errors' => $e->getMessage()
+            ], 500);
+        }
     }
 }
