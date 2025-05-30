@@ -1,0 +1,64 @@
+<?php
+
+namespace App\Repositories;
+
+use App\Models\Consultation;
+use App\Repositories\Interfaces\ConsultationRepositoryInterface;
+
+class ConsultationRepository implements ConsultationRepositoryInterface
+{
+    protected $model;
+
+    public function __construct(Consultation $model)
+    {
+        $this->model = $model;
+    }
+
+    public function create(array $data): Consultation
+    {
+        return $this->model->create($data);
+    }
+
+    public function findById($id): ?Consultation
+    {
+        return $this->model->find($id);
+    }
+
+    public function update($id, array $data): bool
+    {
+        $consultation = $this->model->find($id);
+        if ($consultation) {
+            return $consultation->update($data);
+        }
+        return false;
+    }
+
+    public function getPendingConsultations($doctorId)
+    {
+        return $this->model->where('doctor_id', $doctorId)
+            ->where('status', 'pending')
+            ->with(['user', 'medicalTag'])
+            ->get();
+    }
+
+    public function getUserConsultations($userId)
+    {
+        return $this->model->where('user_id', $userId)
+            ->with(['doctor', 'medicalTag'])
+            ->get();
+    }
+
+    public function scheduleConsultation($id, $scheduledAt, $reminderBeforeMinutes): bool
+    {
+        return $this->update($id, [
+            'scheduled_at' => $scheduledAt,
+            'reminder_before_minutes' => $reminderBeforeMinutes,
+            'status' => 'scheduled'
+        ]);
+    }
+
+    public function updateStatus($id, $status): bool
+    {
+        return $this->update($id, ['status' => $status]);
+    }
+} 

@@ -16,12 +16,15 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained();
             $table->foreignId('doctor_id')->constrained();
             $table->foreignId('medical_tag_id')->constrained();
-            $table->boolean('isSpecial');
+            $table->boolean('isSpecial')->default(false);
             $table->string('problem');
-            $table->string('media');
-            $table->boolean('isAnonymous');
-            $table->string('replayOfDoctor');
+            $table->string('media')->nullable()->default("");
+            $table->boolean('isAnonymous')->default(false);
+            $table->text('replayOfDoctor')->nullable();
             $table->double('fee');
+            $table->enum('status', ['pending', 'accepted', 'rejected', 'scheduled', 'completed'])->default('pending');
+            $table->dateTime('scheduled_at')->nullable();
+            $table->integer('reminder_before_minutes')->default(30);
             $table->timestamps();
         });
     }
