@@ -13,16 +13,17 @@ return new class extends Migration
     {
         Schema::create('payments', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id'); // المريض
-            $table->foreignId('doctor_id');
-            $table->foreignId('consultation_id')->nullable();
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->foreignId('doctor_id')->constrained('users')->onDelete('cascade');
+            $table->foreignId('consultation_id')->nullable()->constrained()->onDelete('set null');
             $table->string('stripe_payment_intent_id')->unique();
-            $table->integer('amount'); // القيمة الكاملة
-            $table->integer('fee');    // العمولة
-            $table->integer('net_amount'); // المبلغ الصافي للطبيب
-            $table->string('status')->default('pending'); // pending, succeeded, failed
+            $table->decimal('amount', 10, 2);
+            $table->decimal('fee', 10, 2)->default(0);
+            $table->decimal('net_amount', 10, 2)->default(0);
+            $table->enum('status', ['pending', 'succeeded', 'failed'])->default('pending');
             $table->boolean('is_refunded')->default(false);
             $table->timestamp('refunded_at')->nullable();
+            $table->string('refund_reason')->nullable();
             $table->timestamps();
         });
     }
