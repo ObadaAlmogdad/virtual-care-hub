@@ -13,4 +13,6 @@ interface ConsultationRepositoryInterface
     public function getUserConsultations($userId);
     public function scheduleConsultation($id, $scheduledAt, $reminderBeforeMinutes): bool;
     public function updateStatus($id, $status): bool;
-} 
+    public function getUserConsultationsByStatus($userId, $status);
+    public function getDoctorConsultationsByStatus($doctorId, $status);
+}

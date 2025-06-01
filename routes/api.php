@@ -111,9 +111,11 @@ Route::middleware('auth:sanctum')->group(function () {
     // User routes
     Route::post('/consultations', [UserController::class, 'createConsultation']);
     Route::get('/consultations', [UserController::class, 'getUserConsultations']);
+    Route::get('/consultations/filter', [UserController::class, 'getUserConsultationsByStatus']);
 
     // Doctor routes
     Route::get('/doctor/consultations/pending', [DoctorController::class, 'getPendingConsultations']);
+    Route::get('/doctor/consultations/filter', [DoctorController::class, 'getConsultationsByStatus']);
     Route::patch('/doctor/consultations/{consultationId}/status', [DoctorController::class, 'updateConsultationStatus']);
     Route::post('/doctor/consultations/{consultationId}/schedule', [DoctorController::class, 'scheduleConsultation']);
 });
