@@ -79,10 +79,17 @@ Route::middleware(['auth:sanctum'])->prefix('admin')->group(function () {
     Route::get('/users/count-by-role', [AdminController::class, 'countUsersByRole']);
 });
 
-Route::middleware('auth:sanctum')->post('/payment/create-intent', [\App\Http\Controllers\Api\PaymentController::class, 'createIntent']);
-Route::post('/stripe/webhook', [\App\Http\Controllers\Api\StripeWebhookController::class, 'handle']);
-Route::middleware('auth:sanctum')->post('/refund/{paymentId}', [\App\Http\Controllers\Api\PaymentController::class, 'refund']);
+Route::middleware('auth:sanctum')->group(function () {
+    Route::post('payments/create-intent', [\App\Http\Controllers\Api\PaymentController::class, 'createIntent']);
+    Route::post('payments/{payment}/refund', [\App\Http\Controllers\Api\PaymentController::class, 'refund']);
+    Route::get('payments/status/{payment}', [\App\Http\Controllers\Api\PaymentController::class, 'getPaymentStatus']);
+});
 
+Route::post('stripe/webhook', [\App\Http\Controllers\Api\StripeWebhookController::class, 'handle']);
+
+Route::get('/stripe/onboard/{doctor_id}', [\App\Http\Controllers\Api\StripeConnectController::class, 'createOnboardingLink']);
+Route::get('/stripe/onboard/refresh', fn () => response()->json(['message' => 'Please try again.']));
+Route::get('/stripe/onboard/return', fn () => response()->json(['message' => 'Onboarding completed successfully.']));
 
 
 // Route::middleware(['auth:sanctum', 'verified'])->group(function () {

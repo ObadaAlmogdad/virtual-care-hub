@@ -53,4 +53,28 @@ class User extends Authenticatable
         return $this->hasMany(Consultation::class);
     }
 
+    public function payments()
+    {
+        return $this->hasMany(Payment::class);
+    }
+
+    public function doctorPayments()
+    {
+        return $this->hasMany(Payment::class, 'doctor_id');
+    }
+
+    public function isAdmin()
+    {
+        return $this->role === 'Admin';
+    }
+
+    public function isDoctor()
+    {
+        return $this->role === 'Doctor';
+    }
+
+    public function isPatient()
+    {
+        return $this->role === 'Patient';
+    }
 }
