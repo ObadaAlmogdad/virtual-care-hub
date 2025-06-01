@@ -73,6 +73,36 @@ class ConsultationService
         return $this->consultationRepository->getPendingConsultations($doctorId);
     }
 
+    public function getDoctorConsultationsByStatus($doctorId, $status = null)
+    {
+        if ($status) {
+            $validator = Validator::make(['status' => $status], [
+                'status' => 'required|in:pending,accepted,rejected,scheduled,completed'
+            ]);
+
+            if ($validator->fails()) {
+                throw new ValidationException($validator);
+            }
+        }
+
+        return $this->consultationRepository->getDoctorConsultationsByStatus($doctorId, $status);
+    }
+
+    public function getUserConsultationsByStatus($userId, $status = null)
+    {
+        if ($status) {
+            $validator = Validator::make(['status' => $status], [
+                'status' => 'required|in:pending,accepted,rejected,scheduled,completed'
+            ]);
+
+            if ($validator->fails()) {
+                throw new ValidationException($validator);
+            }
+        }
+
+        return $this->consultationRepository->getUserConsultationsByStatus($userId, $status);
+    }
+
     public function getUserConsultations($userId)
     {
         return $this->consultationRepository->getUserConsultations($userId);

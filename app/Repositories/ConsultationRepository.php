@@ -41,6 +41,30 @@ class ConsultationRepository implements ConsultationRepositoryInterface
             ->get();
     }
 
+    public function getDoctorConsultationsByStatus($doctorId, $status = null)
+    {
+        $query = $this->model->where('doctor_id', $doctorId)
+            ->with(['user', 'medicalTag']);
+        
+        if ($status) {
+            $query->where('status', $status);
+        }
+        
+        return $query->get();
+    }
+
+    public function getUserConsultationsByStatus($userId, $status = null)
+    {
+        $query = $this->model->where('user_id', $userId)
+            ->with(['doctor', 'medicalTag']);
+        
+        if ($status) {
+            $query->where('status', $status);
+        }
+        
+        return $query->get();
+    }
+
     public function getUserConsultations($userId)
     {
         return $this->model->where('user_id', $userId)

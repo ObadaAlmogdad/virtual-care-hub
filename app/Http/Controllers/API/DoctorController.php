@@ -12,6 +12,7 @@ use App\Models\DoctorSpecialty;
 use App\Services\DoctorService;
 use App\Services\ConsultationService;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Validation\ValidationException;
 
 class DoctorController extends Controller
 {
@@ -205,6 +206,29 @@ class DoctorController extends Controller
             return response()->json([
                 'status' => 'error',
                 'message' => 'An error occurred while fetching pending consultations'
+            ], 500);
+        }
+    }
+
+    public function getConsultationsByStatus(Request $request)
+    {
+        try {
+            $status = $request->query('status');
+            $consultations = $this->consultationService->getDoctorConsultationsByStatus(auth()->id(), $status);
+            return response()->json([
+                'status' => 'success',
+                'data' => $consultations
+            ]);
+        } catch (ValidationException $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Validation failed',
+                'errors' => $e->errors()
+            ], 422);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'An error occurred while fetching consultations'
             ], 500);
         }
     }

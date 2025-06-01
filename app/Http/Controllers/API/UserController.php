@@ -225,4 +225,28 @@ class UserController extends Controller
             ], 500);
         }
     }
+
+    public function getUserConsultationsByStatus(Request $request)
+    {
+        try {
+            $status = $request->query('status');
+            $consultations = $this->consultationService->getUserConsultationsByStatus(auth()->id(), $status);
+            return response()->json([
+                'status' => 'success',
+                'data' => $consultations
+            ]);
+        } catch (ValidationException $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Validation failed',
+                'errors' => $e->errors()
+            ], 422);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'An error occurred while fetching consultations',
+                'errors' => $e->getMessage()
+            ], 500);
+        }
+    }
 }
