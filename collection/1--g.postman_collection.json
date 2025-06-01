@@ -668,7 +668,7 @@
 									},
 									{
 										"key": "Authorization",
-										"value": "Bearer 2|RUCD7oz1KARYnszdJhpH20CV9NVOmCtBoeonFOKO160e8699",
+										"value": "Bearer 2|BkH8apFaHlEDAZLGb8spyf27If7PaWb4U1srtqfad18b89fd",
 										"type": "text"
 									}
 								],
@@ -1139,7 +1139,7 @@
 									},
 									{
 										"key": "Authorization",
-										"value": "Bearer 2|RUCD7oz1KARYnszdJhpH20CV9NVOmCtBoeonFOKO160e8699",
+										"value": "Bearer 2|BkH8apFaHlEDAZLGb8spyf27If7PaWb4U1srtqfad18b89fd",
 										"type": "default"
 									}
 								],
@@ -1931,7 +1931,7 @@
 									},
 									{
 										"key": "Authorization",
-										"value": "Bearer 1|qOteFj6fbbFdG00STqUh5qWl7FbM2HvbMMcbac1tb7dc3197",
+										"value": "Bearer 1|8z0uviPzGbj0zq0bOJ22B9v5qfOs283az08V5Ago386a3ce9",
 										"type": "text"
 									}
 								],
@@ -2090,6 +2090,148 @@
 							"response": []
 						}
 					]
+				}
+			]
+		},
+		{
+			"name": "Payment",
+			"item": [
+				{
+					"name": "create-intent",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer 1|8z0uviPzGbj0zq0bOJ22B9v5qfOs283az08V5Ago386a3ce9",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"amount\": 10,\r\n  \"doctor_id\": 1,\r\n  \"doctor_stripe_account_id\": \"acct_1RUpatQ5LoOMNyY4\",\r\n  \"consultation_id\": 1\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/api/payments/create-intent",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"payments",
+								"create-intent"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create-intent Copy",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer 1|8z0uviPzGbj0zq0bOJ22B9v5qfOs283az08V5Ago386a3ce9",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"amount\": 10,\r\n  \"doctor_id\": 1,\r\n  \"doctor_stripe_account_id\": \"acct_1RUpatQ5LoOMNyY4\",\r\n  \"consultation_id\": 1\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/api/payments/1/refund",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"payments",
+								"1",
+								"refund"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "payments/status",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer 1|8z0uviPzGbj0zq0bOJ22B9v5qfOs283az08V5Ago386a3ce9",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"amount\": 10,\r\n  \"doctor_id\": 1,\r\n  \"doctor_stripe_account_id\": \"acct_1RUpatQ5LoOMNyY4\",\r\n  \"consultation_id\": 1\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/api/payments/status/1",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"payments",
+								"status",
+								"1"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		}
