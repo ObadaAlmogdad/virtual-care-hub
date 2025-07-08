@@ -17,6 +17,11 @@ return new class extends Migration
             $table->string('bio');
             $table->string('yearOfExper');
             $table->string('activatePoint');
+            $table->float('rating')->nullable();
+            $table->string('facebook_url')->nullable();
+            $table->string('instagram_url')->nullable();
+            $table->string('twitter_url')->nullable();
+            $table->string('address')->nullable();
             $table->timestamps();
         });
     }
