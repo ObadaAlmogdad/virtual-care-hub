@@ -10,6 +10,7 @@ use App\Http\Controllers\API\AdminController;
 use App\Http\Controllers\API\MedicalHistoryController;
 use App\Http\Controllers\API\DoctorController;
 use App\Http\Controllers\API\QuestionController;
+use App\Http\Controllers\API\ConsultationController;
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
@@ -116,7 +117,7 @@ Route::get('/stripe/onboard/return', fn () => response()->json(['message' => 'On
 // User Consultation Routes
 Route::middleware('auth:sanctum')->group(function () {
     // User routes
-    Route::post('/consultations', [UserController::class, 'createConsultation']);
+    Route::post('/consultations', [ConsultationController::class, 'store']);
     Route::get('/consultations', [UserController::class, 'getUserConsultations']);
     Route::get('/consultations/filter', [UserController::class, 'getUserConsultationsByStatus']);
 
