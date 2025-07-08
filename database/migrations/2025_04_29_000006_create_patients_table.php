@@ -16,6 +16,8 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained();
             $table->string('fakeName');
             $table->foreignId('medical_history_id')->constrained();
+            $table->float('height')->nullable();
+            $table->float('weight')->nullable();
             $table->timestamps();
         });
     }

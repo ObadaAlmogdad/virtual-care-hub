@@ -14,7 +14,12 @@ class Doctor extends Model
         'user_id',
         'bio',
         'yearOfExper',
-        'activatePoint'
+        'activatePoint',
+        'rating',
+        'facebook_url',
+        'instagram_url',
+        'twitter_url',
+        'address',
     ];
 
     public function user(): BelongsTo
