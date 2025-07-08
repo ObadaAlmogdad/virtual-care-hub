@@ -10,13 +10,12 @@ return new class extends Migration
      * Run the migrations.
      */
     public function up(): void
-    { 
-        Schema::create('doctors', function (Blueprint $table) {
+    {
+        Schema::create('doctor_file', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained();
-            $table->string('bio');
-            $table->string('yearOfExper');
-            $table->string('activatePoint');
+            $table->foreignId('doctor_id')->constrained()->onDelete('cascade');
+            $table->foreignId('file_id')->constrained()->onDelete('cascade');
+            $table->string('type')->default('license'); // To distinguish between different types of files
             $table->timestamps();
         });
     }
@@ -26,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('doctors');
+        Schema::dropIfExists('doctor_file');
     }
-};
+}; 

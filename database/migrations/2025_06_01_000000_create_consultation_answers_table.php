@@ -10,13 +10,12 @@ return new class extends Migration
      * Run the migrations.
      */
     public function up(): void
-    { 
-        Schema::create('doctors', function (Blueprint $table) {
+    {
+        Schema::create('consultation_answers', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained();
-            $table->string('bio');
-            $table->string('yearOfExper');
-            $table->string('activatePoint');
+            $table->foreignId('consultation_id')->constrained();
+            $table->foreignId('question_id')->constrained('questions');
+            $table->string('answer_text');
             $table->timestamps();
         });
     }
@@ -26,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('doctors');
+        Schema::dropIfExists('consultation_answers');
     }
-};
+}; 

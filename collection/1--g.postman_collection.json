@@ -1,0 +1,2251 @@
+{
+	"info": {
+		"_postman_id": "a3ca9e3e-c98f-4f8c-8898-30934f92d593",
+		"name": "1--g",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "user",
+			"item": [
+				{
+					"name": "auth",
+					"item": [
+						{
+							"name": "register",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "multipart/form-data",
+										"type": "default"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "default"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "fullName",
+											"value": "test",
+											"type": "text"
+										},
+										{
+											"key": "email",
+											"value": "t@example.com",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "123123123",
+											"type": "text"
+										},
+										{
+											"key": "phoneNumber",
+											"value": "1234567890",
+											"type": "text"
+										},
+										{
+											"key": "photo",
+											"type": "file",
+											"src": "/C:/Users/HP/Desktop/LIFE/1.png"
+										},
+										{
+											"key": "address",
+											"value": "test",
+											"type": "text"
+										},
+										{
+											"key": "birthday",
+											"value": "1990-01-01",
+											"type": "text"
+										},
+										{
+											"key": "gender",
+											"value": " m",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "http://127.0.0.1:8000/api/register",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8000",
+									"path": [
+										"api",
+										"register"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "login",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "default",
+										"equals": true
+									},
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "default",
+										"equals": true
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer 1|ptrQWnGftvFkTdjjS7bhLo59BF3qH6iZiD8zf42G",
+										"type": "default",
+										"equals": false,
+										"disabled": true
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n   \r\n   \"email\" : \"t@example.com\",\r\n   \"password\":\"123123123\"\r\n}"
+								},
+								"url": {
+									"raw": "http://127.0.0.1:8000/api/login",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8000",
+									"path": [
+										"api",
+										"login"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "profile",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "default",
+										"equals": true
+									},
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "default",
+										"equals": true
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer 5|7a6lJV4qcbBvxQH2ojZto5Y14bfatOBMVubDTFaY3514ec4e",
+										"type": "default",
+										"equals": false
+									}
+								],
+								"url": {
+									"raw": "http://127.0.0.1:8000/api/users/profile",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8000",
+									"path": [
+										"api",
+										"users",
+										"profile"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "logout",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "default",
+										"equals": true
+									},
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "default",
+										"equals": true
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer 5|7a6lJV4qcbBvxQH2ojZto5Y14bfatOBMVubDTFaY3514ec4e",
+										"type": "default",
+										"equals": false
+									}
+								],
+								"url": {
+									"raw": "http://127.0.0.1:8000/api/users/logout",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8000",
+									"path": [
+										"api",
+										"users",
+										"logout"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "medical_histories",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer 1|7DWaxEU4oQRmQPkichl0FVShLqB1EyTCevMK8HZjc8cb1cf4",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"general_diseases\": [\"flu\", \"cold\"],\r\n    \"chronic_diseases\": [\"test2\"],\r\n    \"surgeries\": \"Appendectomy 2010\",\r\n    \"allergies\": \"test12\",\r\n    \"permanent_medications\": \"Insulin\",\r\n    \"medical_documents_path\": \"http://medical_docs/1.pdf\"\r\n}"
+								},
+								"url": {
+									"raw": "http://127.0.0.1:8000/api/medicalHistory/store",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8000",
+									"path": [
+										"api",
+										"medicalHistory",
+										"store"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "medical_histories update",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer 1|7DWaxEU4oQRmQPkichl0FVShLqB1EyTCevMK8HZjc8cb1cf4",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"general_diseases\": [\"flu\", \"cold\"],\r\n    \"chronic_diseases\": [\"test2\" ,\"test2\"],\r\n    \"surgeries\": \"Appendectomy 2010\",\r\n    \"allergies\": \"test12\",\r\n    \"permanent_medications\": \"Insulin\",\r\n    \"medical_documents_path\": \"http://medical_docs/1.pdf\"\r\n}"
+								},
+								"url": {
+									"raw": "http://127.0.0.1:8000/api/medicalHistory/update",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8000",
+									"path": [
+										"api",
+										"medicalHistory",
+										"update"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "ductor",
+			"item": [
+				{
+					"name": "auth",
+					"item": [
+						{
+							"name": "register",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "default"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "default"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "fullName",
+											"value": "test",
+											"type": "text"
+										},
+										{
+											"key": "email",
+											"value": "doctor1@example.com",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "123123123",
+											"type": "text"
+										},
+										{
+											"key": "phoneNumber",
+											"value": "1234567890",
+											"type": "text"
+										},
+										{
+											"key": "photo",
+											"type": "file",
+											"src": "/C:/Users/HP/Desktop/LIFE/1.png"
+										},
+										{
+											"key": "address",
+											"value": "test",
+											"type": "text"
+										},
+										{
+											"key": "birthday",
+											"value": "1990-01-01",
+											"type": "text"
+										},
+										{
+											"key": "gender",
+											"value": " m",
+											"type": "text"
+										},
+										{
+											"key": "bio",
+											"value": "test",
+											"type": "default"
+										},
+										{
+											"key": "yearOfExper",
+											"value": "5",
+											"type": "default"
+										}
+									]
+								},
+								"url": {
+									"raw": "http://127.0.0.1:8000/api/register-ductor",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8000",
+									"path": [
+										"api",
+										"register-ductor"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "login",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "default",
+										"equals": true
+									},
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "default",
+										"equals": true
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer 1|ptrQWnGftvFkTdjjS7bhLo59BF3qH6iZiD8zf42G",
+										"type": "default",
+										"equals": false,
+										"disabled": true
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n   \r\n   \"email\" : \"doctor1@example.com\",\r\n   \"password\":\"123123123\"\r\n}"
+								},
+								"url": {
+									"raw": "http://127.0.0.1:8000/api/login",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8000",
+									"path": [
+										"api",
+										"login"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "logout",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "default",
+										"equals": true
+									},
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "default",
+										"equals": true
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer 3|0BDHA412yKTw02xsqOPfY1dgfStkVCn3r27WLp9t3bee2e38",
+										"type": "default",
+										"equals": false
+									}
+								],
+								"url": {
+									"raw": "http://127.0.0.1:8000/api/logout",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8000",
+									"path": [
+										"api",
+										"logout"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "profile",
+					"item": [
+						{
+							"name": "getProfile",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "default"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "default"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer 5|txQDtkDqziljN0UDrIJNlG83HttB8iYzMyCUFEg1d086a5ca",
+										"type": "default"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "http://127.0.0.1:8000/api/doctor/profile",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8000",
+									"path": [
+										"api",
+										"doctor",
+										"profile"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "updateProfile",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "default"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "default"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer 5|txQDtkDqziljN0UDrIJNlG83HttB8iYzMyCUFEg1d086a5ca",
+										"type": "default"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"bio\": \"طبيب\",\r\n    \"yearOfExper\": \"4\"\r\n}"
+								},
+								"url": {
+									"raw": "http://127.0.0.1:8000/api/doctor/profile",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8000",
+									"path": [
+										"api",
+										"doctor",
+										"profile"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "add license",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "default"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "default"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer 3|RkfnMkgqftmxQQRsXogl8gp4rdkTN0ExOFDEgUVM195767b3",
+										"type": "default"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "license",
+											"type": "file",
+											"src": "/C:/Users/HP/Desktop/LIFE/1.png"
+										}
+									]
+								},
+								"url": {
+									"raw": "http://127.0.0.1:8000/api/doctor/license",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8000",
+									"path": [
+										"api",
+										"doctor",
+										"license"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "specialties",
+					"item": [
+						{
+							"name": "addSpecialty",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"warning": "This is a duplicate header and will be overridden by the Content-Type header generated by Postman.",
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer 2|BkH8apFaHlEDAZLGb8spyf27If7PaWb4U1srtqfad18b89fd",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "medical_tag_id",
+											"value": "1",
+											"type": "text"
+										},
+										{
+											"key": "start_time",
+											"value": "1990-01-01",
+											"type": "text"
+										},
+										{
+											"key": "end_time",
+											"value": "1991-01-01",
+											"type": "text"
+										},
+										{
+											"key": "photo",
+											"type": "file",
+											"src": "/C:/Users/HP/Desktop/LIFE/1.png"
+										},
+										{
+											"key": "consultation_fee",
+											"value": "10",
+											"type": "default"
+										}
+									]
+								},
+								"url": {
+									"raw": "http://127.0.0.1:8000/api/doctor/specialties",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8000",
+									"path": [
+										"api",
+										"doctor",
+										"specialties"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "get my Specialty",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"warning": "This is a duplicate header and will be overridden by the Content-Type header generated by Postman.",
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer 3|RkfnMkgqftmxQQRsXogl8gp4rdkTN0ExOFDEgUVM195767b3",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "http://127.0.0.1:8000/api/doctor/specialties",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8000",
+									"path": [
+										"api",
+										"doctor",
+										"specialties"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "get doctor Specialty",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"warning": "This is a duplicate header and will be overridden by the Content-Type header generated by Postman.",
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer 3|RkfnMkgqftmxQQRsXogl8gp4rdkTN0ExOFDEgUVM195767b3",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "http://127.0.0.1:8000/api/doctor/2/specialties",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8000",
+									"path": [
+										"api",
+										"doctor",
+										"2",
+										"specialties"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "admin",
+			"item": [
+				{
+					"name": "auth",
+					"item": [
+						{
+							"name": "register",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "default"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "default"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "fullName",
+											"value": "test",
+											"type": "text"
+										},
+										{
+											"key": "email",
+											"value": "admin@example.com",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "123123123",
+											"type": "text"
+										},
+										{
+											"key": "phoneNumber",
+											"value": "1234567890",
+											"type": "text"
+										},
+										{
+											"key": "photo",
+											"type": "file",
+											"src": "/C:/Users/HP/Desktop/LIFE/1.png"
+										},
+										{
+											"key": "address",
+											"value": "test",
+											"type": "text"
+										},
+										{
+											"key": "birthday",
+											"value": "1990-01-01",
+											"type": "text"
+										},
+										{
+											"key": "gender",
+											"value": " m",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "http://127.0.0.1:8000/api/register-admin",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8000",
+									"path": [
+										"api",
+										"register-admin"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "login",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "default",
+										"equals": true
+									},
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "default",
+										"equals": true
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer 1|ptrQWnGftvFkTdjjS7bhLo59BF3qH6iZiD8zf42G",
+										"type": "default",
+										"equals": false,
+										"disabled": true
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n   \r\n   \"email\" : \"doctor1@example.com\",\r\n   \"password\":\"123123123\"\r\n}"
+								},
+								"url": {
+									"raw": "http://127.0.0.1:8000/api/login",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8000",
+									"path": [
+										"api",
+										"login"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "profile",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "default",
+										"equals": true
+									},
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "default",
+										"equals": true
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer 1|R8nSarFMyaL65bbhnJ123LO39InQaolQUUg5aqY3a53ab9e2",
+										"type": "default",
+										"equals": false
+									}
+								],
+								"url": {
+									"raw": "http://127.0.0.1:8000/api/profile",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8000",
+									"path": [
+										"api",
+										"profile"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "logout",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "default",
+										"equals": true
+									},
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "default",
+										"equals": true
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer 3|0BDHA412yKTw02xsqOPfY1dgfStkVCn3r27WLp9t3bee2e38",
+										"type": "default",
+										"equals": false
+									}
+								],
+								"url": {
+									"raw": "http://127.0.0.1:8000/api/logout",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8000",
+									"path": [
+										"api",
+										"logout"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "verfy",
+							"request": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer 1|6TtKy9qGWyqoJ2lW0EcMzM59XRuFnwIev8V8tI8Z4781feb7",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "http://127.0.0.1:8000/api/admin/verification_account/1",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8000",
+									"path": [
+										"api",
+										"admin",
+										"verification_account",
+										"1"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "medical-tags",
+					"item": [
+						{
+							"name": "getMedicalTags",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "default"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "default"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer 2|EviRwGD2Qz01w2ZF1Ep6UcKscf6tfHhKW4G4BFaH24d3587b",
+										"type": "default"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": []
+								},
+								"url": {
+									"raw": "http://127.0.0.1:8000/api/admin/medical-tags/",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8000",
+									"path": [
+										"api",
+										"admin",
+										"medical-tags",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "add MedicalTags",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "default"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "default"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer 2|BkH8apFaHlEDAZLGb8spyf27If7PaWb4U1srtqfad18b89fd",
+										"type": "default"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"عصبية\",\r\n    \"is_active\": true\r\n\r\n}"
+								},
+								"url": {
+									"raw": "http://127.0.0.1:8000/api/admin/medical-tags/",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8000",
+									"path": [
+										"api",
+										"admin",
+										"medical-tags",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "update MedicalTags",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "default"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "default"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer 2|P9vtDp1uMOLFRM1zSbm7xZymmJitcTSDtuWoAGdIf2c121ed",
+										"type": "default"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"عينية\",\r\n    \"is_active\": false\r\n\r\n}"
+								},
+								"url": {
+									"raw": "http://127.0.0.1:8000/api/admin/medical-tags/1",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8000",
+									"path": [
+										"api",
+										"admin",
+										"medical-tags",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "delete MedicalTags",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "default"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "default"
+									},
+									{
+										"key": "auth",
+										"value": "Bearer 2|P9vtDp1uMOLFRM1zSbm7xZymmJitcTSDtuWoAGdIf2c121ed",
+										"type": "default"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"عينية\",\r\n    \"is_active\": \"true\"\r\n\r\n}"
+								},
+								"url": {
+									"raw": "http://127.0.0.1:8000/api/admin/medical-tags/",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8000",
+									"path": [
+										"api",
+										"admin",
+										"medical-tags",
+										""
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "New Folder",
+					"item": []
+				}
+			]
+		},
+		{
+			"name": "Question",
+			"item": [
+				{
+					"name": "get all q",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer 3|KBzx9SpBDuE6ekpGHJyMUvJIQk0Kow7QhtODoxPt0dbd90e9",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://127.0.0.1:8000/api/questions/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"questions",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "crate new q",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer 3|KBzx9SpBDuE6ekpGHJyMUvJIQk0Kow7QhtODoxPt0dbd90e9",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"content\": \"q2\",\r\n    \"isActive\": true,\r\n    \"medical_tag_ids\":[1]\r\n}"
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/api/questions/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"questions",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get q by id",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"warning": "This is a duplicate header and will be overridden by the Content-Type header generated by Postman.",
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer 3|RkfnMkgqftmxQQRsXogl8gp4rdkTN0ExOFDEgUVM195767b3",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://127.0.0.1:8000/api/questions/7",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"questions",
+								"7"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update q",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"warning": "This is a duplicate header and will be overridden by the Content-Type header generated by Postman.",
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer 3|RkfnMkgqftmxQQRsXogl8gp4rdkTN0ExOFDEgUVM195767b3",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"content\": \"q1\",\r\n    \"isActive\": true,\r\n    \"medical_tag_ids\":[1,2]\r\n}"
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/api/questions/1",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"questions",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete q",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"warning": "This is a duplicate header and will be overridden by the Content-Type header generated by Postman.",
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer 3|RkfnMkgqftmxQQRsXogl8gp4rdkTN0ExOFDEgUVM195767b3",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://127.0.0.1:8000/api/questions/1",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"questions",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get question by tag",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"warning": "This is a duplicate header and will be overridden by the Content-Type header generated by Postman.",
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer 3|RkfnMkgqftmxQQRsXogl8gp4rdkTN0ExOFDEgUVM195767b3",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://127.0.0.1:8000/api/questions/medical-tag/1",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"questions",
+								"medical-tag",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "add q to tages",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"warning": "This is a duplicate header and will be overridden by the Content-Type header generated by Postman.",
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer 3|RkfnMkgqftmxQQRsXogl8gp4rdkTN0ExOFDEgUVM195767b3",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"medical_tag_ids\":[1]\r\n}"
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/api/questions/7/attach-tags",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"questions",
+								"7",
+								"attach-tags"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "remove q from tages",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"warning": "This is a duplicate header and will be overridden by the Content-Type header generated by Postman.",
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer 3|RkfnMkgqftmxQQRsXogl8gp4rdkTN0ExOFDEgUVM195767b3",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"medical_tag_ids\":[1]\r\n}"
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/api/questions/1/attach-tags",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"questions",
+								"1",
+								"attach-tags"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "sync",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"warning": "This is a duplicate header and will be overridden by the Content-Type header generated by Postman.",
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer 3|RkfnMkgqftmxQQRsXogl8gp4rdkTN0ExOFDEgUVM195767b3",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"medical_tag_ids\":[1]\r\n}"
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/api/questions/7/attach-tags",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"questions",
+								"7",
+								"attach-tags"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "consultations",
+			"item": [
+				{
+					"name": "doctor",
+					"item": [
+						{
+							"name": "getPendingConsultations",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Content-Type",
+										"value": "multipart/form-data",
+										"type": "default"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer 1|qOteFj6fbbFdG00STqUh5qWl7FbM2HvbMMcbac1tb7dc3197",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": []
+								},
+								"url": {
+									"raw": "http://127.0.0.1:8000/api/doctor/consultations/pending",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8000",
+									"path": [
+										"api",
+										"doctor",
+										"consultations",
+										"pending"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "get Consultations by filter",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Content-Type",
+										"value": "multipart/form-data",
+										"type": "default"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer 1|qOteFj6fbbFdG00STqUh5qWl7FbM2HvbMMcbac1tb7dc3197",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": []
+								},
+								"url": {
+									"raw": "http://127.0.0.1:8000/api/doctor/consultations/filter?status=accepted",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8000",
+									"path": [
+										"api",
+										"doctor",
+										"consultations",
+										"filter"
+									],
+									"query": [
+										{
+											"key": "status",
+											"value": "accepted"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "updateConsultationStatus",
+							"request": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"warning": "This is a duplicate header and will be overridden by the Content-Type header generated by Postman.",
+										"key": "Content-Type",
+										"value": "multipart/form-data",
+										"type": "default"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer 2|RUCD7oz1KARYnszdJhpH20CV9NVOmCtBoeonFOKO160e8699",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": []
+								},
+								"url": {
+									"raw": "http://127.0.0.1:8000/api/doctor/consultations/1/status?status=accepted",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8000",
+									"path": [
+										"api",
+										"doctor",
+										"consultations",
+										"1",
+										"status"
+									],
+									"query": [
+										{
+											"key": "status",
+											"value": "accepted"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "schedule Consultation",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"warning": "This is a duplicate header and will be overridden by the Content-Type header generated by Postman.",
+										"key": "Content-Type",
+										"value": "multipart/form-data",
+										"type": "default"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer 1|qd8psxuHmALyAfaFCUeosg9tncYVqu11VbYmjPhFdc92f78d",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "doctor_id",
+											"value": "1",
+											"type": "text"
+										},
+										{
+											"key": "medical_tag_id",
+											"value": "1",
+											"type": "text"
+										},
+										{
+											"key": "isSpecial",
+											"value": "1",
+											"type": "text"
+										},
+										{
+											"key": "problem",
+											"value": "test",
+											"type": "text"
+										},
+										{
+											"key": "isAnonymous",
+											"value": "0",
+											"type": "text"
+										},
+										{
+											"key": "media[]",
+											"type": "file",
+											"src": "/C:/Users/HP/Desktop/LIFE/1.png"
+										}
+									]
+								},
+								"url": {
+									"raw": "http://127.0.0.1:8000/api/doctor/consultations/1/schedule?scheduled_at=2025-06-30 15:00:00&reminder_before_minutes=120",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8000",
+									"path": [
+										"api",
+										"doctor",
+										"consultations",
+										"1",
+										"schedule"
+									],
+									"query": [
+										{
+											"key": "scheduled_at",
+											"value": "2025-06-30 15:00:00"
+										},
+										{
+											"key": "reminder_before_minutes",
+											"value": "120"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "user",
+					"item": [
+						{
+							"name": "crate consultation",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"warning": "This is a duplicate header and will be overridden by the Content-Type header generated by Postman.",
+										"key": "Content-Type",
+										"value": "multipart/form-data",
+										"type": "default"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer 1|8z0uviPzGbj0zq0bOJ22B9v5qfOs283az08V5Ago386a3ce9",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "medical_tag_id",
+											"value": "1",
+											"type": "text"
+										},
+										{
+											"key": "problem",
+											"value": "أعاني من دوخة متكررة وفقدان توازن منذ أسبوع",
+											"type": "text"
+										},
+										{
+											"key": "isAnonymous",
+											"value": "1",
+											"type": "text"
+										},
+										{
+											"key": "answers[0][question_id]",
+											"value": "1",
+											"type": "text"
+										},
+										{
+											"key": "answers[0][answer]",
+											"value": "الإجابة هنا",
+											"type": "text"
+										},
+										{
+											"key": "answers[1][question_id]",
+											"value": " 2",
+											"type": "text"
+										},
+										{
+											"key": "answers[1][answer]",
+											"value": "إجابة أخرى",
+											"type": "text"
+										},
+										{
+											"key": "media",
+											"type": "file",
+											"src": "/C:/Users/HP/Desktop/LIFE/1.png"
+										}
+									]
+								},
+								"url": {
+									"raw": "http://127.0.0.1:8000/api/consultations/",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8000",
+									"path": [
+										"api",
+										"consultations",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "get user consultations",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Content-Type",
+										"value": "multipart/form-data",
+										"type": "default"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer 1|qOteFj6fbbFdG00STqUh5qWl7FbM2HvbMMcbac1tb7dc3197",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": []
+								},
+								"url": {
+									"raw": "http://127.0.0.1:8000/api/consultations/",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8000",
+									"path": [
+										"api",
+										"consultations",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "user consultation by filter",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Content-Type",
+										"value": "multipart/form-data",
+										"type": "default"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer 1|qOteFj6fbbFdG00STqUh5qWl7FbM2HvbMMcbac1tb7dc3197",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": []
+								},
+								"url": {
+									"raw": "http://127.0.0.1:8000/api/consultations/filter?status=pending",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8000",
+									"path": [
+										"api",
+										"consultations",
+										"filter"
+									],
+									"query": [
+										{
+											"key": "status",
+											"value": "pending"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Payment",
+			"item": [
+				{
+					"name": "create-intent",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer 1|8z0uviPzGbj0zq0bOJ22B9v5qfOs283az08V5Ago386a3ce9",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"amount\": 10,\r\n  \"doctor_id\": 1,\r\n  \"doctor_stripe_account_id\": \"acct_1RUpatQ5LoOMNyY4\",\r\n  \"consultation_id\": 1\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/api/payments/create-intent",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"payments",
+								"create-intent"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create-intent Copy",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer 1|8z0uviPzGbj0zq0bOJ22B9v5qfOs283az08V5Ago386a3ce9",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"amount\": 10,\r\n  \"doctor_id\": 1,\r\n  \"doctor_stripe_account_id\": \"acct_1RUpatQ5LoOMNyY4\",\r\n  \"consultation_id\": 1\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/api/payments/1/refund",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"payments",
+								"1",
+								"refund"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "payments/status",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer 1|8z0uviPzGbj0zq0bOJ22B9v5qfOs283az08V5Ago386a3ce9",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"amount\": 10,\r\n  \"doctor_id\": 1,\r\n  \"doctor_stripe_account_id\": \"acct_1RUpatQ5LoOMNyY4\",\r\n  \"consultation_id\": 1\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/api/payments/status/1",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"payments",
+								"status",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

@@ -13,11 +13,14 @@ return new class extends Migration
     {
         Schema::create('doctor_specialties', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('doctor_id')->constrained();
-            $table->foreignId('medical_tag_id')->constrained();
-            $table->date('time');
-            $table->string('photo');
-            $table->double('consultationFee');
+            $table->foreignId('doctor_id')->constrained()->onDelete('cascade');
+            $table->foreignId('medical_tag_id')->constrained()->onDelete('cascade');
+            $table->dateTime('start_time');
+            $table->dateTime('end_time');
+            $table->string('photo')->nullable();
+            $table->decimal('consultation_fee', 10, 2);
+            $table->text('description')->nullable();
+            $table->boolean('is_active')->default(true);
             $table->timestamps();
         });
     }

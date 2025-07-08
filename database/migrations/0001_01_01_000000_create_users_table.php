@@ -24,7 +24,7 @@ return new class extends Migration
             $table->string('gender');
             $table->string('role');
             $table->boolean('isVerified');
-
+           // $table->string('stripe_account_id')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

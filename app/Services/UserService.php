@@ -3,19 +3,28 @@
 namespace App\Services;
 
 use App\Repositories\Interfaces\UserRepositoryInterface;
+use App\Repositories\FileRepository;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
 use App\Models\User;
+use Illuminate\Support\Facades\DB;
 
 class UserService
 {
     protected UserRepositoryInterface $userRepository;
+    protected $doctorService;
+    protected $fileRepository;
 
-    public function __construct(UserRepositoryInterface $userRepository)
-    {
+    public function __construct(
+        UserRepositoryInterface $userRepository, 
+        DoctorService $doctorService,
+        FileRepository $fileRepository
+    ) {
         $this->userRepository = $userRepository;
+        $this->doctorService = $doctorService;
+        $this->fileRepository = $fileRepository;
     }
 
     public function getAllUsers()
@@ -28,27 +37,58 @@ class UserService
         return $this->userRepository->findById($id);
     }
 
-    public function register(array $data, $role): User
+    public function register(array $data, string $role)
     {
         $validator = Validator::make($data, [
             'fullName' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:6',
-            'phoneNumber' => 'required|string|min:6',
-            'address' => 'required',
-            'birthday' => 'required',
-            'gender' => 'required',
+            'password' => 'required|string|min:8',
+            'phoneNumber' => 'required|string',
+            'photo' => 'required|image|mimes:jpeg,png,jpg|max:2048',
+            'address' => 'required|string',
+            'birthday' => 'required|date',
+            'gender' => 'required|string',
         ]);
 
         if ($validator->fails()) {
             throw new ValidationException($validator);
         }
 
-        $data['password'] = Hash::make($data['password']);
-        $data['role'] = $role;
-        $data['isVerified'] = false;
+        try {
+            DB::beginTransaction();
 
-        return $this->userRepository->create($data);
+            // Store user photo
+            $photoData = $this->fileRepository->storeFile($data['photo'], 'profiles');
+            $fileRecord = $this->fileRepository->create($photoData);
+
+            $data['password'] = Hash::make($data['password']);
+            $data['role'] = $role;
+            $data['isVerified'] = false;
+            $data['photoPath'] = $fileRecord->path;
+
+            $user = $this->userRepository->create($data);
+
+            if ($role === 'Ductor') {
+                $doctorData = [
+                    'user_id' => $user->id,
+                    'bio' => $data['bio'] ?? '',
+                    'yearOfExper' => $data['yearOfExper'] ?? '0',
+                    'activatePoint' => '0'
+                ];
+                
+                $this->doctorService->create($doctorData);
+            }
+
+            DB::commit();
+
+            // Add photo URL to the response
+            $user->photo_url = $this->fileRepository->getFileUrl($fileRecord->path);
+            
+            return $user;
+        } catch (\Exception $e) {
+            DB::rollBack();
+            throw $e;
+        }
     }
 
     public function updateUser($id, array $data)

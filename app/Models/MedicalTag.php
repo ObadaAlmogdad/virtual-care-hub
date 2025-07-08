@@ -9,8 +9,22 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class MedicalTag extends Model
 {
-    use HasFactory,SoftDeletes;
-    protected $guarded=['id'];
+    use HasFactory, SoftDeletes;
+
+    protected $fillable = [
+        'name',
+        'name_ar',
+        'description',
+        'icon',
+        'is_active',
+        'order'
+    ];
+
+    protected $casts = [
+        'is_active' => 'boolean',
+        'order' => 'integer'
+    ];
+
     public function doctors(): BelongsToMany
     {
         return $this->belongsToMany(Doctor::class, 'doctor_specialties')
@@ -21,5 +35,10 @@ class MedicalTag extends Model
     public function questions(): BelongsToMany
     {
         return $this->belongsToMany(Question::class);
+    }
+
+    public function doctorSpecialties()
+    {
+        return $this->hasMany(DoctorSpecialty::class);
     }
 }
