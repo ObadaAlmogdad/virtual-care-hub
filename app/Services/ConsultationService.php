@@ -22,10 +22,13 @@ class ConsultationService
         $validator = Validator::make($data, [
             'doctor_id' => 'nullable|exists:doctors,id',
             'medical_tag_id' => 'required|exists:medical_tags,id',
-            'isSpecial' => 'required|boolean',
+            'isSpecial' => 'nullable|boolean',
             'problem' => 'required|string',
             'media.*' => 'nullable|file|mimes:jpeg,png,jpg,pdf|max:10240',
             'isAnonymous' => 'required|boolean',
+            'answers' => 'required|array|min:1',
+            'answers.*.question_id' => 'required|exists:questions,id',
+            'answers.*.answer' => 'required|string',
         ]);
 
         if ($validator->fails()) {
@@ -65,7 +68,37 @@ class ConsultationService
             $data['media'] = '';
         }
 
-        return $this->consultationRepository->create($data);
+        // Remove answers from $data before creating consultation
+        $answers = $data['answers'] ?? [];
+        unset($data['answers']);
+
+        // إنشاء الاستشارة
+        $consultation = $this->consultationRepository->create($data);
+
+        // تخزين الإجابات
+        if (!empty($answers)) {
+            foreach ($answers as $answer) {
+                // استخدم النموذج مباشرة (يجب أن يكون موجودًا)
+                \App\Models\ConsultationAnswer::create([
+                    'consultation_id' => $consultation->id,
+                    'question_id' => $answer['question_id'],
+                    'answer_text' => $answer['answer'],
+                ]);
+            }
+        }
+
+        // إرجاع روابط الملفات
+        if ($consultation->media) {
+            $mediaPaths = explode(',', $consultation->media);
+            $mediaUrls = array_map(function($path) {
+                return \Illuminate\Support\Facades\Storage::url($path);
+            }, $mediaPaths);
+            $consultation->media_urls = $mediaUrls;
+        } else {
+            $consultation->media_urls = [];
+        }
+
+        return $consultation;
     }
 
     public function getPendingConsultations($doctorId)

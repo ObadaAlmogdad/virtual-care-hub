@@ -13,7 +13,10 @@ return new class extends Migration
     {
         Schema::create('questions', function (Blueprint $table) {
             $table->id();
-            $table->string('content');
+            $table->foreignId('specialty_id')->constrained('doctor_specialties');
+            $table->foreignId('parent_question_id')->nullable()->constrained('questions');
+            $table->string('parent_answer_value')->nullable();
+            $table->string('question_text');
             $table->boolean('isActive');
             $table->timestamps();
         });
