@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('consultations', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained();
+            $table->foreignId('patient_id')->constrained();
             $table->foreignId('doctor_id')->nullable()->constrained();
             $table->foreignId('medical_tag_id')->constrained();
             $table->boolean('isSpecial')->default(false);

@@ -10,4 +10,8 @@ class Patient extends Model
         'height',
         'weight',
     ];
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

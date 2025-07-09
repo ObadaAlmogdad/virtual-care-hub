@@ -7,6 +7,7 @@ use App\Http\Controllers\API\DocumentController;
 use App\Http\Controllers\API\BankAccountController;
 use App\Http\Controllers\API\ActivationRequestController;
 use App\Http\Controllers\API\AdminController;
+use App\Http\Controllers\API\AppointmentController;
 use App\Http\Controllers\API\MedicalHistoryController;
 use App\Http\Controllers\API\DoctorController;
 use App\Http\Controllers\API\QuestionController;
@@ -120,4 +121,12 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/doctor/consultations/filter', [DoctorController::class, 'getConsultationsByStatus']);
     Route::patch('/doctor/consultations/{consultationId}/status', [DoctorController::class, 'updateConsultationStatus']);
     Route::post('/doctor/consultations/{consultationId}/schedule', [DoctorController::class, 'scheduleConsultation']);
+});
+
+
+//Booking Appointment
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/doctors/{doctor}/available-days', [AppointmentController::class, 'availableDays']);
+    Route::get('/doctors/{doctor}/available-slots', [AppointmentController::class, 'availableSlots']);
+    Route::post('/doctors/{doctor}/book', [AppointmentController::class, 'book']);
 });

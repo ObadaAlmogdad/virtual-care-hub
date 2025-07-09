@@ -21,7 +21,7 @@ return new class extends Migration
             $table->json('work_days')->nullable();
             $table->time('work_time_in')->nullable();
             $table->time('work_time_out')->nullable();
-            $table->integer('time_for_wationg')->nullable();
+            $table->integer('time_for_waiting')->nullable();
             $table->string('facebook_url')->nullable();
             $table->string('instagram_url')->nullable();
             $table->string('twitter_url')->nullable();

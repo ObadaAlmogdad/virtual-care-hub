@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('medical_histories', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->unique()->constrained()->onDelete('cascade');
+            $table->foreignId('patient_id')->unique()->constrained()->onDelete('cascade');
             $table->json('general_diseases')->nullable();
             $table->json('chronic_diseases')->nullable();
             $table->text('surgeries')->nullable();
@@ -21,7 +21,7 @@ return new class extends Migration
             $table->text('permanent_medications')->nullable();
             $table->string('medical_documents_path')->nullable();
             $table->softDeletes();
-            $table->timestamps(); 
+            $table->timestamps();
         });
     }
 
