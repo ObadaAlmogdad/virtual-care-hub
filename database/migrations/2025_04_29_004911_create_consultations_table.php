@@ -20,7 +20,6 @@ return new class extends Migration
             $table->string('problem');
             $table->string('media')->nullable()->default("");
             $table->boolean('isAnonymous')->default(false);
-            $table->text('replayOfDoctor')->nullable();
             $table->double('fee');
             $table->enum('status', ['pending', 'accepted', 'rejected', 'scheduled', 'completed'])->default('pending');
             $table->dateTime('scheduled_at')->nullable();

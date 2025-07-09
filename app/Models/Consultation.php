@@ -56,6 +56,6 @@ class Consultation extends Model
 
     public function consultationResults()
     {
-        return $this->hasOne(ConsultationResult::class);
+        return $this->hasMany(ConsultationResult::class);
     }
 }
