@@ -55,6 +55,27 @@ class StripeWebhookController extends Controller
 
     protected function handlePaymentSuccess($paymentIntent)
     {
+        // معالجة شحن المحفظة
+        if (isset($paymentIntent->metadata->type) && $paymentIntent->metadata->type == 'wallet_topup') {
+            $userId = $paymentIntent->metadata->user_id;
+            $amount = $paymentIntent->amount / 100;
+
+            $wallet = \App\Models\Wallet::firstOrCreate(['user_id' => $userId]);
+            $wallet->increment('balance', $amount);
+
+            \App\Models\Transaction::create([
+                'wallet_id' => $wallet->id,
+                'type' => 'charge',
+                'amount' => $amount,
+                'reference_id' => $paymentIntent->id,
+                'reference_type' => 'stripe_payment_intent',
+                'description' => 'Wallet top-up via Stripe',
+            ]);
+
+            Log::info("Wallet topped up for user $userId, amount: $amount");
+            return;
+        }
+
         $payment = Payment::where('stripe_payment_intent_id', $paymentIntent->id)->first();
 
         if ($payment) {
