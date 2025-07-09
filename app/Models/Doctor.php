@@ -27,19 +27,6 @@ class Doctor extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function files(): BelongsToMany
-    {
-        return $this->belongsToMany(File::class, 'doctor_file')
-            ->withPivot('type')
-            ->withTimestamps();
-    }
-
-    public function licenses()
-    {
-        return $this->belongsToMany(File::class, 'doctor_file')
-            ->wherePivot('type', 'license')
-            ->withTimestamps();
-    }
 
     public function specialties(): BelongsToMany
     {

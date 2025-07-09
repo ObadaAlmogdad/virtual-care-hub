@@ -20,7 +20,7 @@ return new class extends Migration
             $table->text('allergies')->nullable();
             $table->text('permanent_medications')->nullable();
             $table->string('medical_documents_path')->nullable();
-             $table->softDeletes();
+            $table->softDeletes();
             $table->timestamps(); 
         });
     }
