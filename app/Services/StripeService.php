@@ -83,4 +83,22 @@ class StripeService
             'type' => 'account_onboarding',
         ]);
     }
+
+    public function createWalletTopupIntent($amount, $userId)
+    {
+        try {
+            return PaymentIntent::create([
+                'amount' => $amount * 100,
+                'currency' => 'usd',
+                'payment_method_types' => ['card'],
+                'metadata' => [
+                    'type' => 'wallet_topup',
+                    'user_id' => $userId,
+                ],
+            ]);
+        } catch (ApiErrorException $e) {
+            Log::error('Stripe Wallet Topup Intent creation failed: ' . $e->getMessage());
+            throw $e;
+        }
+    }
 }
