@@ -100,19 +100,13 @@ Route::get('/stripe/onboard/return', fn () => response()->json(['message' => 'On
 //     });
 // });
 
-// Route::post('/users/{user}/documents', [DocumentController::class, 'upload']);
-// Route::post('/users/{user}/bank-account', [BankAccountController::class, 'link']);
-// Route::post('/users/{user}/activation-request', [ActivationRequestController::class, 'send']);
-// Route::post('/admin/activation-requests/{activationRequest}/approve', [ActivationRequestController::class, 'approve']);
-// Route::get('/users/{user}/activation-status', [ActivationRequestController::class, 'status']);
 
+Route::group(["middleware" => ["auth:sanctum"]], function () {
 
-// Route::group(["middleware" => ["auth:sanctum"]], function () {
-
-//     Route::prefix('admin/')->group(function () {
-//         Route::patch("verification_account/{id}", [AdminController::class, "verficat"]);
-//     });
-// });
+    Route::prefix('admin/')->group(function () {
+        Route::patch("verification_account/{id}", [AdminController::class, "verficat"]);
+    });
+});
 
 // User Consultation Routes
 Route::middleware('auth:sanctum')->group(function () {
