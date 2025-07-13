@@ -18,7 +18,7 @@ return new class extends Migration
             $table->dateTime('start_time');
             $table->dateTime('end_time');
             $table->string('yearOfExper')->nullable();
-            $table->json('photo')->nullable();
+            $table->string('photo')->nullable();
             $table->decimal('consultation_fee', 10, 2);
             $table->text('description')->nullable();
             $table->boolean('is_active')->default(true);

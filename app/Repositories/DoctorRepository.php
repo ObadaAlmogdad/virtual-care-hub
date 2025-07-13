@@ -46,12 +46,6 @@ class DoctorRepository implements DoctorRepositoryInterface
 
     $user = $doctor->user;
     $specialty = $doctor->specialties()->first();
-
-    // Debug: Log the data being updated
-    Log::info('Updating user data:', $userData);
-    Log::info('Updating doctor data:', $doctorData);
-    Log::info('Updating specialty data:', $specialtyData);
-
     $user->update($userData);
     $doctor->update($doctorData);
 
