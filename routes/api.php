@@ -37,7 +37,7 @@ Route::post('/register-ductor', [UserController::class, 'registerDuctor']);
 Route::middleware('auth:sanctum')->group(function () {
     Route::prefix('doctor')->group(function () {
         Route::get('/profile', [DoctorController::class, 'getProfile']);
-        Route::put('/profile', [DoctorController::class, 'updateProfile']);
+        Route::post('/profile', [DoctorController::class, 'updateProfile']);
         Route::post('/license', [DoctorController::class, 'uploadLicense']);
         Route::delete('/license/{fileId}', [DoctorController::class, 'deleteLicense']);
     });

@@ -27,6 +27,38 @@ class DoctorController extends Controller
 
     public function updateProfile(Request $request)
     {
+        // dd($request->toArray());
+
+        $validator = Validator::make($request->all(), [
+    'fullName' => 'sometimes|string|max:255',
+    'phoneNumber' => 'sometimes|string|max:20',
+    'address' => 'sometimes|string|max:255',
+    'birthday' => 'sometimes|date',
+    'gender' => 'sometimes|in:man,woman',
+    'photoPath' => 'sometimes|file|image|max:2048',
+
+    'bio' => 'sometimes|string|max:1000',
+    'facebook_url' => 'nullable|url',
+    'instagram_url' => 'nullable|url',
+    'twitter_url' => 'nullable|url',
+    'doctor_address' => 'nullable|string|max:255',
+    'work_days' => 'sometimes|array',
+    'work_days.*' => 'in:mon,tue,wed,thu,fri,sat,sun',
+    'work_time_in' => 'sometimes|date_format:H:i:s',
+    'work_time_out' => 'sometimes|date_format:H:i:s',
+    'time_for_waiting' => 'sometimes|integer|min:0',
+
+    'start_time' => 'sometimes|date',
+    'end_time' => 'sometimes|date|after_or_equal:start_time',
+    'consultation_fee' => 'sometimes|numeric|min:0',
+    'description' => 'nullable|string|max:1000',
+    'yearOfExper' => 'sometimes|string|max:50',
+    'photo' => 'sometimes|file|image|max:2048',
+]);
+
+if ($validator->fails()) {
+    throw new ValidationException($validator);
+}
         try {
             // Debug: Log the request data
             Log::info('Request data in controller:', $request->all());
