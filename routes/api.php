@@ -85,6 +85,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('payments/create-intent', [\App\Http\Controllers\Api\PaymentController::class, 'createIntent']);
     Route::post('payments/{payment}/refund', [\App\Http\Controllers\Api\PaymentController::class, 'refund']);
     Route::get('payments/status/{payment}', [\App\Http\Controllers\Api\PaymentController::class, 'getPaymentStatus']);
+    Route::post('wallet/topup', [\App\Http\Controllers\Api\WalletTopupController::class, 'topup']);
+    Route::post('/wallet/confirm', [\App\Http\Controllers\Api\WalletTopupController::class, 'confirmTopup']);
 });
 
 Route::post('stripe/webhook', [\App\Http\Controllers\Api\StripeWebhookController::class, 'handle']);
