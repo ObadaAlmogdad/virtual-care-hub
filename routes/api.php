@@ -3,15 +3,13 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\UserController;
-use App\Http\Controllers\API\DocumentController;
-use App\Http\Controllers\API\BankAccountController;
-use App\Http\Controllers\API\ActivationRequestController;
 use App\Http\Controllers\API\AdminController;
 use App\Http\Controllers\API\AppointmentController;
 use App\Http\Controllers\API\MedicalHistoryController;
 use App\Http\Controllers\API\DoctorController;
 use App\Http\Controllers\API\QuestionController;
 use App\Http\Controllers\API\ConsultationController;
+use App\Http\Controllers\API\ComplaintController;
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
@@ -131,4 +129,14 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/doctors/{doctor}/available-days', [AppointmentController::class, 'availableDays']);
     Route::get('/doctors/{doctor}/available-slots', [AppointmentController::class, 'availableSlots']);
     Route::post('/doctors/{doctor}/book', [AppointmentController::class, 'book']);
+});
+
+
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/complaints', [ComplaintController::class, 'index']);
+    Route::post('/complaints', [ComplaintController::class, 'store']);
+    Route::get('/complaints/count', [ComplaintController::class, 'count']);
+    Route::get('/complaints/{complaint}', [ComplaintController::class, 'show']);
+    Route::post('/complaints/{complaint}', [ComplaintController::class, 'update']);
+    Route::delete('/complaints/{complaint}', [ComplaintController::class, 'destroy']);
 });
