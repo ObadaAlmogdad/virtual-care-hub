@@ -12,7 +12,8 @@ class Complaint extends Model
     'header',
     'content',
     'type',
-    'media'
+    'media',
+    'answer'
 ];
 
 protected $casts = [
