@@ -14,10 +14,4 @@ class File extends Model
         'extension'
     ];
 
-    public function doctors(): BelongsToMany
-    {
-        return $this->belongsToMany(Doctor::class, 'doctor_file')
-            ->withPivot('type')
-            ->withTimestamps();
-    }
 }

@@ -10,7 +10,7 @@ class UserQuestionTagAnswer extends Model
 {
     use HasFactory;
     protected $guarded=['id'];
-    public function questions()
+    public function question()
     {
         return $this->belongsTo(Question::class);
     }

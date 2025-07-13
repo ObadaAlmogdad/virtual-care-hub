@@ -10,14 +10,14 @@ class Question extends Model
 {
     use HasFactory;
     protected $guarded=['id'];
-    
+
     public function medicalTags(): BelongsToMany
     {
         return $this->belongsToMany(MedicalTag::class, 'question_medical_tags');
     }
 
-    public function user_questions_tag_answers(): BelongsToMany
+    public function user_questions_tag_answers()
     {
-        return $this->belongsToMany(UserQuestionTagAnswer::class);
+        return $this->hasMany(UserQuestionTagAnswer::class);
     }
 }

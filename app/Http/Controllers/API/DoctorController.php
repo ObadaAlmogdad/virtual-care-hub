@@ -28,48 +28,17 @@ class DoctorController extends Controller
     public function updateProfile(Request $request)
     {
         try {
+            // Debug: Log the request data
+            Log::info('Request data in controller:', $request->all());
+
             $doctor = $this->doctorService->updateProfile(auth()->id(), $request->all());
             return response()->json([
                 'message' => 'Profile updated successfully',
-                'doctor' => $doctor->load('licenses')
+                'doctor' => $doctor
             ]);
         } catch (\Exception $e) {
             return response()->json(['message' => $e->getMessage()], $e->getCode() ?: 500);
         }
-    }
-
-    public function uploadLicense(Request $request)
-    {
-        $validator = Validator::make($request->all(), [
-            'license' => 'required|file|mimes:jpeg,png,jpg,pdf|max:10240'
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()], 422);
-        }
-
-        $doctor = Doctor::where('user_id', auth()->id())->first();
-
-        if (!$doctor) {
-            return response()->json(['message' => 'Doctor not found'], 404);
-        }
-
-        $file = $request->file('license');
-        $path = $file->store('licenses', 'public');
-
-        $fileRecord = File::create([
-            'path' => $path,
-            'origanName' => $file->getClientOriginalName(),
-            'size' => $file->getSize(),
-            'extension' => $file->getClientOriginalExtension()
-        ]);
-
-        $doctor->files()->attach($fileRecord->id, ['type' => 'license']);
-
-        return response()->json([
-            'message' => 'License uploaded successfully',
-            'file' => $fileRecord
-        ]);
     }
 
     public function getProfile()
@@ -80,36 +49,6 @@ class DoctorController extends Controller
         } catch (\Exception $e) {
             return response()->json(['message' => $e->getMessage()], $e->getCode() ?: 500);
         }
-    }
-
-    public function deleteLicense($fileId)
-    {
-        $doctor = Doctor::where('user_id', auth()->id())->first();
-
-        if (!$doctor) {
-            return response()->json(['message' => 'Doctor not found'], 404);
-        }
-
-        $file = File::find($fileId);
-
-        if (!$file) {
-            return response()->json(['message' => 'File not found'], 404);
-        }
-
-        // Check if the file belongs to the doctor
-        $pivot = $doctor->files()->where('file_id', $fileId)->first();
-
-        if (!$pivot) {
-            return response()->json(['message' => 'Unauthorized'], 403);
-        }
-
-        // Delete the file from storage
-        Storage::disk('public')->delete($file->path);
-
-        // Delete the file record and its pivot
-        $file->delete();
-
-        return response()->json(['message' => 'License deleted successfully']);
     }
 
     public function getSpecialties()
