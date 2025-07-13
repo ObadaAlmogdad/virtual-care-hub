@@ -7,9 +7,6 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
-use App\Models\Document;
-use App\Models\BankAccount;
-use App\Models\ActivationRequest;
 
 class User extends Authenticatable
 {
@@ -28,20 +25,17 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
-    public function documents()
+    public function patient()
     {
-        return $this->hasMany(Document::class);
+        return $this->hasOne(Patient::class);
     }
 
-    public function bankAccount()
+    public function doctor()
     {
-        return $this->belongsTo(BankAccount::class, 'bank_account_id');
+        return $this->hasOne(Doctor::class);
     }
 
-    public function activationRequests()
-    {
-        return $this->hasMany(ActivationRequest::class);
-    }
+
 
     public function medicalHistory()
     {

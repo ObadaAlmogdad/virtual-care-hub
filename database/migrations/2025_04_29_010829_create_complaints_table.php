@@ -17,6 +17,8 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained();
             $table->string('header');
             $table->string('content');
+            $table->enum('type', ['pending', 'in_progress', 'resolved'])->default('pending');
+            $table->json('media')->nullable();
             $table->timestamps();
         });
     }

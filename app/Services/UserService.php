@@ -18,7 +18,7 @@ class UserService
     protected $fileRepository;
 
     public function __construct(
-        UserRepositoryInterface $userRepository, 
+        UserRepositoryInterface $userRepository,
         DoctorService $doctorService,
         FileRepository $fileRepository
     ) {
@@ -72,10 +72,9 @@ class UserService
                 $doctorData = [
                     'user_id' => $user->id,
                     'bio' => $data['bio'] ?? '',
-                    'yearOfExper' => $data['yearOfExper'] ?? '0',
                     'activatePoint' => '0'
                 ];
-                
+
                 $this->doctorService->create($doctorData);
             }
 
@@ -83,13 +82,64 @@ class UserService
 
             // Add photo URL to the response
             $user->photo_url = $this->fileRepository->getFileUrl($fileRecord->path);
-            
+
             return $user;
         } catch (\Exception $e) {
             DB::rollBack();
             throw $e;
         }
     }
+    public function registerDuctorMinimal(array $data)
+{
+    try {
+        DB::beginTransaction();
+
+        $user = $this->userRepository->create([
+            'email' => $data['email'],
+            'password' => Hash::make($data['password']),
+            'role' => $data['role'],
+            'isVerified' => false,
+            'fullName' => 'Not Set',
+            'phoneNumber' => 'Not Set',
+            'photoPath' => '',
+            'address' => 'Not Set',
+            'birthday' => now(),
+            'gender' => 'Not Set',
+        ]);
+        $doctor = $this->doctorService->create([
+            'user_id' => $user->id,
+            'bio' => '',
+            'activatePoint' => '0',
+        ]);
+
+        $certificatePaths = [];
+        foreach ($data['certificate_images'] as $image) {
+            $certificatePaths[] = $image->store('certificates', 'public');
+        }
+        // dd('asdasd');
+
+        $doctor->update([
+            'certificate_images' => json_encode($certificatePaths)
+        ]);
+
+        $this->doctorService->addSpecialtyBySystem($doctor->id, [
+            'medical_tag_id' => $data['medical_tag_id'],
+            'start_time' => $data['start_time'],
+            'end_time' => $data['end_time'],
+            'consultation_fee' => 0,
+            'is_active' => false,
+            'yearOfExper' => $data['yearOfExper'] ?? '0',
+        ]);
+
+        DB::commit();
+
+        return $user;
+    } catch (\Exception $e) {
+        DB::rollBack();
+        throw $e;
+    }
+}
+
 
     public function updateUser($id, array $data)
     {

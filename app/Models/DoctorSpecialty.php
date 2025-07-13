@@ -14,6 +14,7 @@ class DoctorSpecialty extends Model
         'medical_tag_id',
         'start_time',
         'end_time',
+        'yearOfExper',
         'photo',
         'consultation_fee',
         'description',
@@ -24,7 +25,8 @@ class DoctorSpecialty extends Model
         'start_time' => 'datetime',
         'end_time' => 'datetime',
         'is_active' => 'boolean',
-        'consultation_fee' => 'decimal:2'
+        'consultation_fee' => 'decimal:2',
+        'photo'=>'array'
     ];
 
     public function doctor()
@@ -36,4 +38,4 @@ class DoctorSpecialty extends Model
     {
         return $this->belongsTo(MedicalTag::class);
     }
-} 
+}

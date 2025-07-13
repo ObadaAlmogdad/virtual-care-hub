@@ -13,7 +13,7 @@ class Consultation extends Model
     protected $guarded=['id'];
 
     protected $fillable = [
-        'user_id',
+        'patient_id',
         'doctor_id',
         'medical_tag_id',
         'isSpecial',
@@ -57,5 +57,10 @@ class Consultation extends Model
     public function consultationResults()
     {
         return $this->hasMany(ConsultationResult::class);
+    }
+
+    public function patient(): BelongsTo
+    {
+        return $this->belongsTo(Patient::class);
     }
 }

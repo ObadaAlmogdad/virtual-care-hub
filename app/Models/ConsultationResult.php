@@ -6,6 +6,14 @@ use Illuminate\Database\Eloquent\Model;
 
 class ConsultationResult extends Model
 {
+
+    protected $fillable = [
+    'consultation_id',
+    'user_question_tag_answer_id',
+    'replayOfDoctor',
+    'accepted',
+];
+
     public function consultation()
     {
         return $this->belongsTo(Consultation::class);
