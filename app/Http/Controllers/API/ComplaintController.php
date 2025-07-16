@@ -13,6 +13,7 @@ class ComplaintController extends Controller
     // List complaints
     public function index()
     {
+        /**  @var User $user*/
         $user = auth()->user();
         if ($user->isAdmin()) {
             $complaints = Complaint::all();
@@ -43,6 +44,8 @@ class ComplaintController extends Controller
     // Show a complaint (admin or owner only)
     public function show($id)
     {
+        /**  @var User $user*/
+
         $user = auth()->user();
         $complaint = Complaint::findOrFail($id);
         if (!$user->isAdmin() && $complaint->user_id !== $user->id) {
@@ -54,6 +57,7 @@ class ComplaintController extends Controller
     // Update a complaint (admin or owner only, partial update allowed)
     public function update(Request $request, $id)
     {
+        /**  @var User $user*/
         $user = auth()->user();
         $complaint = Complaint::findOrFail($id);
         if (!$user->isAdmin() && $complaint->user_id !== $user->id) {
@@ -93,6 +97,7 @@ class ComplaintController extends Controller
     // Delete a complaint (admin or owner only)
     public function destroy($id)
     {
+        /**  @var User $user*/
         $user = auth()->user();
         $complaint = Complaint::findOrFail($id);
         if (!$user->isAdmin() && $complaint->user_id !== $user->id) {
@@ -105,6 +110,7 @@ class ComplaintController extends Controller
     // Count complaints (admin only)
     public function count()
     {
+        /**  @var User $user*/
         $user = auth()->user();
         if (!$user->isAdmin()) {
             return response()->json(['error' => 'Unauthorized'], 403);
