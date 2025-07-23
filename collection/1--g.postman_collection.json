@@ -554,7 +554,7 @@
 						{
 							"name": "updateProfile",
 							"request": {
-								"method": "PUT",
+								"method": "POST",
 								"header": [
 									{
 										"key": "Content-Type",
@@ -573,8 +573,107 @@
 									}
 								],
 								"body": {
-									"mode": "raw",
-									"raw": "{\r\n    \"bio\": \"طبيب\",\r\n    \"yearOfExper\": \"4\"\r\n}"
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "fullName",
+											"value": "shdaskhdlaskdshk",
+											"type": "text"
+										},
+										{
+											"key": "phoneNumber",
+											"value": "0955667833",
+											"type": "text"
+										},
+										{
+											"key": "address",
+											"value": "dahdasjdhaskdha",
+											"type": "text"
+										},
+										{
+											"key": "birthday",
+											"value": "2025-07-10",
+											"type": "text"
+										},
+										{
+											"key": "gender",
+											"value": "man",
+											"type": "text"
+										},
+										{
+											"key": "bio",
+											"value": "jalsdjasdjasdd",
+											"type": "text"
+										},
+										{
+											"key": "work_days[0]",
+											"value": "mon",
+											"type": "text"
+										},
+										{
+											"key": "work_days[1]",
+											"value": "wed",
+											"type": "text"
+										},
+										{
+											"key": "work_days[2]",
+											"value": "thu",
+											"type": "text"
+										},
+										{
+											"key": "work_time_in",
+											"value": "10:00:00",
+											"type": "text"
+										},
+										{
+											"key": "work_time_out",
+											"value": "19:00:00",
+											"type": "text"
+										},
+										{
+											"key": "time_for_waiting",
+											"value": "20",
+											"type": "text"
+										},
+										{
+											"key": "address",
+											"value": "dashdasjkhdkask",
+											"type": "text"
+										},
+										{
+											"key": "yearOfExper",
+											"value": "5",
+											"type": "text"
+										},
+										{
+											"key": "consultation_fee",
+											"value": "300",
+											"type": "text"
+										},
+										{
+											"key": "description",
+											"value": "dhdhdhhdh",
+											"type": "text"
+										},
+										{
+											"key": "photoPath",
+											"type": "file",
+											"src": "/C:/Users/HP/Desktop/LIFE/1.png"
+										},
+										{
+											"key": "certificate_images[]",
+											"type": "file",
+											"src": [
+												"/C:/Users/HP/Desktop/LIFE/1.png",
+												"/C:/Users/HP/Desktop/LIFE/IMG_٢٠٢٠١٢١٧_١٤١٣٠٥.jpg"
+											]
+										},
+										{
+											"key": "photo",
+											"type": "file",
+											"src": "/C:/Users/HP/Desktop/LIFE/1.png"
+										}
+									]
 								},
 								"url": {
 									"raw": "http://127.0.0.1:8000/api/doctor/profile",
@@ -1103,7 +1202,7 @@
 									"formdata": []
 								},
 								"url": {
-									"raw": "http://127.0.0.1:8000/api/admin/medical-tags/",
+									"raw": "http://127.0.0.1:8000/api/admin/doctors",
 									"protocol": "http",
 									"host": [
 										"127",
@@ -1115,8 +1214,7 @@
 									"path": [
 										"api",
 										"admin",
-										"medical-tags",
-										""
+										"doctors"
 									]
 								}
 							},
@@ -1261,7 +1359,114 @@
 				},
 				{
 					"name": "New Folder",
-					"item": []
+					"item": [
+						{
+							"name": "get all doctors",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "default"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "default"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer 6|Qt5mhJmpxK0sKvSiCvHhnS21N8Cc7OeJL7dHw1pa01048204",
+										"type": "default"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": []
+								},
+								"url": {
+									"raw": "http://127.0.0.1:8000/api/admin/doctors?page=2",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8000",
+									"path": [
+										"api",
+										"admin",
+										"doctors"
+									],
+									"query": [
+										{
+											"key": "page",
+											"value": "2"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "get all patients",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "default"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "default"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer 6|Qt5mhJmpxK0sKvSiCvHhnS21N8Cc7OeJL7dHw1pa01048204",
+										"type": "default"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": []
+								},
+								"url": {
+									"raw": "http://127.0.0.1:8000/api/admin/patients?page=2",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8000",
+									"path": [
+										"api",
+										"admin",
+										"patients"
+									],
+									"query": [
+										{
+											"key": "page",
+											"value": "2"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
 				}
 			]
 		},
@@ -2448,8 +2653,24 @@
 							}
 						],
 						"body": {
-							"mode": "raw",
-							"raw": "{\r\n  \"header\": \"test\",\r\n  \"content\": \"test\"\r\n}"
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "header",
+									"value": "shdaskhdlaskdshk",
+									"type": "text"
+								},
+								{
+									"key": "content",
+									"value": "0955667833",
+									"type": "text"
+								},
+								{
+									"key": "media[]",
+									"type": "file",
+									"src": "/C:/Users/HP/Desktop/LIFE/1.png"
+								}
+							]
 						},
 						"url": {
 							"raw": "http://127.0.0.1:8000/api/complaints",
@@ -2495,7 +2716,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"header\": \"test\",\r\n  \"content\": \"test\"\r\n}"
+							"raw": ""
 						},
 						"url": {
 							"raw": "http://127.0.0.1:8000/api/complaints/1",
@@ -2542,10 +2763,10 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"header\": \"test\",\r\n  \"content\": \"test\"\r\n}"
+							"raw": ""
 						},
 						"url": {
-							"raw": "http://127.0.0.1:8000/api/complaints/1",
+							"raw": "http://127.0.0.1:8000/api/complaints",
 							"protocol": "http",
 							"host": [
 								"127",
@@ -2556,8 +2777,7 @@
 							"port": "8000",
 							"path": [
 								"api",
-								"complaints",
-								"1"
+								"complaints"
 							]
 						}
 					},

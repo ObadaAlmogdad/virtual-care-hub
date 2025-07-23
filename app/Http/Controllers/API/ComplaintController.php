@@ -20,7 +20,45 @@ class ComplaintController extends Controller
         } else {
             $complaints = Complaint::where('user_id', $user->id)->get();
         }
-        return response()->json(['data' => $complaints]);
+        // تجهيز الرسبونس مع اسم الطبيب واسم المريض لكل شكوى
+        $data = $complaints->map(function ($complaint) {
+            // بيانات الطبيب
+            $doctorName = null;
+            $doctorEmail = null;
+            $doctorId = null;
+            $doctorRole = null;
+            if ($complaint->consultation_id) {
+                $consultation = $complaint->consultation;
+                if ($consultation && $consultation->doctor) {
+                    $doctorUser = $consultation->doctor->user;
+                    if ($doctorUser) {
+                        $doctorName = $doctorUser->fullName;
+                        $doctorEmail = $doctorUser->email;
+                        $doctorId = $doctorUser->id;
+                        $doctorRole = $doctorUser->role;
+                    }
+                }
+            }
+            // بيانات المريض
+            $patientUser = $complaint->user;
+            $userData = $patientUser ? [
+                'id' => $patientUser->id,
+                'fullName' => $patientUser->fullName,
+                'email' => $patientUser->email,
+                'role' => $patientUser->role,
+            ] : null;
+            // دمج بيانات الشكوى مع بيانات المستخدم
+            $complaintData = $complaint->toArray();
+            $complaintData['user'] = $userData;
+            return [
+                'data' => $complaintData,
+                'doctor_name' => $doctorName,
+                'doctor_email' => $doctorEmail,
+                'doctor_id' => $doctorId,
+                'doctor_role' => $doctorRole,
+            ];
+        });
+        return response()->json(['data' => $data]);
     }
 
     // Store a new complaint
@@ -31,12 +69,24 @@ class ComplaintController extends Controller
             'header' => 'required|string|max:255',
             'content' => 'required|string',
             'media' => 'nullable|array',
+            'media.*' => 'file|mimes:jpg,jpeg,png,gif,webp,pdf|max:10240', // دعم أنواع الصور والـ PDF حتى 10MB
         ]);
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()], 422);
         }
         $data = $validator->validated();
         $data['user_id'] = auth()->id();
+
+        // معالجة رفع الصور وتخزينها
+        $mediaPaths = [];
+        if ($request->hasFile('media')) {
+            foreach ($request->file('media') as $file) {
+                $path = $file->store('complaints_media', 'public');
+                $mediaPaths[] = $path;
+            }
+        }
+        $data['media'] = $mediaPaths;
+
         $complaint = Complaint::create($data);
         return response()->json(['data' => $complaint], 201);
     }
@@ -45,13 +95,46 @@ class ComplaintController extends Controller
     public function show($id)
     {
         /**  @var User $user*/
-
         $user = auth()->user();
         $complaint = Complaint::findOrFail($id);
         if (!$user->isAdmin() && $complaint->user_id !== $user->id) {
             return response()->json(['error' => 'Unauthorized'], 403);
         }
-        return response()->json(['data' => $complaint]);
+        // جلب بيانات الطبيب
+        $doctorName = null;
+        $doctorEmail = null;
+        $doctorId = null;
+        $doctorRole = null;
+        if ($complaint->consultation_id) {
+            $consultation = $complaint->consultation;
+            if ($consultation && $consultation->doctor) {
+                $doctorUser = $consultation->doctor->user;
+                if ($doctorUser) {
+                    $doctorName = $doctorUser->fullName;
+                    $doctorEmail = $doctorUser->email;
+                    $doctorId = $doctorUser->id;
+                    $doctorRole = $doctorUser->role;
+                }
+            }
+        }
+        // بيانات المريض
+        $patientUser = $complaint->user;
+        $userData = $patientUser ? [
+            'id' => $patientUser->id,
+            'fullName' => $patientUser->fullName,
+            'email' => $patientUser->email,
+            'role' => $patientUser->role,
+        ] : null;
+        // دمج بيانات الشكوى مع بيانات المستخدم
+        $complaintData = $complaint->toArray();
+        $complaintData['user'] = $userData;
+        return response()->json([
+            'data' => $complaintData,
+            'doctor_name' => $doctorName,
+            'doctor_email' => $doctorEmail,
+            'doctor_id' => $doctorId,
+            'doctor_role' => $doctorRole,
+        ]);
     }
 
     // Update a complaint (admin or owner only, partial update allowed)
