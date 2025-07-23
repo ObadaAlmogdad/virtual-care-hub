@@ -13,4 +13,6 @@ interface UserRepositoryInterface
     public function update(User $user, array $data): bool;
     public function delete(User $user): bool;
     public function createUser(array $data): User;
+    public function updateProfile(User $user, array $userData, ?array $patientData = null, ?array $medicalData = null);
+
 }

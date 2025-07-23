@@ -3,9 +3,6 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\UserController;
-use App\Http\Controllers\API\DocumentController;
-use App\Http\Controllers\API\BankAccountController;
-use App\Http\Controllers\API\ActivationRequestController;
 use App\Http\Controllers\API\AdminController;
 use App\Http\Controllers\API\AppointmentController;
 use App\Http\Controllers\API\MedicalHistoryController;
@@ -26,6 +23,7 @@ Route::group(["middleware" => ["auth:sanctum"]], function () {
     Route::prefix('users/')->group(function () {
 
         Route::get("profile", [UserController::class, "profile"]);
+        Route::post('update-profile', [UserController::class, 'updateProfile']);
         Route::get("logout", [UserController::class, "logout"]);
         Route::post('complete-registration', [MedicalHistoryController::class, 'store']);
     });
