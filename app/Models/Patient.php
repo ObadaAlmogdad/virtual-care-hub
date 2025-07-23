@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 class Patient extends Model
 {
     protected $fillable = [
+        'user_id',
+        'fakeName',
         'height',
         'weight',
     ];
@@ -28,5 +30,6 @@ class Patient extends Model
     {
         return $this->hasMany(Consultation::class);
     }
+
 
 }

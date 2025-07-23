@@ -60,9 +60,6 @@ if ($validator->fails()) {
     throw new ValidationException($validator);
 }
         try {
-            // Debug: Log the request data
-            Log::info('Request data in controller:', $request->all());
-
             $doctor = $this->doctorService->updateProfile(auth()->id(), $request->all());
             return response()->json([
                 'message' => 'Profile updated successfully',
