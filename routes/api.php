@@ -77,6 +77,8 @@ Route::post('/register-admin', [UserController::class, 'registerAdmin']);
 Route::middleware(['auth:sanctum'])->prefix('admin')->group(function () {
 
     Route::get('/users/count-by-role', [AdminController::class, 'countUsersByRole']);
+    Route::get('/doctors', [AdminController::class, 'getAllDoctors']);
+    Route::get('/patients', [AdminController::class, 'getAllPatients']);
 });
 
 Route::middleware('auth:sanctum')->group(function () {
