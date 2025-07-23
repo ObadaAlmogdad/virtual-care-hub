@@ -24,6 +24,7 @@ Route::group(["middleware" => ["auth:sanctum"]], function () {
     Route::prefix('users/')->group(function () {
 
         Route::get("profile", [UserController::class, "profile"]);
+        Route::post('update-profile', [UserController::class, 'updateProfile']);
         Route::get("logout", [UserController::class, "logout"]);
         Route::post('complete-registration', [MedicalHistoryController::class, 'store']);
     });

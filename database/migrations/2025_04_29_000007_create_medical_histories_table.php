@@ -19,7 +19,7 @@ return new class extends Migration
             $table->text('surgeries')->nullable();
             $table->text('allergies')->nullable();
             $table->text('permanent_medications')->nullable();
-            $table->string('medical_documents_path')->nullable();
+            $table->json('medical_documents_path')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });
