@@ -35,18 +35,6 @@ class User extends Authenticatable
         return $this->hasOne(Doctor::class);
     }
 
-
-
-    public function medicalHistory()
-    {
-        return $this->hasOne(MedicalHistory::class);
-    }
-
-    public function consultations()
-    {
-        return $this->hasMany(Consultation::class);
-    }
-
     public function payments()
     {
         return $this->hasMany(Payment::class);
