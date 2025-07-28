@@ -22,6 +22,7 @@ class AppointmentController extends Controller
     // ⬅️ Return available days for booking
     public function availableDays(Doctor $doctor)
     {
+
         $days = $this->appointmentService->getAvailableDays($doctor);
         return response()->json($days);
     }
@@ -47,6 +48,16 @@ class AppointmentController extends Controller
         ]);
 
         $user = Auth::user();
+
+        $alreadyBooked = \App\Models\Appointment::where('patient_id', $user->patient->id)
+        ->where('doctor_id', $doctor->id)
+        ->exists();
+
+    if ($alreadyBooked) {
+        throw ValidationException::withMessages([
+            'appointment' => 'لقد قمت بحجز موعد سابق مع هذا الطبيب.'
+        ]);
+    }
         $slots = $this->appointmentService->getAvailableSlots($doctor, $request->date);
 
         if (!in_array($request->time, $slots)) {
@@ -56,10 +67,10 @@ class AppointmentController extends Controller
         }
 
         $appointment = $this->appointmentService->bookAppointment([
-            'patient_id' => $user->id,
+            'patient_id' => $user->patient->id,
             'doctor_id' => $doctor->id,
             'date' => $request->date,
-            'day' => strtolower(Carbon::parse($request->date)->format('l')),
+            'day' => strtolower(Carbon::parse($request->date,'Asia/Damascus')->format('l')),
             'time' => $request->time,
             'user_note' => $request->user_note,
         ]);

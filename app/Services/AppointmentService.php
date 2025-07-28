@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Services;
 
 use App\Models\Doctor;
@@ -18,18 +17,22 @@ class AppointmentService
     public function getAvailableDays(Doctor $doctor, int $daysAhead = 14): array
     {
         $availableDays = [];
-        $workDays = json_decode($doctor->work_days, true);
-
-        $today = Carbon::today();
+        $workDays      = $doctor->work_days;
+        $today         = Carbon::today('Asia/Damascus');
         for ($i = 0; $i < $daysAhead; $i++) {
-            $date = $today->copy()->addDays($i);
+            $date    = $today->copy()->addDays($i);
             $dayName = strtolower($date->format('l'));
+            // dd($dayName);
 
             if (in_array($dayName, $workDays)) {
-                $availableDays[] = [
-                    'date' => $date->toDateString(),
-                    'day' => $dayName
-                ];
+                $availableSlots = $this->getAvailableSlots($doctor, $date->toDateString());
+
+                if (! empty($availableSlots)) {
+                    $availableDays[] = [
+                        'date' => $date->toDateString(),
+                        'day'  => $dayName,
+                    ];
+                }
             }
         }
 
@@ -38,27 +41,27 @@ class AppointmentService
 
     public function getAvailableSlots(Doctor $doctor, string $date): array
     {
-        $workDays = json_decode($doctor->work_days, true);
-        $dayName = strtolower(Carbon::parse($date)->format('l'));
+        $workDays = $doctor->work_days;
+        $dayName  = strtolower(Carbon::parse($date,'Asia/Damascus')->format('l'));
 
-        if (!in_array($dayName, $workDays)) {
+        if (! in_array($dayName, $workDays)) {
             return []; // doctor doesn't work on this day
         }
 
-        $start = Carbon::parse($doctor->work_time_in);
-        $end = Carbon::parse($doctor->work_time_out);
-        $slotDuration = 20;
+        $start        = Carbon::parse($doctor->work_time_in,'Asia/Damascus');
+        $end          = Carbon::parse($doctor->work_time_out,'Asia/Damascus');
+        $slotDuration = $doctor->time_for_waiting?? 20;
 
         $bookedTimes = $this->appointmentRepo
             ->getAppointmentsByDoctorAndDate($doctor->id, $date)
             ->pluck('time')
-            ->map(fn($t) => Carbon::parse($t)->format('H:i'))
+            ->map(fn($t) => Carbon::parse($t,'Asia/Damascus')->format('H:i'))
             ->toArray();
 
         $slots = [];
         while ($start->lt($end)) {
             $time = $start->format('H:i');
-            if (!in_array($time, $bookedTimes)) {
+            if (! in_array($time, $bookedTimes)) {
                 $slots[] = $time;
             }
             $start->addMinutes($slotDuration);

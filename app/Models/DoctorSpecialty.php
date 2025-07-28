@@ -26,7 +26,7 @@ class DoctorSpecialty extends Model
         'end_time' => 'datetime',
         'is_active' => 'boolean',
         'consultation_fee' => 'decimal:2',
-        'photo'=>'array'
+        // 'photo'=>'array'
     ];
 
     public function doctor()
