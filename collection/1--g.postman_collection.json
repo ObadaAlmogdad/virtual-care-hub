@@ -37,7 +37,7 @@
 										},
 										{
 											"key": "email",
-											"value": "t@example.com",
+											"value": "t11@example.com",
 											"type": "text"
 										},
 										{
@@ -117,7 +117,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n   \r\n   \"email\" : \"t@example.com\",\r\n   \"password\":\"123123123\"\r\n}"
+									"raw": "{\r\n   \r\n   \"email\" : \"t11@example.com\",\r\n   \"password\":\"123123123\"\r\n}"
 								},
 								"url": {
 									"raw": "http://127.0.0.1:8000/api/login",
@@ -132,6 +132,126 @@
 									"path": [
 										"api",
 										"login"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "updateProfile",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer 14|iEkMv4dME9R9WfSFcElxF4G4wG8USd7Kh2JEZd2G0dfa7542",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "fullName",
+											"value": " Ahmad Kassem",
+											"type": "text"
+										},
+										{
+											"key": "phoneNumber",
+											"value": " 0987654321",
+											"type": "text"
+										},
+										{
+											"key": "address",
+											"value": " Damascus, Syria",
+											"type": "text"
+										},
+										{
+											"key": "birthday",
+											"value": " 1990-05-12",
+											"type": "text"
+										},
+										{
+											"key": "gender",
+											"value": " man",
+											"type": "text"
+										},
+										{
+											"key": "fakeName",
+											"value": " TestFakeName",
+											"type": "text"
+										},
+										{
+											"key": "height",
+											"value": " 178",
+											"type": "text"
+										},
+										{
+											"key": "weight",
+											"value": " 70",
+											"type": "text"
+										},
+										{
+											"key": "general_diseases[0]",
+											"value": " Diabetes",
+											"type": "text"
+										},
+										{
+											"key": "general_diseases[1]",
+											"value": " Hypertension",
+											"type": "text"
+										},
+										{
+											"key": "chronic_diseases[0]",
+											"value": " Asthma",
+											"type": "text"
+										},
+										{
+											"key": "surgeries",
+											"value": " Appendix removal",
+											"type": "text"
+										},
+										{
+											"key": "allergies",
+											"value": " Penicillin",
+											"type": "text"
+										},
+										{
+											"key": "permanent_medications",
+											"value": " Ibuprofen",
+											"type": "text"
+										},
+										{
+											"key": "photoPath",
+											"type": "file",
+											"src": "/C:/Users/ASUSD/Desktop/8.png"
+										},
+										{
+											"key": "medical_documents_path[]",
+											"type": "file",
+											"src": "/C:/Users/ASUSD/Desktop/5.png"
+										}
+									]
+								},
+								"url": {
+									"raw": "http://127.0.0.1:8000/api/users/update-profile",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8000",
+									"path": [
+										"api",
+										"users",
+										"update-profile"
 									]
 								}
 							},
@@ -156,7 +276,7 @@
 									},
 									{
 										"key": "Authorization",
-										"value": "Bearer 5|7a6lJV4qcbBvxQH2ojZto5Y14bfatOBMVubDTFaY3514ec4e",
+										"value": "Bearer 14|iEkMv4dME9R9WfSFcElxF4G4wG8USd7Kh2JEZd2G0dfa7542",
 										"type": "default",
 										"equals": false
 									}
@@ -222,94 +342,6 @@
 								}
 							},
 							"response": []
-						},
-						{
-							"name": "medical_histories",
-							"request": {
-								"method": "POST",
-								"header": [
-									{
-										"key": "Content-Type",
-										"value": "application/json",
-										"type": "text"
-									},
-									{
-										"key": "Accept",
-										"value": "application/json",
-										"type": "text"
-									},
-									{
-										"key": "Authorization",
-										"value": "Bearer 1|7DWaxEU4oQRmQPkichl0FVShLqB1EyTCevMK8HZjc8cb1cf4",
-										"type": "text"
-									}
-								],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n    \"general_diseases\": [\"flu\", \"cold\"],\r\n    \"chronic_diseases\": [\"test2\"],\r\n    \"surgeries\": \"Appendectomy 2010\",\r\n    \"allergies\": \"test12\",\r\n    \"permanent_medications\": \"Insulin\",\r\n    \"medical_documents_path\": \"http://medical_docs/1.pdf\"\r\n}"
-								},
-								"url": {
-									"raw": "http://127.0.0.1:8000/api/medicalHistory/store",
-									"protocol": "http",
-									"host": [
-										"127",
-										"0",
-										"0",
-										"1"
-									],
-									"port": "8000",
-									"path": [
-										"api",
-										"medicalHistory",
-										"store"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "medical_histories update",
-							"request": {
-								"method": "POST",
-								"header": [
-									{
-										"key": "Content-Type",
-										"value": "application/json",
-										"type": "text"
-									},
-									{
-										"key": "Accept",
-										"value": "application/json",
-										"type": "text"
-									},
-									{
-										"key": "Authorization",
-										"value": "Bearer 1|7DWaxEU4oQRmQPkichl0FVShLqB1EyTCevMK8HZjc8cb1cf4",
-										"type": "text"
-									}
-								],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n    \"general_diseases\": [\"flu\", \"cold\"],\r\n    \"chronic_diseases\": [\"test2\" ,\"test2\"],\r\n    \"surgeries\": \"Appendectomy 2010\",\r\n    \"allergies\": \"test12\",\r\n    \"permanent_medications\": \"Insulin\",\r\n    \"medical_documents_path\": \"http://medical_docs/1.pdf\"\r\n}"
-								},
-								"url": {
-									"raw": "http://127.0.0.1:8000/api/medicalHistory/update",
-									"protocol": "http",
-									"host": [
-										"127",
-										"0",
-										"0",
-										"1"
-									],
-									"port": "8000",
-									"path": [
-										"api",
-										"medicalHistory",
-										"update"
-									]
-								}
-							},
-							"response": []
 						}
 					]
 				}
@@ -341,13 +373,8 @@
 									"mode": "formdata",
 									"formdata": [
 										{
-											"key": "fullName",
-											"value": "test",
-											"type": "text"
-										},
-										{
 											"key": "email",
-											"value": "doctor1@example.com",
+											"value": "doctor3@example.com",
 											"type": "text"
 										},
 										{
@@ -356,39 +383,24 @@
 											"type": "text"
 										},
 										{
-											"key": "phoneNumber",
-											"value": "1234567890",
-											"type": "text"
-										},
-										{
-											"key": "photo",
+											"key": "certificate_images[]",
 											"type": "file",
 											"src": "/C:/Users/HP/Desktop/LIFE/1.png"
 										},
 										{
-											"key": "address",
-											"value": "test",
+											"key": "medical_tag_id",
+											"value": "1",
 											"type": "text"
 										},
 										{
-											"key": "birthday",
-											"value": "1990-01-01",
+											"key": "start_time",
+											"value": "2025-07-10 10:00:00",
 											"type": "text"
 										},
 										{
-											"key": "gender",
-											"value": " m",
+											"key": "end_time",
+											"value": "2025-07-15 10:00:00",
 											"type": "text"
-										},
-										{
-											"key": "bio",
-											"value": "test",
-											"type": "default"
-										},
-										{
-											"key": "yearOfExper",
-											"value": "5",
-											"type": "default"
 										}
 									]
 								},
@@ -437,7 +449,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n   \r\n   \"email\" : \"doctor1@example.com\",\r\n   \"password\":\"123123123\"\r\n}"
+									"raw": "{\r\n   \r\n   \"email\" : \"doctor3@example.com\",\r\n   \"password\":\"123123123\"\r\n}"
 								},
 								"url": {
 									"raw": "http://127.0.0.1:8000/api/login",
@@ -524,7 +536,7 @@
 									},
 									{
 										"key": "Authorization",
-										"value": "Bearer 5|txQDtkDqziljN0UDrIJNlG83HttB8iYzMyCUFEg1d086a5ca",
+										"value": "Bearer 15|ruz8EdhsSmDAz21q1WGMyHQAe9vligA1QsyAzP9G44f49219",
 										"type": "default"
 									}
 								],
@@ -568,7 +580,7 @@
 									},
 									{
 										"key": "Authorization",
-										"value": "Bearer 5|txQDtkDqziljN0UDrIJNlG83HttB8iYzMyCUFEg1d086a5ca",
+										"value": "Bearer 15|ruz8EdhsSmDAz21q1WGMyHQAe9vligA1QsyAzP9G44f49219",
 										"type": "default"
 									}
 								],
@@ -663,10 +675,7 @@
 										{
 											"key": "certificate_images[]",
 											"type": "file",
-											"src": [
-												"/C:/Users/HP/Desktop/LIFE/1.png",
-												"/C:/Users/HP/Desktop/LIFE/IMG_٢٠٢٠١٢١٧_١٤١٣٠٥.jpg"
-											]
+											"src": "/C:/Users/HP/Desktop/LIFE/1.png"
 										},
 										{
 											"key": "photo",
@@ -689,56 +698,6 @@
 										"api",
 										"doctor",
 										"profile"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "add license",
-							"request": {
-								"method": "POST",
-								"header": [
-									{
-										"key": "Content-Type",
-										"value": "application/json",
-										"type": "default"
-									},
-									{
-										"key": "Accept",
-										"value": "application/json",
-										"type": "default"
-									},
-									{
-										"key": "Authorization",
-										"value": "Bearer 3|RkfnMkgqftmxQQRsXogl8gp4rdkTN0ExOFDEgUVM195767b3",
-										"type": "default"
-									}
-								],
-								"body": {
-									"mode": "formdata",
-									"formdata": [
-										{
-											"key": "license",
-											"type": "file",
-											"src": "/C:/Users/HP/Desktop/LIFE/1.png"
-										}
-									]
-								},
-								"url": {
-									"raw": "http://127.0.0.1:8000/api/doctor/license",
-									"protocol": "http",
-									"host": [
-										"127",
-										"0",
-										"0",
-										"1"
-									],
-									"port": "8000",
-									"path": [
-										"api",
-										"doctor",
-										"license"
 									]
 								}
 							},
@@ -767,7 +726,7 @@
 									},
 									{
 										"key": "Authorization",
-										"value": "Bearer 2|BkH8apFaHlEDAZLGb8spyf27If7PaWb4U1srtqfad18b89fd",
+										"value": "Bearer 15|ruz8EdhsSmDAz21q1WGMyHQAe9vligA1QsyAzP9G44f49219",
 										"type": "text"
 									}
 								],
@@ -826,7 +785,6 @@
 								"method": "GET",
 								"header": [
 									{
-										"warning": "This is a duplicate header and will be overridden by the Content-Type header generated by Postman.",
 										"key": "Content-Type",
 										"value": "application/json",
 										"type": "text"
@@ -838,7 +796,7 @@
 									},
 									{
 										"key": "Authorization",
-										"value": "Bearer 3|RkfnMkgqftmxQQRsXogl8gp4rdkTN0ExOFDEgUVM195767b3",
+										"value": "Bearer 15|ruz8EdhsSmDAz21q1WGMyHQAe9vligA1QsyAzP9G44f49219",
 										"type": "text"
 									}
 								],
@@ -867,7 +825,6 @@
 								"method": "GET",
 								"header": [
 									{
-										"warning": "This is a duplicate header and will be overridden by the Content-Type header generated by Postman.",
 										"key": "Content-Type",
 										"value": "application/json",
 										"type": "text"
@@ -879,12 +836,12 @@
 									},
 									{
 										"key": "Authorization",
-										"value": "Bearer 3|RkfnMkgqftmxQQRsXogl8gp4rdkTN0ExOFDEgUVM195767b3",
+										"value": "Bearer 15|ruz8EdhsSmDAz21q1WGMyHQAe9vligA1QsyAzP9G44f49219",
 										"type": "text"
 									}
 								],
 								"url": {
-									"raw": "http://127.0.0.1:8000/api/doctor/2/specialties",
+									"raw": "http://127.0.0.1:8000/api/doctor/5/specialties",
 									"protocol": "http",
 									"host": [
 										"127",
@@ -896,7 +853,7 @@
 									"path": [
 										"api",
 										"doctor",
-										"2",
+										"5",
 										"specialties"
 									]
 								}
@@ -939,7 +896,7 @@
 										},
 										{
 											"key": "email",
-											"value": "admin@example.com",
+											"value": "admin1@example.com",
 											"type": "text"
 										},
 										{
@@ -1019,7 +976,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n   \r\n   \"email\" : \"admin@example.com\",\r\n   \"password\":\"123123123\"\r\n}"
+									"raw": "{\r\n   \r\n   \"email\" : \"admin1@example.com\",\r\n   \"password\":\"123123123\"\r\n}"
 								},
 								"url": {
 									"raw": "http://127.0.0.1:8000/api/login",
@@ -1237,7 +1194,7 @@
 									},
 									{
 										"key": "Authorization",
-										"value": "Bearer 2|BkH8apFaHlEDAZLGb8spyf27If7PaWb4U1srtqfad18b89fd",
+										"value": "Bearer 3|XY30rJENyFlau0qNPs8E3AYHqonaDEkjscC05xxQ79e155d3",
 										"type": "default"
 									}
 								],
@@ -2375,7 +2332,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"amount\": 10,\r\n  \"doctor_id\": 1,\r\n  \"doctor_stripe_account_id\": \"acct_1RUpatQ5LoOMNyY4\",\r\n  \"consultation_id\": 1\r\n}",
+							"raw": "{\r\n  \"reason\": \"the doctor was not test\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -2505,12 +2462,6 @@
 						"method": "POST",
 						"header": [
 							{
-								"warning": "This is a duplicate header and will be overridden by the Content-Type header generated by Postman.",
-								"key": "Content-Type",
-								"value": "application/json",
-								"type": "text"
-							},
-							{
 								"key": "Accept",
 								"value": "application/json",
 								"type": "text"
@@ -2519,12 +2470,6 @@
 								"key": "Authorization",
 								"value": "Bearer ",
 								"type": "text"
-							},
-							{
-								"warning": "This is a duplicate header and will be overridden by the Content-Type header generated by Postman.",
-								"key": "Content-Type",
-								"value": "application/x-www-form-urlencoded",
-								"type": "default"
 							}
 						],
 						"body": {
@@ -2853,7 +2798,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n\r\n  \"header\": \"test\",\r\n  \"content\": \"test\"\r\n}"
+							"raw": "{\r\n  \"header\": \"test\",\r\n  \"content\": \"test\"\r\n}"
 						},
 						"url": {
 							"raw": "http://127.0.0.1:8000/api/complaints/1",
@@ -2897,7 +2842,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n\r\n  \"header\": \"test\",\r\n  \"content\": \"test\",\r\n  \"type\":\"in_progress\",\r\n  \"answer\":\"test\"\r\n}"
+							"raw": "{\r\n\r\n  \"type\":\"in_progress\",\r\n  \"answer\":\"test1\"\r\n}"
 						},
 						"url": {
 							"raw": "http://127.0.0.1:8000/api/complaints/1",
@@ -2913,6 +2858,237 @@
 								"api",
 								"complaints",
 								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "chat",
+			"item": [
+				{
+					"name": "my chats",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer 4|hmbcVnoPMRNC2mRMCRw7Mfz48EqkbkPlJ7H8s89g81a10f0c",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://127.0.0.1:8000/api/chats",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"chats"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "chat messages",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer 4|hmbcVnoPMRNC2mRMCRw7Mfz48EqkbkPlJ7H8s89g81a10f0c",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://127.0.0.1:8000/api/chats/1/messages",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"chats",
+								"1",
+								"messages"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "send message",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer 4|hmbcVnoPMRNC2mRMCRw7Mfz48EqkbkPlJ7H8s89g81a10f0c",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "message_content",
+									"value": "test",
+									"type": "default"
+								},
+								{
+									"key": "message_type",
+									"value": "text",
+									"type": "default"
+								},
+								{
+									"key": "file",
+									"type": "file",
+									"src": []
+								}
+							]
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/api/chats/1/messages",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"chats",
+								"1",
+								"messages"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete message",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer 4|hmbcVnoPMRNC2mRMCRw7Mfz48EqkbkPlJ7H8s89g81a10f0c",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://127.0.0.1:8000/api/chats/1/messages/1",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"chats",
+								"1",
+								"messages",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "open private chat",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer 4|hmbcVnoPMRNC2mRMCRw7Mfz48EqkbkPlJ7H8s89g81a10f0c",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"patient_id\":1\r\n}"
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/api/chats",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"chats"
 							]
 						}
 					},

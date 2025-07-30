@@ -17,6 +17,7 @@ return new class extends Migration
             $table->foreignId('sender_id')->constrained('users')->onDelete('cascade');
             $table->text('message_content');  // Encrypted
             $table->enum('message_type', ['text', 'image', 'file']);
+            $table->boolean('is_read')->default(false);
             $table->timestamps();
         });
     }

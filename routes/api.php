@@ -10,6 +10,8 @@ use App\Http\Controllers\API\DoctorController;
 use App\Http\Controllers\API\QuestionController;
 use App\Http\Controllers\API\ConsultationController;
 use App\Http\Controllers\API\ComplaintController;
+use App\Http\Controllers\API\{ChatController, MessageController};
+use Illuminate\Broadcasting\Broadcast;
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
@@ -142,4 +144,21 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/complaints/{complaint}', [ComplaintController::class, 'show']);
     Route::post('/complaints/{complaint}', [ComplaintController::class, 'update']);
     Route::delete('/complaints/{complaint}', [ComplaintController::class, 'destroy']);
+});
+
+// Broadcasting Auth Route
+Route::post('/broadcasting/auth', function (Request $request) {
+    return Broadcast::auth($request);
+})->middleware('auth:sanctum');
+
+Route::middleware('auth:sanctum')->group(function () {
+    // Chat Routes
+    Route::post('/chats', [ChatController::class, 'createChat']);
+    Route::get('/chats', [ChatController::class, 'myChats']);
+    Route::get('/chats/{chat_id}', [ChatController::class, 'getChat']);
+    
+    // Message Routes
+    Route::get('/chats/{chat_id}/messages', [MessageController::class, 'getMessages']);
+    Route::post('/chats/{chat_id}/messages', [MessageController::class, 'sendMessage']);
+    Route::delete('/chats/{chat_id}/messages/{message_id}', [MessageController::class, 'deleteMessage']);
 });
