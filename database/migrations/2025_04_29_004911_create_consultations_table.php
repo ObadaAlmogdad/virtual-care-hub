@@ -13,14 +13,13 @@ return new class extends Migration
     {
         Schema::create('consultations', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained();
+            $table->foreignId('patient_id')->constrained();
             $table->foreignId('doctor_id')->nullable()->constrained();
             $table->foreignId('medical_tag_id')->constrained();
             $table->boolean('isSpecial')->default(false);
             $table->string('problem');
             $table->string('media')->nullable()->default("");
             $table->boolean('isAnonymous')->default(false);
-            $table->text('replayOfDoctor')->nullable();
             $table->double('fee');
             $table->enum('status', ['pending', 'accepted', 'rejected', 'scheduled', 'completed'])->default('pending');
             $table->dateTime('scheduled_at')->nullable();

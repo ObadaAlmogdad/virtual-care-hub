@@ -554,7 +554,7 @@
 						{
 							"name": "updateProfile",
 							"request": {
-								"method": "PUT",
+								"method": "POST",
 								"header": [
 									{
 										"key": "Content-Type",
@@ -573,8 +573,107 @@
 									}
 								],
 								"body": {
-									"mode": "raw",
-									"raw": "{\r\n    \"bio\": \"طبيب\",\r\n    \"yearOfExper\": \"4\"\r\n}"
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "fullName",
+											"value": "shdaskhdlaskdshk",
+											"type": "text"
+										},
+										{
+											"key": "phoneNumber",
+											"value": "0955667833",
+											"type": "text"
+										},
+										{
+											"key": "address",
+											"value": "dahdasjdhaskdha",
+											"type": "text"
+										},
+										{
+											"key": "birthday",
+											"value": "2025-07-10",
+											"type": "text"
+										},
+										{
+											"key": "gender",
+											"value": "man",
+											"type": "text"
+										},
+										{
+											"key": "bio",
+											"value": "jalsdjasdjasdd",
+											"type": "text"
+										},
+										{
+											"key": "work_days[0]",
+											"value": "mon",
+											"type": "text"
+										},
+										{
+											"key": "work_days[1]",
+											"value": "wed",
+											"type": "text"
+										},
+										{
+											"key": "work_days[2]",
+											"value": "thu",
+											"type": "text"
+										},
+										{
+											"key": "work_time_in",
+											"value": "10:00:00",
+											"type": "text"
+										},
+										{
+											"key": "work_time_out",
+											"value": "19:00:00",
+											"type": "text"
+										},
+										{
+											"key": "time_for_waiting",
+											"value": "20",
+											"type": "text"
+										},
+										{
+											"key": "address",
+											"value": "dashdasjkhdkask",
+											"type": "text"
+										},
+										{
+											"key": "yearOfExper",
+											"value": "5",
+											"type": "text"
+										},
+										{
+											"key": "consultation_fee",
+											"value": "300",
+											"type": "text"
+										},
+										{
+											"key": "description",
+											"value": "dhdhdhhdh",
+											"type": "text"
+										},
+										{
+											"key": "photoPath",
+											"type": "file",
+											"src": "/C:/Users/HP/Desktop/LIFE/1.png"
+										},
+										{
+											"key": "certificate_images[]",
+											"type": "file",
+											"src": [
+												"/C:/Users/HP/Desktop/LIFE/1.png",
+												"/C:/Users/HP/Desktop/LIFE/IMG_٢٠٢٠١٢١٧_١٤١٣٠٥.jpg"
+											]
+										},
+										{
+											"key": "photo",
+											"type": "file",
+											"src": "/C:/Users/HP/Desktop/LIFE/1.png"
+										}
+									]
 								},
 								"url": {
 									"raw": "http://127.0.0.1:8000/api/doctor/profile",
@@ -920,7 +1019,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n   \r\n   \"email\" : \"doctor1@example.com\",\r\n   \"password\":\"123123123\"\r\n}"
+									"raw": "{\r\n   \r\n   \"email\" : \"admin@example.com\",\r\n   \"password\":\"123123123\"\r\n}"
 								},
 								"url": {
 									"raw": "http://127.0.0.1:8000/api/login",
@@ -1103,7 +1202,7 @@
 									"formdata": []
 								},
 								"url": {
-									"raw": "http://127.0.0.1:8000/api/admin/medical-tags/",
+									"raw": "http://127.0.0.1:8000/api/admin/doctors",
 									"protocol": "http",
 									"host": [
 										"127",
@@ -1115,8 +1214,7 @@
 									"path": [
 										"api",
 										"admin",
-										"medical-tags",
-										""
+										"doctors"
 									]
 								}
 							},
@@ -1261,7 +1359,114 @@
 				},
 				{
 					"name": "New Folder",
-					"item": []
+					"item": [
+						{
+							"name": "get all doctors",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "default"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "default"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer 6|Qt5mhJmpxK0sKvSiCvHhnS21N8Cc7OeJL7dHw1pa01048204",
+										"type": "default"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": []
+								},
+								"url": {
+									"raw": "http://127.0.0.1:8000/api/admin/doctors?page=2",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8000",
+									"path": [
+										"api",
+										"admin",
+										"doctors"
+									],
+									"query": [
+										{
+											"key": "page",
+											"value": "2"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "get all patients",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "default"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "default"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer 6|Qt5mhJmpxK0sKvSiCvHhnS21N8Cc7OeJL7dHw1pa01048204",
+										"type": "default"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": []
+								},
+								"url": {
+									"raw": "http://127.0.0.1:8000/api/admin/patients?page=2",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8000",
+									"path": [
+										"api",
+										"admin",
+										"patients"
+									],
+									"query": [
+										{
+											"key": "page",
+											"value": "2"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
 				}
 			]
 		},
@@ -2239,6 +2444,474 @@
 								"api",
 								"payments",
 								"status",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "wallet",
+			"item": [
+				{
+					"name": "topup",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer 3|7q43NKh5trS0pWbMgCn9Xbw0gmg3ryzvSwwKwBlp4d38200e",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"amount\": 5\r\n}"
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/api/wallet/topup",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"wallet",
+								"topup"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "payment_methods",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"warning": "This is a duplicate header and will be overridden by the Content-Type header generated by Postman.",
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer ",
+								"type": "text"
+							},
+							{
+								"warning": "This is a duplicate header and will be overridden by the Content-Type header generated by Postman.",
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "type",
+									"value": "card",
+									"type": "text"
+								},
+								{
+									"key": "card[number]",
+									"value": "4242424242424242",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "card[exp_month]",
+									"value": "12",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "card[exp_year]",
+									"value": "2030",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "card[cvc]",
+									"value": "123",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "card[token]",
+									"value": "tok_visa",
+									"type": "default"
+								}
+							]
+						},
+						"url": {
+							"raw": "https://api.stripe.com/v1/payment_methods",
+							"protocol": "https",
+							"host": [
+								"api",
+								"stripe",
+								"com"
+							],
+							"path": [
+								"v1",
+								"payment_methods"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "confirm",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer 3|7q43NKh5trS0pWbMgCn9Xbw0gmg3ryzvSwwKwBlp4d38200e",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"payment_intent_id\": \"pi_3RlShMPvxrl8PULy1idGbCqz\",\r\n  \"payment_method_id\": \"pm_1RlShzPvxrl8PULyx4n6IptS\"\r\n}"
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/api/wallet/confirm",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"wallet",
+								"confirm"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Complaints",
+			"item": [
+				{
+					"name": "create",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer 1|GgkJKFYtLkXQOBuMbDtnNmIrPjeChjb9hyK1qHoi74a2e960",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "header",
+									"value": "shdaskhdlaskdshk",
+									"type": "text"
+								},
+								{
+									"key": "content",
+									"value": "0955667833",
+									"type": "text"
+								},
+								{
+									"key": "media[]",
+									"type": "file",
+									"src": "/C:/Users/HP/Desktop/LIFE/1.png"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/api/complaints",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"complaints"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get by id",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer 1|GgkJKFYtLkXQOBuMbDtnNmIrPjeChjb9hyK1qHoi74a2e960",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/api/complaints/1",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"complaints",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer 1|GgkJKFYtLkXQOBuMbDtnNmIrPjeChjb9hyK1qHoi74a2e960",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/api/complaints",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"complaints"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "cont",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer 2|OyMrFhfTAS61xds1Q1JKvx2XTa5OFKeK3F3qot4786e27cb7",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"header\": \"test\",\r\n  \"content\": \"test\"\r\n}"
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/api/complaints/count",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"complaints",
+								"count"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer 1|GgkJKFYtLkXQOBuMbDtnNmIrPjeChjb9hyK1qHoi74a2e960",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\r\n  \"header\": \"test\",\r\n  \"content\": \"test\"\r\n}"
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/api/complaints/1",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"complaints",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update for admin",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer 2|OyMrFhfTAS61xds1Q1JKvx2XTa5OFKeK3F3qot4786e27cb7",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\r\n  \"header\": \"test\",\r\n  \"content\": \"test\",\r\n  \"type\":\"in_progress\",\r\n  \"answer\":\"test\"\r\n}"
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/api/complaints/1",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"complaints",
 								"1"
 							]
 						}

@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('user_question_tag_answers', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained();
+            $table->foreignId('patient_id')->constrained();
             $table->foreignId('question_medical_tag_id')->constrained();
             $table->string('answer');
             $table->timestamps();

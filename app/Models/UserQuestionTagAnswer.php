@@ -10,9 +10,9 @@ class UserQuestionTagAnswer extends Model
 {
     use HasFactory;
     protected $guarded=['id'];
-    public function questions(): BelongsToMany
+    public function question()
     {
-        return $this->belongsToMany(Question::class);
+        return $this->belongsTo(Question::class);
     }
 
     public function consultationResult()

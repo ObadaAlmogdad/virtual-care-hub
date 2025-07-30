@@ -17,6 +17,7 @@ return new class extends Migration
             $table->foreignId('medical_tag_id')->constrained()->onDelete('cascade');
             $table->dateTime('start_time');
             $table->dateTime('end_time');
+            $table->string('yearOfExper')->nullable();
             $table->string('photo')->nullable();
             $table->decimal('consultation_fee', 10, 2);
             $table->text('description')->nullable();

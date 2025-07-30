@@ -10,13 +10,22 @@ return new class extends Migration
      * Run the migrations.
      */
     public function up(): void
-    { 
+    {
         Schema::create('doctors', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained();
             $table->string('bio');
-            $table->string('yearOfExper');
             $table->string('activatePoint');
+            $table->float('rating')->nullable();
+            $table->json('work_days')->nullable();
+            $table->time('work_time_in')->nullable();
+            $table->time('work_time_out')->nullable();
+            $table->json('certificate_images')->nullable();
+            $table->integer('time_for_waiting')->nullable();
+            $table->string('facebook_url')->nullable();
+            $table->string('instagram_url')->nullable();
+            $table->string('twitter_url')->nullable();
+            $table->string('address')->nullable();
             $table->timestamps();
         });
     }

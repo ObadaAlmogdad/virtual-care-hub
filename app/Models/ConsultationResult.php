@@ -2,10 +2,20 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class ConsultationResult extends Model
 {
+    use HasFactory;
+
+    protected $fillable = [
+    'consultation_id',
+    'user_question_tag_answer_id',
+    'replayOfDoctor',
+    'accepted',
+];
+
     public function consultation()
     {
         return $this->belongsTo(Consultation::class);

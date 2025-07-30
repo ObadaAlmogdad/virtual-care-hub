@@ -32,9 +32,9 @@ class MedicalTag extends Model
                     ->withTimestamps();
     }
 
-    public function questions(): BelongsToMany
+    public function questions()
     {
-        return $this->belongsToMany(Question::class);
+        return $this->hasMany(Question::class);
     }
 
     public function doctorSpecialties()

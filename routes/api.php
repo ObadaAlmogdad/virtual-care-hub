@@ -3,14 +3,13 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\UserController;
-use App\Http\Controllers\API\DocumentController;
-use App\Http\Controllers\API\BankAccountController;
-use App\Http\Controllers\API\ActivationRequestController;
 use App\Http\Controllers\API\AdminController;
+use App\Http\Controllers\API\AppointmentController;
 use App\Http\Controllers\API\MedicalHistoryController;
 use App\Http\Controllers\API\DoctorController;
 use App\Http\Controllers\API\QuestionController;
 use App\Http\Controllers\API\ConsultationController;
+use App\Http\Controllers\API\ComplaintController;
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
@@ -25,6 +24,7 @@ Route::group(["middleware" => ["auth:sanctum"]], function () {
     Route::prefix('users/')->group(function () {
 
         Route::get("profile", [UserController::class, "profile"]);
+        Route::post('update-profile', [UserController::class, 'updateProfile']);
         Route::get("logout", [UserController::class, "logout"]);
         Route::post('complete-registration', [MedicalHistoryController::class, 'store']);
     });
@@ -36,7 +36,7 @@ Route::post('/register-ductor', [UserController::class, 'registerDuctor']);
 Route::middleware('auth:sanctum')->group(function () {
     Route::prefix('doctor')->group(function () {
         Route::get('/profile', [DoctorController::class, 'getProfile']);
-        Route::put('/profile', [DoctorController::class, 'updateProfile']);
+        Route::post('/profile', [DoctorController::class, 'updateProfile']);
         Route::post('/license', [DoctorController::class, 'uploadLicense']);
         Route::delete('/license/{fileId}', [DoctorController::class, 'deleteLicense']);
     });
@@ -78,12 +78,16 @@ Route::post('/register-admin', [UserController::class, 'registerAdmin']);
 Route::middleware(['auth:sanctum'])->prefix('admin')->group(function () {
 
     Route::get('/users/count-by-role', [AdminController::class, 'countUsersByRole']);
+    Route::get('/doctors', [AdminController::class, 'getAllDoctors']);
+    Route::get('/patients', [AdminController::class, 'getAllPatients']);
 });
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('payments/create-intent', [\App\Http\Controllers\Api\PaymentController::class, 'createIntent']);
     Route::post('payments/{payment}/refund', [\App\Http\Controllers\Api\PaymentController::class, 'refund']);
     Route::get('payments/status/{payment}', [\App\Http\Controllers\Api\PaymentController::class, 'getPaymentStatus']);
+    Route::post('wallet/topup', [\App\Http\Controllers\Api\WalletTopupController::class, 'topup']);
+    Route::post('/wallet/confirm', [\App\Http\Controllers\Api\WalletTopupController::class, 'confirmTopup']);
 });
 
 Route::post('stripe/webhook', [\App\Http\Controllers\Api\StripeWebhookController::class, 'handle']);
@@ -100,19 +104,13 @@ Route::get('/stripe/onboard/return', fn () => response()->json(['message' => 'On
 //     });
 // });
 
-// Route::post('/users/{user}/documents', [DocumentController::class, 'upload']);
-// Route::post('/users/{user}/bank-account', [BankAccountController::class, 'link']);
-// Route::post('/users/{user}/activation-request', [ActivationRequestController::class, 'send']);
-// Route::post('/admin/activation-requests/{activationRequest}/approve', [ActivationRequestController::class, 'approve']);
-// Route::get('/users/{user}/activation-status', [ActivationRequestController::class, 'status']);
 
+Route::group(["middleware" => ["auth:sanctum"]], function () {
 
-// Route::group(["middleware" => ["auth:sanctum"]], function () {
-
-//     Route::prefix('admin/')->group(function () {
-//         Route::patch("verification_account/{id}", [AdminController::class, "verficat"]);
-//     });
-// });
+    Route::prefix('admin/')->group(function () {
+        Route::patch("verification_account/{id}", [AdminController::class, "verficat"]);
+    });
+});
 
 // User Consultation Routes
 Route::middleware('auth:sanctum')->group(function () {
@@ -126,4 +124,22 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/doctor/consultations/filter', [DoctorController::class, 'getConsultationsByStatus']);
     Route::patch('/doctor/consultations/{consultationId}/status', [DoctorController::class, 'updateConsultationStatus']);
     Route::post('/doctor/consultations/{consultationId}/schedule', [DoctorController::class, 'scheduleConsultation']);
+});
+
+
+//Booking Appointment
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/doctors/{doctor}/available-days', [AppointmentController::class, 'availableDays']);
+    Route::get('/doctors/{doctor}/available-slots', [AppointmentController::class, 'availableSlots']);
+    Route::post('/doctors/{doctor}/book', [AppointmentController::class, 'book']);
+});
+
+
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/complaints', [ComplaintController::class, 'index']);
+    Route::post('/complaints', [ComplaintController::class, 'store']);
+    Route::get('/complaints/count', [ComplaintController::class, 'count']);
+    Route::get('/complaints/{complaint}', [ComplaintController::class, 'show']);
+    Route::post('/complaints/{complaint}', [ComplaintController::class, 'update']);
+    Route::delete('/complaints/{complaint}', [ComplaintController::class, 'destroy']);
 });

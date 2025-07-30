@@ -13,10 +13,13 @@ return new class extends Migration
     {
         Schema::create('complaints', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('consultation_id')->constrained();
+            $table->foreignId('consultation_id')->nullable()->constrained();
             $table->foreignId('user_id')->constrained();
             $table->string('header');
             $table->string('content');
+            $table->enum('type', ['pending', 'in_progress', 'resolved'])->default('pending');
+            $table->json('media')->nullable();
+            $table->string('answer')->nullable();
             $table->timestamps();
         });
     }

@@ -13,8 +13,24 @@ class Doctor extends Model
     protected $fillable = [
         'user_id',
         'bio',
-        'yearOfExper',
-        'activatePoint'
+        'activatePoint',
+        'rating',
+        'facebook_url',
+        'instagram_url',
+        'twitter_url',
+        'address',
+        'work_days',
+        'work_time_in',
+        'work_time_out',
+        'time_for_waiting',
+        'certificate_images',
+    ];
+
+    protected $casts = [
+        'work_days' => 'array',
+        'certificate_images' => 'array',
+        'work_time_in' => 'datetime:H:i:s',
+        'work_time_out' => 'datetime:H:i:s',
     ];
 
     public function user(): BelongsTo
@@ -22,29 +38,18 @@ class Doctor extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function files(): BelongsToMany
-    {
-        return $this->belongsToMany(File::class, 'doctor_file')
-            ->withPivot('type')
-            ->withTimestamps();
-    }
 
-    public function licenses()
-    {
-        return $this->belongsToMany(File::class, 'doctor_file')
-            ->wherePivot('type', 'license')
-            ->withTimestamps();
-    }
+    public function specialties()
+{
+    return $this->hasMany(DoctorSpecialty::class);
+}
 
-    public function specialties(): BelongsToMany
-    {
-        return $this->belongsToMany(MedicalTag::class, 'doctor_specialties')
-                    ->withPivot(['time', 'photo', 'consultationFee'])
-                    ->withTimestamps();
-    }
 
     public function consultations()
     {
         return $this->hasMany(Consultation::class);
     }
+
+
+
 }

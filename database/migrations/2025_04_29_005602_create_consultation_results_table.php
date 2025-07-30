@@ -15,6 +15,8 @@ return new class extends Migration
             $table->id();
             $table->foreignId('consultation_id')->constrained();
             $table->foreignId('user_question_tag_answer_id')->constrained();
+            $table->string('replayOfDoctor');
+            $table->boolean('accepted');
             $table->timestamps();
         });
     }

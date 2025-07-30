@@ -6,6 +6,7 @@ use App\Models\Doctor;
 use App\Models\DoctorSpecialty;
 use App\Repositories\Interfaces\DoctorRepositoryInterface;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log;
 
 class DoctorRepository implements DoctorRepositoryInterface
 {
@@ -37,6 +38,24 @@ class DoctorRepository implements DoctorRepositoryInterface
         }
         return null;
     }
+
+    public function updateProfileFull($userId, array $userData, array $doctorData, array $specialtyData = [])
+{
+    $doctor = $this->findByUserId($userId);
+    if (!$doctor) return null;
+
+    $user = $doctor->user;
+    $specialty = $doctor->specialties()->first();
+    $user->update($userData);
+    $doctor->update($doctorData);
+
+    if ($specialty) {
+        $specialty->update($specialtyData);
+    }
+
+    return $doctor->fresh()->load(['user', 'specialties']);
+}
+
 
     public function find($id)
     {
@@ -103,4 +122,4 @@ class DoctorRepository implements DoctorRepositoryInterface
         }
         return false;
     }
-} 
+}

@@ -143,4 +143,68 @@ class AdminController extends Controller
             ], 500);
         }
     }
+
+    /**
+     * Get all doctors with details for admin
+     */
+    public function getAllDoctors(Request $request)
+    {
+        $doctors = \App\Models\Doctor::with(['user', 'specialties.medicalTag'])
+            ->paginate(20);
+
+        $result = $doctors->map(function ($doctor) {
+            $user = $doctor->user;
+            $specialty = $doctor->specialties->first();
+            $medicalTag = $specialty && $specialty->medicalTag ? $specialty->medicalTag->name : null;
+            return [
+                'doctor_name' => $user ? $user->fullName : null,
+                'email' => $user ? $user->email : null,
+                'specialty' => $medicalTag,
+                'city' => $user ? $user->address : null,
+                'rating' => $doctor->rating ?? 0,
+                'status' => $user && $user->isVerified ? 'مفعل' : 'غير مفعل',
+            ];
+        });
+
+        return response()->json([
+            'status' => 'success',
+            'data' => $result,
+            'current_page' => $doctors->currentPage(),
+            'last_page' => $doctors->lastPage(),
+            'per_page' => $doctors->perPage(),
+            'total' => $doctors->total(),
+        ]);
+    }
+
+    /**
+     * Get all patients with useful details for admin
+     */
+    public function getAllPatients(Request $request)
+    {
+        $patients = \App\Models\Patient::with('user')
+            ->paginate(20);
+
+        $result = $patients->map(function ($patient) {
+            $user = $patient->user;
+            return [
+                'name' => $user ? $user->fullName : null,
+                'email' => $user ? $user->email : null,
+                'address' => $user ? $user->address : null,
+                'gender' => $user ? $user->gender : null,
+                'birthday' => $user ? $user->birthday : null,
+                'height' => $patient->height,
+                'weight' => $patient->weight,
+                'status' => $user && $user->isVerified ? 'مفعل' : 'غير مفعل',
+            ];
+        });
+
+        return response()->json([
+            'status' => 'success',
+            'data' => $result,
+            'current_page' => $patients->currentPage(),
+            'last_page' => $patients->lastPage(),
+            'per_page' => $patients->perPage(),
+            'total' => $patients->total(),
+        ]);
+    }
 }

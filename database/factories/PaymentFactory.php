@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use App\Models\Payment;
 use App\Models\User;
+use App\Models\Consultation;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class PaymentFactory extends Factory
@@ -15,6 +16,7 @@ class PaymentFactory extends Factory
         return [
             'user_id' => User::factory(),
             'doctor_id' => User::factory(),
+            'consultation_id' => Consultation::factory(),
             'stripe_payment_intent_id' => 'pi_' . $this->faker->unique()->randomNumber(8),
             'amount' => $this->faker->numberBetween(100, 1000),
             'fee' => function (array $attributes) {

@@ -12,14 +12,15 @@ class MedicalHistory extends Model
 
     protected $guarded=['id'];
     protected $casts = [
-        'generalDiseases' => 'array',
-        'chronicDiseases' => 'array',
+        'general_diseases' => 'array',
+        'chronic_diseases' => 'array',
+        'medical_documents_path' => 'array',
     ];
 
-    public function user()
-    {
-        return $this->belongsTo(User::class);
-    }
+    public function patient()
+{
+    return $this->belongsTo(Patient::class);
+}
 
     public function consultationResultHistory()
     {

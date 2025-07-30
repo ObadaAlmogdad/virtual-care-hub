@@ -2,6 +2,8 @@
 
 namespace App\Services;
 
+use App\Models\MedicalHistory;
+use App\Models\Patient;
 use App\Repositories\Interfaces\UserRepositoryInterface;
 use App\Repositories\FileRepository;
 use Illuminate\Support\Facades\Hash;
@@ -18,7 +20,7 @@ class UserService
     protected $fileRepository;
 
     public function __construct(
-        UserRepositoryInterface $userRepository, 
+        UserRepositoryInterface $userRepository,
         DoctorService $doctorService,
         FileRepository $fileRepository
     ) {
@@ -39,25 +41,12 @@ class UserService
 
     public function register(array $data, string $role)
     {
-        $validator = Validator::make($data, [
-            'fullName' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:8',
-            'phoneNumber' => 'required|string',
-            'photo' => 'required|image|mimes:jpeg,png,jpg|max:2048',
-            'address' => 'required|string',
-            'birthday' => 'required|date',
-            'gender' => 'required|string',
-        ]);
-
-        if ($validator->fails()) {
-            throw new ValidationException($validator);
-        }
 
         try {
             DB::beginTransaction();
-
             // Store user photo
+            if (isset($data['photo']) && $data['photo'] instanceof \Illuminate\Http\UploadedFile)
+                // dd('asd;las');
             $photoData = $this->fileRepository->storeFile($data['photo'], 'profiles');
             $fileRecord = $this->fileRepository->create($photoData);
 
@@ -68,28 +57,82 @@ class UserService
 
             $user = $this->userRepository->create($data);
 
-            if ($role === 'Ductor') {
-                $doctorData = [
-                    'user_id' => $user->id,
-                    'bio' => $data['bio'] ?? '',
-                    'yearOfExper' => $data['yearOfExper'] ?? '0',
-                    'activatePoint' => '0'
-                ];
-                
-                $this->doctorService->create($doctorData);
-            }
+            $patient=Patient::create([
+            'user_id'=>$user->id,
+            'fakeName'=>'',
+            'height'=>0.0,
+            'weight'=>0.0
+            ]);
+
+            MedicalHistory::create([
+            'patient_id' => $patient->id,
+            ]);
+
+            $token = $user->createToken('auth_token')->plainTextToken;
+            $user['token']=$token;
 
             DB::commit();
 
             // Add photo URL to the response
             $user->photo_url = $this->fileRepository->getFileUrl($fileRecord->path);
-            
+
             return $user;
         } catch (\Exception $e) {
             DB::rollBack();
             throw $e;
         }
     }
+    public function registerDuctorMinimal(array $data)
+{
+    try {
+        DB::beginTransaction();
+
+        $user = $this->userRepository->create([
+            'email' => $data['email'],
+            'password' => Hash::make($data['password']),
+            'role' => $data['role'],
+            'isVerified' => false,
+            'fullName' => 'Not Set',
+            'phoneNumber' => 'Not Set',
+            'photoPath' => '',
+            'address' => 'Not Set',
+            'birthday' => now(),
+            'gender' => 'Not Set',
+        ]);
+        $doctor = $this->doctorService->create([
+            'user_id' => $user->id,
+            'bio' => '',
+            'activatePoint' => '0',
+        ]);
+
+        $certificatePaths = [];
+        foreach ($data['certificate_images'] as $image) {
+            $certificatePaths[] = $image->store('certificates', 'public');
+        }
+        // dd('asdasd');
+
+        $doctor->update([
+            'certificate_images' => json_encode($certificatePaths)
+        ]);
+
+        $this->doctorService->addSpecialtyBySystem($doctor->id, [
+            'medical_tag_id' => $data['medical_tag_id'],
+            'start_time' => $data['start_time'],
+            'end_time' => $data['end_time'],
+            'consultation_fee' => 0,
+            'is_active' => false,
+            'yearOfExper' => $data['yearOfExper'] ?? '0',
+        ]);
+
+        DB::commit();
+
+        return $user;
+    } catch (\Exception $e) {
+        DB::rollBack();
+        throw $e;
+    }
+}
+
 
     public function updateUser($id, array $data)
     {
@@ -113,6 +156,41 @@ class UserService
         $user = $this->userRepository->update($id, $data);
         return ['success' => true, 'user' => $user];
     }
+
+   public function updateProfile($userId, $request)
+{
+    $user = $this->userRepository->findById($userId);
+
+    $userData = $request->only(['fullName', 'phoneNumber', 'address', 'birthday', 'gender']);
+    $patientData = $request->only(['fakeName', 'height', 'weight']);
+    $medicalData = $request->only([
+        'general_diseases',
+        'chronic_diseases',
+        'surgeries',
+        'allergies',
+        'permanent_medications',
+    ]);
+
+    if ($request->hasFile('photoPath')) {
+        $photoData = $this->fileRepository->storeFile($request->file('photoPath'), 'profiles');
+        $fileRecord = $this->fileRepository->create($photoData);
+        $userData['photoPath'] = $fileRecord->path;
+    }
+
+    if ($request->hasFile('medical_documents_path')) {
+        $paths = [];
+        foreach ($request->file('medical_documents_path') as $file) {
+            $docData = $this->fileRepository->storeFile($file, 'medical_documents');
+            $paths[] = $docData['path'];
+        }
+        $medicalData['medical_documents_path'] = json_encode($paths);
+        // dd($medicalData);
+    }
+
+    return $this->userRepository->updateProfile($userId, $userData, $patientData, $medicalData);
+}
+
+
 
     public function deleteUser($id)
     {

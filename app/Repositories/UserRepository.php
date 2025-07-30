@@ -2,10 +2,12 @@
 
 namespace App\Repositories;
 
+use App\Models\MedicalHistory;
 use App\Models\User;
 use App\Repositories\Interfaces\UserRepositoryInterface;
-
+use App\Models\Patient;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 
 class UserRepository implements UserRepositoryInterface
 {
@@ -50,4 +52,29 @@ class UserRepository implements UserRepositoryInterface
     {
         return $this->model->create($data);
     }
+
+    public function updateProfile($userId, array $userData, ?array $patientData = null, ?array $medicalData = null)
+{
+        $user=$this->findById($userId);
+        if (!$user)
+            return null;
+
+        $user->update($userData);
+        $patient=null;
+        $medical=null;
+        if ($patientData && $user->patient) {
+            $patient=$user?->patient;
+            $patient->update($patientData);
+        }
+        if ($medicalData) {
+            $medical=$patient?->medicalHistory;
+            if ($medical) {
+                $medical->update($medicalData);
+            } elseif ($user->patient) {
+                $medicalData['patient_id'] = $user->patient->id;
+                MedicalHistory::create($medicalData);
+            }
+        }
+    return $patient->load('user', 'medicalHistory');
+}
 }
