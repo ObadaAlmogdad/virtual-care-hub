@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>اختبار Pusher - Laravel</title>
+</head>
+<body>
+  <h2>🔔 اختبار استقبال الرسائل عبر WebSocket</h2>
+  <div id="messages"></div>
+
+  <script src="https://js.pusher.com/7.2/pusher.min.js"></script>
+  <script>
+    // لتسجيل كل أحداث Pusher في Console
+    Pusher.logToConsole = true;
+
+    const pusher = new Pusher('4b0bcf74bbde610d48d7', {
+      cluster: 'eu',
+      authEndpoint: 'http://localhost:8000/broadcasting/auth', // 🔐 نقطة المصادقة من Laravel
+      auth: {
+        headers: {
+          Authorization: 'Bearer 4|hmbcVnoPMRNC2mRMCRw7Mfz48EqkbkPlJ7H8s89g81a10f0c'
+        }
+      },
+      forceTLS: false // ✅ اجعلها false إذا كنت تعمل على http وليس https
+    });
+
+    const channel = pusher.subscribe('private-chat.1');
+    channel.bind('NewMessageEvent', function (data) {
+      console.log('📥 رسالة جديدة:', data);
+
+      const msgBox = document.getElementById('messages');
+      const msg = document.createElement('div');
+      msg.innerText = `💬 ${data.message}`;
+      msgBox.appendChild(msg);
+    });
+  </script>
+</body>
+</html>
