@@ -46,21 +46,22 @@ Route::middleware('auth:sanctum')->group(function () {
 
 // Doctor Specialties Routes
 Route::middleware(['auth:sanctum'])->prefix('doctor/specialties')->group(function () {
-    Route::get('/', [DoctorController::class, 'getSpecialties']);
+
     Route::post('/', [DoctorController::class, 'addSpecialty']);
     Route::put('/{specialtyId}', [DoctorController::class, 'updateSpecialty']);
     Route::delete('/{specialtyId}', [DoctorController::class, 'deleteSpecialty']);
 });
+Route::get('doctor/specialties', [DoctorController::class, 'getSpecialties']);
 Route::get('doctor/{doctor_id}/specialties', [DoctorController::class, 'getDoctorSpecialties']);
 
 // Medical Tags Routes
 Route::middleware(['auth:sanctum'])->prefix('admin/medical-tags')->group(function () {
-    Route::get('/', [AdminController::class, 'getMedicalTags']);
+
     Route::post('/', [AdminController::class, 'addMedicalTag']);
     Route::put('/{id}', [AdminController::class, 'updateMedicalTag']);
     Route::delete('/{id}', [AdminController::class, 'deleteMedicalTag']);
 });
-
+Route::get('admin/medical-tags', [AdminController::class, 'getMedicalTags']);
 // Question Routes
 Route::middleware(['auth:sanctum'])->prefix('questions')->group(function () {
     Route::get('/', [QuestionController::class, 'index']);
@@ -156,7 +157,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/chats', [ChatController::class, 'createChat']);
     Route::get('/chats', [ChatController::class, 'myChats']);
     Route::get('/chats/{chat_id}', [ChatController::class, 'getChat']);
-    
+
     // Message Routes
     Route::get('/chats/{chat_id}/messages', [MessageController::class, 'getMessages']);
     Route::post('/chats/{chat_id}/messages', [MessageController::class, 'sendMessage']);
