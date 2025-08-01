@@ -18,7 +18,7 @@ class ChatController extends Controller
     public function createChat(Request $request)
     {
         $user = Auth::user();
-        
+
         // التحقق من أن المستخدم طبيب
         if (!$user->isDoctor()) {
             return response()->json([
@@ -54,10 +54,10 @@ class ChatController extends Controller
         }
 
         // إنشاء محادثة جديدة
-            $chat = Chat::create([
+        $chat = Chat::create([
             'doctor_id' => $user->doctor->id,
             'patient_id' => $patient->patient->id,
-            ]);
+        ]);
 
         return response()->json([
             'success' => true,
@@ -72,11 +72,11 @@ class ChatController extends Controller
     public function myChats(Request $request)
     {
         $user = Auth::user();
-        
-        $chats = Chat::with(['doctor.user', 'patient.user', 'messages' => function($query) {
-                $query->latest()->limit(1); // آخر رسالة فقط
-            }])
-            ->where(function($query) use ($user) {
+
+        $chats = Chat::with(['doctor.user', 'patient.user', 'messages' => function ($query) {
+            $query->latest()->limit(1); // آخر رسالة فقط
+        }])
+            ->where(function ($query) use ($user) {
                 if ($user->isDoctor()) {
                     $query->where('doctor_id', $user->doctor->id);
                 } elseif ($user->isPatient()) {
@@ -98,10 +98,10 @@ class ChatController extends Controller
     public function getChat($chat_id)
     {
         $user = Auth::user();
-        
+
         $chat = Chat::with(['doctor.user', 'patient.user'])
             ->where('id', $chat_id)
-            ->where(function($query) use ($user) {
+            ->where(function ($query) use ($user) {
                 if ($user->isDoctor()) {
                     $query->where('doctor_id', $user->doctor->id);
                 } elseif ($user->isPatient()) {
@@ -120,6 +120,28 @@ class ChatController extends Controller
         return response()->json([
             'success' => true,
             'chat' => $chat
+        ]);
+    }
+
+
+
+
+    public function getmyChatId()
+    {
+        $user = Auth::user();
+
+        if ($user->isDoctor()) {
+            $chats = \App\Models\Chat::where('doctor_id', $user->doctor->id)->pluck('id');
+        } elseif ($user->isPatient()) {
+            $chats = \App\Models\Chat::where('patient_id', $user->patient->id)->pluck('id');
+        } else {
+            $chats = collect();
+        }
+
+        return response()->json([
+            'success' => true,
+            'message' => 'تم إرجاع محادثات المستخدم بنجاح',
+            'chats' => $chats
         ]);
     }
 }

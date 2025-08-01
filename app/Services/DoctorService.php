@@ -24,6 +24,12 @@ public function updateProfile($userId, array $data)
     $user = $doctor->user;
     $specialty = $doctor->specialties()->first();
 
+    // معالجة رفع صورة الملف الشخصي للطبيب (photoPath)
+    if (isset($data['photoPath']) && $data['photoPath'] instanceof \Illuminate\Http\UploadedFile) {
+        // تخزين الصورة في مجلد profiles داخل التخزين العام
+        $storedPath = $data['photoPath']->store('profiles', 'public');
+        $data['photoPath'] = $storedPath;
+    }
 $userData = [
         'fullName' => $data['fullName'] ?? $user->fullName,
         'phoneNumber' => $data['phoneNumber'] ?? $user->phoneNumber,

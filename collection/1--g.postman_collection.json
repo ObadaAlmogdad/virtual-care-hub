@@ -149,7 +149,7 @@
 									},
 									{
 										"key": "Authorization",
-										"value": "Bearer 14|iEkMv4dME9R9WfSFcElxF4G4wG8USd7Kh2JEZd2G0dfa7542",
+										"value": "Bearer 6|5UzJnr1VzJS1YUKOUdX95Mml0Pil66FU5jWiZjFF7c62c4a4",
 										"type": "text"
 									}
 								],
@@ -276,7 +276,7 @@
 									},
 									{
 										"key": "Authorization",
-										"value": "Bearer 14|iEkMv4dME9R9WfSFcElxF4G4wG8USd7Kh2JEZd2G0dfa7542",
+										"value": "Bearer 6|5UzJnr1VzJS1YUKOUdX95Mml0Pil66FU5jWiZjFF7c62c4a4",
 										"type": "default",
 										"equals": false
 									}
@@ -536,7 +536,7 @@
 									},
 									{
 										"key": "Authorization",
-										"value": "Bearer 15|ruz8EdhsSmDAz21q1WGMyHQAe9vligA1QsyAzP9G44f49219",
+										"value": "Bearer 5|jhvcUml8vuDnTroqn89JqvJxyDdnKpsFMmbMFgDod3ce4455",
 										"type": "default"
 									}
 								],
@@ -580,7 +580,7 @@
 									},
 									{
 										"key": "Authorization",
-										"value": "Bearer 15|ruz8EdhsSmDAz21q1WGMyHQAe9vligA1QsyAzP9G44f49219",
+										"value": "Bearer 5|jhvcUml8vuDnTroqn89JqvJxyDdnKpsFMmbMFgDod3ce4455",
 										"type": "default"
 									}
 								],
@@ -1147,11 +1147,6 @@
 										"key": "Accept",
 										"value": "application/json",
 										"type": "default"
-									},
-									{
-										"key": "Authorization",
-										"value": "Bearer 2|EviRwGD2Qz01w2ZF1Ep6UcKscf6tfHhKW4G4BFaH24d3587b",
-										"type": "default"
 									}
 								],
 								"body": {
@@ -1159,7 +1154,7 @@
 									"formdata": []
 								},
 								"url": {
-									"raw": "http://127.0.0.1:8000/api/admin/doctors",
+									"raw": "http://127.0.0.1:8000/api/admin/medical-tags",
 									"protocol": "http",
 									"host": [
 										"127",
@@ -1171,7 +1166,7 @@
 									"path": [
 										"api",
 										"admin",
-										"doctors"
+										"medical-tags"
 									]
 								}
 							},
@@ -2870,6 +2865,45 @@
 			"item": [
 				{
 					"name": "my chats",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer 4|hmbcVnoPMRNC2mRMCRw7Mfz48EqkbkPlJ7H8s89g81a10f0c",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://127.0.0.1:8000/api/my_chats",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"my_chats"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "my chat ids",
 					"request": {
 						"method": "GET",
 						"header": [
