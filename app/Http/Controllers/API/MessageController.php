@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Events\NewMessageEvent;
+use App\Events\MessageEvent;
 use App\Models\Message;
 use App\Models\Chat;
 use App\Models\User;
@@ -54,16 +54,24 @@ class MessageController extends Controller
         if ($request->hasFile('file')) {
             $file = $request->file('file');
             $fileName = time() . '_' . Str::random(10) . '.' . $file->getClientOriginalExtension();
-            
-            // حفظ الملف في storage/app/public/messages
+
             $filePath = $file->storeAs('messages', $fileName, 'public');
-            
-            $messageData['message_content'] = $filePath;
+
+            $messageData['file_path'] = $filePath;
             $messageData['message_type'] = $this->getMessageType($file->getClientOriginalExtension());
+            
+            // إذا كان هناك نص مع الملف، احفظه في message_content
+            if ($request->filled('message_content')) {
+                $messageData['message_content'] = $request->message_content;
+            } else {
+                // إذا لم يكن هناك نص، احفظ اسم الملف كرسالة
+                $messageData['message_content'] = $file->getClientOriginalName();
+            }
         } else {
-            // رسالة نصية
+            // رسالة نصية فقط
             $messageData['message_content'] = $request->message_content;
             $messageData['message_type'] = 'text';
+            $messageData['file_path'] = null;
         }
 
         $message = Message::create($messageData);
@@ -71,10 +79,9 @@ class MessageController extends Controller
         // تحديث وقت آخر تحديث للمحادثة
         $chat->update(['updated_at' => now()]);
 
-        // إرسال الإشعار عبر WebSocket مع معالجة الأخطاء
+        // إرسال الإشعار عبر WebSocket للمستلم فقط
         try {
-            broadcast(new NewMessageEvent($message));
-            //->toOthers();
+            broadcast(new MessageEvent($message));
         } catch (\Exception $e) {
             // تسجيل الخطأ ولكن لا نوقف العملية
             \Log::error('WebSocket broadcast failed: ' . $e->getMessage());
@@ -122,8 +129,8 @@ class MessageController extends Controller
         // تحويل الرسائل إلى ترتيب تصاعدي (الأقدم أولاً)
         $messages->getCollection()->transform(function ($message) {
             // إذا كان الملف، أضف رابط التحميل
-            if ($message->message_type !== 'text') {
-                $message->file_url = Storage::url($message->message_content);
+            if ($message->message_type !== 'text' && $message->file_path) {
+                $message->file_url = Storage::url($message->file_path);
             }
             return $message;
         });
@@ -155,8 +162,8 @@ class MessageController extends Controller
         }
 
         // حذف الملف إذا كان موجود
-        if ($message->message_type !== 'text' && Storage::disk('public')->exists($message->message_content)) {
-            Storage::disk('public')->delete($message->message_content);
+        if ($message->message_type !== 'text' && $message->file_path && Storage::disk('public')->exists($message->file_path)) {
+            Storage::disk('public')->delete($message->file_path);
         }
 
         $message->delete();

@@ -9,6 +9,7 @@ use App\Models\User;
 use App\Models\Doctor;
 use App\Models\Patient;
 use Illuminate\Support\Facades\Auth;
+use App\Events\NewChatEvent;
 
 class ChatController extends Controller
 {
@@ -17,14 +18,23 @@ class ChatController extends Controller
      */
     public function createChat(Request $request)
     {
+        /**  @var User $user*/
         $user = Auth::user();
-
+        
         // التحقق من أن المستخدم طبيب
         if (!$user->isDoctor()) {
             return response()->json([
                 'success' => false,
                 'message' => 'فقط الأطباء يمكنهم إنشاء محادثات'
             ], 403);
+        }
+
+        // التحقق من وجود علاقة الطبيب
+        if (!$user->doctor) {
+            return response()->json([
+                'success' => false,
+                'message' => 'بيانات الطبيب غير مكتملة'
+            ], 400);
         }
 
         $request->validate([
@@ -37,6 +47,14 @@ class ChatController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => 'المستخدم المحدد ليس مريض'
+            ], 400);
+        }
+
+        // التحقق من وجود علاقة المريض
+        if (!$patient->patient) {
+            return response()->json([
+                'success' => false,
+                'message' => 'بيانات المريض غير مكتملة'
             ], 400);
         }
 
@@ -59,6 +77,13 @@ class ChatController extends Controller
             'patient_id' => $patient->patient->id,
         ]);
 
+        // إرسال إشعار المحادثة الجديدة للمريض
+        try {
+            broadcast(new NewChatEvent($chat, $user));
+        } catch (\Exception $e) {
+            \Log::error('Failed to broadcast new chat: ' . $e->getMessage());
+        }
+
         return response()->json([
             'success' => true,
             'message' => 'تم إنشاء المحادثة بنجاح',
@@ -71,15 +96,16 @@ class ChatController extends Controller
      */
     public function myChats(Request $request)
     {
+        /**  @var User $user*/
         $user = Auth::user();
-
-        $chats = Chat::with(['doctor.user', 'patient.user', 'messages' => function ($query) {
-            $query->latest()->limit(1); // آخر رسالة فقط
-        }])
-            ->where(function ($query) use ($user) {
-                if ($user->isDoctor()) {
+        
+        $chats = Chat::with(['doctor.user', 'patient.user', 'messages' => function($query) {
+                $query->latest()->limit(1); // آخر رسالة فقط
+            }])
+            ->where(function($query) use ($user) {
+                if ($user->isDoctor() && $user->doctor) {
                     $query->where('doctor_id', $user->doctor->id);
-                } elseif ($user->isPatient()) {
+                } elseif ($user->isPatient() && $user->patient) {
                     $query->where('patient_id', $user->patient->id);
                 }
             })
@@ -97,14 +123,15 @@ class ChatController extends Controller
      */
     public function getChat($chat_id)
     {
+        /**  @var User $user*/
         $user = Auth::user();
-
+        
         $chat = Chat::with(['doctor.user', 'patient.user'])
             ->where('id', $chat_id)
-            ->where(function ($query) use ($user) {
-                if ($user->isDoctor()) {
+            ->where(function($query) use ($user) {
+                if ($user->isDoctor() && $user->doctor) {
                     $query->where('doctor_id', $user->doctor->id);
-                } elseif ($user->isPatient()) {
+                } elseif ($user->isPatient() && $user->patient) {
                     $query->where('patient_id', $user->patient->id);
                 }
             })
@@ -123,11 +150,9 @@ class ChatController extends Controller
         ]);
     }
 
-
-
-
     public function getmyChatId()
     {
+        /**  @var User $user*/
         $user = Auth::user();
 
         if ($user->isDoctor()) {

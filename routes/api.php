@@ -148,9 +148,9 @@ Route::middleware('auth:sanctum')->group(function () {
 });
 
 // Broadcasting Auth Route
-// Route::post('/broadcasting/auth', function (Request $request) {
-//     return Broadcast::auth($request);
-// })->middleware('auth:sanctum');
+Route::post('/broadcasting/auth', function (Request $request) {
+    return Broadcast::auth($request);
+})->middleware('auth:sanctum');
 
 Route::middleware('auth:sanctum')->group(function () {
     // Chat Routes

@@ -2,37 +2,257 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>اختبار Pusher - Laravel</title>
+  <title>اختبار WebSocket - النظام الجديد</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #f5f5f5;
+    }
+    .container {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    .input-group {
+      margin: 10px 0;
+    }
+    input, button {
+      padding: 8px 12px;
+      margin: 5px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+    }
+    button {
+      background: #007bff;
+      color: white;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #0056b3;
+    }
+    .messages {
+      margin-top: 20px;
+      max-height: 400px;
+      overflow-y: auto;
+      border: 1px solid #ddd;
+      padding: 10px;
+      background: #f9f9f9;
+    }
+    .message {
+      background: white;
+      padding: 8px;
+      margin: 5px 0;
+      border-radius: 4px;
+      border-left: 3px solid #007bff;
+    }
+    .error {
+      color: red;
+      background: #ffe6e6;
+      padding: 10px;
+      border-radius: 4px;
+      margin: 10px 0;
+    }
+    .success {
+      color: green;
+      background: #e6ffe6;
+      padding: 10px;
+      border-radius: 4px;
+      margin: 10px 0;
+    }
+    .info {
+      color: blue;
+      background: #e6f3ff;
+      padding: 10px;
+      border-radius: 4px;
+      margin: 10px 0;
+    }
+  </style>
 </head>
 <body>
-  <h2>🔔 اختبار استقبال الرسائل عبر WebSocket</h2>
-  <div id="messages"></div>
+  <div class="container">
+    <h1>🔔 اختبار WebSocket - النظام الجديد</h1>
+    <p><strong>النظام الجديد:</strong> كل مستخدم يستمع لقنته الشخصية فقط</p>
+    
+    <div class="input-group">
+      <label>Pusher App Key:</label>
+      <input type="text" id="appKey" placeholder="أدخل Pusher App Key" value="4b0bcf74bbde610d48d7" style="width: 300px;">
+    </div>
+    
+    <div class="input-group">
+      <label>Pusher Cluster:</label>
+      <input type="text" id="cluster" placeholder="أدخل Pusher Cluster" value="mt1" style="width: 300px;">
+    </div>
+    
+    <div class="input-group">
+      <label>Token:</label>
+      <input type="text" id="token" placeholder="أدخل التوكن" style="width: 400px;">
+    </div>
+    
+    <div class="input-group">
+      <label>User ID (المستخدم الذي يستمع):</label>
+      <input type="number" id="userId" placeholder="أدخل User ID" value="1" style="width: 100px;">
+    </div>
+    
+    <button onclick="connect()">🔗 الاتصال</button>
+    <button onclick="disconnect()">❌ قطع الاتصال</button>
+    <button onclick="clearMessages()">🗑️ مسح الرسائل</button>
+    
+    <div id="status"></div>
+    <div id="messages" class="messages"></div>
+  </div>
 
   <script src="https://js.pusher.com/7.2/pusher.min.js"></script>
   <script>
-    // لتسجيل كل أحداث Pusher في Console
-    Pusher.logToConsole = true;
+    let pusher = null;
+    let channel = null;
 
-    const pusher = new Pusher('4b0bcf74bbde610d48d7', {
-      cluster: 'eu',
-      authEndpoint: 'http://localhost:8000/broadcasting/auth', // 🔐 نقطة المصادقة من Laravel
-      auth: {
-        headers: {
-          Authorization: 'Bearer 4|hmbcVnoPMRNC2mRMCRw7Mfz48EqkbkPlJ7H8s89g81a10f0c'
+    function connect() {
+      const appKey = document.getElementById('appKey').value;
+      const cluster = document.getElementById('cluster').value;
+      const token = document.getElementById('token').value;
+      const userId = document.getElementById('userId').value;
+
+      if (!appKey || !cluster || !token || !userId) {
+        showError('يرجى ملء جميع الحقول المطلوبة');
+        return;
+      }
+
+      try {
+        // قطع الاتصال السابق إذا كان موجود
+        if (pusher) {
+          pusher.disconnect();
         }
-      },
-      forceTLS: false // ✅ اجعلها false إذا كنت تعمل على http وليس https
-    });
 
-    const channel = pusher.subscribe('private-chat.1');
-    channel.bind('NewMessageEvent', function (data) {
-      console.log('📥 رسالة جديدة:', data);
+        // إنشاء اتصال Pusher جديد
+        pusher = new Pusher(appKey, {
+          cluster: cluster,
+          authEndpoint: "http://127.0.0.1:8000/broadcasting/auth",
+          auth: {
+            headers: {
+              Authorization: "Bearer " + token
+            }
+          }
+        });
 
-      const msgBox = document.getElementById('messages');
-      const msg = document.createElement('div');
-      msg.innerText = `💬 ${data.message}`;
-      msgBox.appendChild(msg);
-    });
+        // تفعيل التسجيل في وحدة التحكم
+        Pusher.logToConsole = true;
+
+        // الاشتراك في القناة الشخصية للمستخدم
+        channel = pusher.subscribe("private-user." + userId);
+
+        // الاستماع للرسائل الجديدة
+        channel.bind("NewMessage", function(data) {
+          console.log("📥 رسالة جديدة:", data);
+          addMessage("رسالة جديدة", data);
+        });
+
+        // الاستماع للمحادثات الجديدة
+        channel.bind("NewChat", function(data) {
+          console.log("💬 محادثة جديدة:", data);
+          addMessage("محادثة جديدة", data);
+        });
+
+        // أحداث الاتصال
+        pusher.connection.bind('connected', function() {
+          showSuccess('✅ تم الاتصال بنجاح!');
+          addMessage("النظام", "تم الاتصال بنجاح");
+        });
+
+        pusher.connection.bind('disconnected', function() {
+          showError('❌ تم قطع الاتصال');
+          addMessage("النظام", "تم قطع الاتصال");
+        });
+
+        pusher.connection.bind('error', function(err) {
+          showError('❌ خطأ في الاتصال: ' + err.message);
+          addMessage("النظام", "خطأ في الاتصال: " + err.message);
+        });
+
+        // أحداث القناة
+        channel.bind('pusher:subscription_succeeded', function() {
+          showSuccess('✅ تم الاشتراك في القناة الشخصية بنجاح!');
+          addMessage("النظام", "تم الاشتراك في القناة الشخصية: user." + userId);
+        });
+
+        channel.bind('pusher:subscription_error', function(status) {
+          showError('❌ خطأ في الاشتراك: ' + status);
+          addMessage("النظام", "خطأ في الاشتراك: " + status);
+        });
+
+      } catch (error) {
+        showError('❌ خطأ في الاتصال: ' + error.message);
+        addMessage("النظام", "خطأ في الاتصال: " + error.message);
+      }
+    }
+
+    function disconnect() {
+      if (pusher) {
+        pusher.disconnect();
+        pusher = null;
+        channel = null;
+        showSuccess('✅ تم قطع الاتصال');
+        addMessage("النظام", "تم قطع الاتصال");
+      }
+    }
+
+    function clearMessages() {
+      document.getElementById('messages').innerHTML = '';
+    }
+
+    function addMessage(sender, data) {
+      const messagesDiv = document.getElementById('messages');
+      const messageDiv = document.createElement('div');
+      messageDiv.className = 'message';
+      
+      const timestamp = new Date().toLocaleTimeString();
+      
+      if (typeof data === 'object') {
+        messageDiv.innerHTML = `
+          <strong>${sender}</strong> (${timestamp})
+          <br>
+          <pre>${JSON.stringify(data, null, 2)}</pre>
+        `;
+      } else {
+        messageDiv.innerHTML = `
+          <strong>${sender}</strong> (${timestamp})
+          <br>
+          ${data}
+        `;
+      }
+      
+      messagesDiv.appendChild(messageDiv);
+      messagesDiv.scrollTop = messagesDiv.scrollHeight;
+    }
+
+    function showSuccess(message) {
+      const statusDiv = document.getElementById('status');
+      statusDiv.innerHTML = `<div class="success">${message}</div>`;
+    }
+
+    function showError(message) {
+      const statusDiv = document.getElementById('status');
+      statusDiv.innerHTML = `<div class="error">${message}</div>`;
+    }
+
+    function showInfo(message) {
+      const statusDiv = document.getElementById('status');
+      statusDiv.innerHTML = `<div class="info">${message}</div>`;
+    }
+
+    // إضافة معلومات مساعدة
+    window.onload = function() {
+      addMessage("النظام", "مرحباً! استخدم هذه الصفحة لاختبار النظام الجديد");
+      addMessage("النظام", "النظام الجديد: كل مستخدم يستمع لقنته الشخصية فقط");
+      addMessage("النظام", "1. أدخل Pusher App Key و Cluster");
+      addMessage("النظام", "2. أدخل التوكن الصالح");
+      addMessage("النظام", "3. أدخل User ID للمستخدم الذي تريد أن يستمع");
+      addMessage("النظام", "4. اضغط على 'الاتصال'");
+      addMessage("النظام", "5. جرب إرسال رسالة من مستخدم آخر لنفس المحادثة");
+    };
   </script>
 </body>
 </html>

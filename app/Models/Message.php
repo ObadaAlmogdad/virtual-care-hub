@@ -31,8 +31,8 @@ class Message extends Model
      */
     public function getFileUrlAttribute()
     {
-        if ($this->message_type !== 'text' && $this->message_content) {
-            return \Storage::url($this->message_content);
+        if ($this->message_type !== 'text' && $this->file_path) {
+            return \Storage::url($this->file_path);
         }
         return null;
     }
