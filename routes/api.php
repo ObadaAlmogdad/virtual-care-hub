@@ -52,8 +52,8 @@ Route::middleware(['auth:sanctum'])->prefix('doctor/specialties')->group(functio
 Route::get('doctor/{doctor_id}/specialties', [DoctorController::class, 'getDoctorSpecialties']);
 
 // Medical Tags Routes
+Route::get('admin/medical-tags/', [AdminController::class, 'getMedicalTags']);
 Route::middleware(['auth:sanctum'])->prefix('admin/medical-tags')->group(function () {
-    Route::get('/', [AdminController::class, 'getMedicalTags']);
     Route::post('/', [AdminController::class, 'addMedicalTag']);
     Route::put('/{id}', [AdminController::class, 'updateMedicalTag']);
     Route::delete('/{id}', [AdminController::class, 'deleteMedicalTag']);
@@ -118,6 +118,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/consultations', [ConsultationController::class, 'store']);
     Route::get('/consultations', [UserController::class, 'getUserConsultations']);
     Route::get('/consultations/filter', [UserController::class, 'getUserConsultationsByStatus']);
+    Route::get('/doctors/by-specialty/{medical_tag_id}', [DoctorController::class, 'getBySpecialty']);
 
     // Doctor routes
     Route::get('/doctor/consultations/pending', [DoctorController::class, 'getPendingConsultations']);

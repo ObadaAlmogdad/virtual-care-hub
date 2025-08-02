@@ -168,4 +168,10 @@ $userData = [
 
         return $this->doctorRepository->deleteSpecialty($doctor->id, $specialtyId);
     }
+    public function getDoctorsBySpecialty($medicalTagId)
+    {
+        $doctors = $this->doctorRepository->getByMedicalTag($medicalTagId);
+        return response()->json($doctors);
+    }
+
 }

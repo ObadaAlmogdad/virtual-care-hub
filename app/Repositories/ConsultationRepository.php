@@ -45,29 +45,29 @@ class ConsultationRepository implements ConsultationRepositoryInterface
     {
         $query = $this->model->where('doctor_id', $doctorId)
             ->with(['user', 'medicalTag']);
-        
+
         if ($status) {
             $query->where('status', $status);
         }
-        
+
         return $query->get();
     }
 
     public function getUserConsultationsByStatus($userId, $status = null)
     {
-        $query = $this->model->where('user_id', $userId)
+        $query = $this->model->where('patient_id', $userId)
             ->with(['doctor', 'medicalTag']);
-        
+
         if ($status) {
             $query->where('status', $status);
         }
-        
+
         return $query->get();
     }
 
     public function getUserConsultations($userId)
     {
-        return $this->model->where('user_id', $userId)
+        return $this->model->where('patient_id', $userId)
             ->with(['doctor', 'medicalTag'])
             ->get();
     }
@@ -85,4 +85,4 @@ class ConsultationRepository implements ConsultationRepositoryInterface
     {
         return $this->update($id, ['status' => $status]);
     }
-} 
+}

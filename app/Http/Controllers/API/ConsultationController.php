@@ -31,6 +31,7 @@ class ConsultationController extends Controller
             if ($request->hasFile('media')) {
                 $data['media'] = $request->file('media');
             }
+            $data['patient_id']=Auth::user()->patient->id;
 
             $consultation = $this->consultationService->createConsultation($data);
 
