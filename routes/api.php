@@ -10,6 +10,8 @@ use App\Http\Controllers\API\DoctorController;
 use App\Http\Controllers\API\QuestionController;
 use App\Http\Controllers\API\ConsultationController;
 use App\Http\Controllers\API\ComplaintController;
+use App\Http\Controllers\API\{ChatController, MessageController};
+use Illuminate\Broadcasting\Broadcast;
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
@@ -44,21 +46,23 @@ Route::middleware('auth:sanctum')->group(function () {
 
 // Doctor Specialties Routes
 Route::middleware(['auth:sanctum'])->prefix('doctor/specialties')->group(function () {
-    Route::get('/', [DoctorController::class, 'getSpecialties']);
+
     Route::post('/', [DoctorController::class, 'addSpecialty']);
     Route::put('/{specialtyId}', [DoctorController::class, 'updateSpecialty']);
     Route::delete('/{specialtyId}', [DoctorController::class, 'deleteSpecialty']);
 });
+Route::get('doctor/specialties', [DoctorController::class, 'getSpecialties']);
 Route::get('doctor/{doctor_id}/specialties', [DoctorController::class, 'getDoctorSpecialties']);
 
 // Medical Tags Routes
 Route::get('admin/medical-tags/', [AdminController::class, 'getMedicalTags']);
 Route::middleware(['auth:sanctum'])->prefix('admin/medical-tags')->group(function () {
+
     Route::post('/', [AdminController::class, 'addMedicalTag']);
     Route::put('/{id}', [AdminController::class, 'updateMedicalTag']);
     Route::delete('/{id}', [AdminController::class, 'deleteMedicalTag']);
 });
-
+Route::get('admin/medical-tags', [AdminController::class, 'getMedicalTags']);
 // Question Routes
 Route::middleware(['auth:sanctum'])->prefix('questions')->group(function () {
     Route::get('/', [QuestionController::class, 'index']);
@@ -143,4 +147,22 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/complaints/{complaint}', [ComplaintController::class, 'show']);
     Route::post('/complaints/{complaint}', [ComplaintController::class, 'update']);
     Route::delete('/complaints/{complaint}', [ComplaintController::class, 'destroy']);
+});
+
+// Broadcasting Auth Route
+Route::post('/broadcasting/auth', function (Request $request) {
+    return Broadcast::auth($request);
+})->middleware('auth:sanctum');
+
+Route::middleware('auth:sanctum')->group(function () {
+    // Chat Routes
+    Route::post('/chats', [ChatController::class, 'createChat']);
+    Route::get('/chats', [ChatController::class, 'myChats']);
+    Route::get('/chats/{chat_id}', [ChatController::class, 'getChat']);
+    Route::get('/my_chats', [ChatController::class, 'getmyChatId']);
+
+    // Message Routes
+    Route::get('/chats/{chat_id}/messages', [MessageController::class, 'getMessages']);
+    Route::post('/chats/{chat_id}/messages', [MessageController::class, 'sendMessage']);
+    Route::delete('/chats/{chat_id}/messages/{message_id}', [MessageController::class, 'deleteMessage']);
 });

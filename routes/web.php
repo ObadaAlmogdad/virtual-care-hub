@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Broadcast;
+use App\Events\NewMessageEvent;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,4 +17,14 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
+});
+
+
+Broadcast::routes(['middleware' => ['auth:sanctum']]);
+
+
+Route::get('/test-broadcast', function () {
+    $message = \App\Models\Message::latest()->with('sender')->first(); // اجلب آخر رسالة مع العلاقة
+    event(new NewMessageEvent($message));
+    return 'Broadcasted!';
 });
