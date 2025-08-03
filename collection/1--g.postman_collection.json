@@ -3278,7 +3278,7 @@
 							}
 						],
 						"url": {
-							"raw": "http://127.0.0.1:8000/api/public/doctors/search?name=shdaskhdlaskdshk&specialty=قلب",
+							"raw": "http://127.0.0.1:8000/api/public/doctors/search?name=shdaskhdlaskdshk&specialty=عصبية",
 							"protocol": "http",
 							"host": [
 								"127",
@@ -3300,7 +3300,7 @@
 								},
 								{
 									"key": "specialty",
-									"value": "قلب"
+									"value": "عصبية"
 								}
 							]
 						}
@@ -3425,6 +3425,234 @@
 								"medical-specialties",
 								"1",
 								"doctors"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "banners",
+			"item": [
+				{
+					"name": "get banners",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://127.0.0.1:8000/api/medical-banners",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"medical-banners"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "add banners",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "title",
+									"value": "test",
+									"type": "default"
+								},
+								{
+									"key": "image",
+									"type": "file",
+									"src": "/C:/Users/HP/Desktop/LIFE/1.png"
+								},
+								{
+									"key": "link",
+									"value": "test",
+									"type": "default"
+								},
+								{
+									"key": "expires_at",
+									"value": "2026/1/1",
+									"type": "default"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/api/medical-banners",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"medical-banners"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get banners by id",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://127.0.0.1:8000/api/medical-banners/1",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"medical-banners",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\": \"titletitle\",\r\n    \"link\": \"dgfdf\"\r\n    }"
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/api/medical-banners/1",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"medical-banners",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "change active",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer 4|hmbcVnoPMRNC2mRMCRw7Mfz48EqkbkPlJ7H8s89g81a10f0c",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "title",
+									"value": "test1",
+									"type": "default"
+								},
+								{
+									"key": "is_active",
+									"value": "0",
+									"type": "default"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/api/medical-banners/1/toggle-active",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"medical-banners",
+								"1",
+								"toggle-active"
 							]
 						}
 					},

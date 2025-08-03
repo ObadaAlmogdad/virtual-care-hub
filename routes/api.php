@@ -14,6 +14,7 @@ use App\Http\Controllers\API\{ChatController, MessageController};
 use App\Http\Controllers\API\PublicDoctorController;
 use App\Http\Controllers\API\MedicalSpecialtyController;
 use Illuminate\Broadcasting\Broadcast;
+use App\Http\Controllers\Api\MedicalBannerController;
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
@@ -63,7 +64,7 @@ Route::prefix('public')->group(function () {
     Route::get('doctors/{id}', [PublicDoctorController::class, 'show']);
     Route::get('doctors/specialty/{specialtyId}', [PublicDoctorController::class, 'getBySpecialty']);
     Route::get('doctors/search', [PublicDoctorController::class, 'search']);
-    
+
     // Medical Specialties APIs
     Route::get('medical-specialties', [MedicalSpecialtyController::class, 'index']);
     Route::get('medical-specialties/{id}', [MedicalSpecialtyController::class, 'show']);
@@ -182,3 +183,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/chats/{chat_id}/messages', [MessageController::class, 'sendMessage']);
     Route::delete('/chats/{chat_id}/messages/{message_id}', [MessageController::class, 'deleteMessage']);
 });
+
+
+Route::apiResource('medical-banners', MedicalBannerController::class);
+Route::patch('medical-banners/{id}/toggle-active', [MedicalBannerController::class, 'toggleActive']);

@@ -84,8 +84,8 @@ class MessageController extends Controller
         try {
             // إرسال للمستلم
             broadcast(new MessageEvent($message));
-            // إرسال للمرسل أيضاً (اختياري)
-            broadcast(new MessageSentEvent($message));
+            // // إرسال للمرسل أيضاً (اختياري)
+            // broadcast(new MessageSentEvent($message));
         } catch (\Exception $e) {
             // تسجيل الخطأ ولكن لا نوقف العملية
             \Log::error('WebSocket broadcast failed: ' . $e->getMessage());

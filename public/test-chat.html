@@ -150,17 +150,16 @@
           addMessage("رسالة جديدة", data);
         });
 
-        // الاستماع لرسائل تم إرسالها
-        channel.bind("MessageSent", function(data) {
-          console.log("✅ رسالة تم إرسالها:", data);
-          addMessage("رسالة تم إرسالها", data);
-        });
 
-        // الاستماع للمحادثات الجديدة
-        channel.bind("NewChat", function(data) {
-          console.log("💬 محادثة جديدة:", data);
-          addMessage("محادثة جديدة", data);
-        });
+        // channel.bind("MessageSent", function(data) {
+        //   console.log("✅ رسالة تم إرسالها:", data);
+        //   addMessage("رسالة تم إرسالها", data);
+        // });
+
+        // channel.bind("NewChat", function(data) {
+        //   console.log("💬 محادثة جديدة:", data);
+        //   addMessage("محادثة جديدة", data);
+        // });
 
         // أحداث الاتصال
         pusher.connection.bind('connected', function() {

@@ -16,7 +16,7 @@ class PublicDoctorController extends Controller
     {
         try {
             \Log::info('Starting doctors fetch');
-            
+
             $doctors = Doctor::with(['user', 'specialties.medicalTag'])
                 ->whereHas('user', function ($query) {
                     $query->where('isVerified', true);
@@ -35,7 +35,7 @@ class PublicDoctorController extends Controller
                 'file' => $e->getFile(),
                 'line' => $e->getLine()
             ]);
-            
+
             return response()->json([
                 'status' => 'error',
                 'message' => 'An error occurred while fetching doctors: ' . $e->getMessage()
@@ -79,16 +79,16 @@ class PublicDoctorController extends Controller
     {
         try {
             \Log::info('Starting doctors by specialty fetch', ['specialtyId' => $specialtyId]);
-            
+
             $doctors = Doctor::with(['user', 'specialties.medicalTag'])
                 ->whereHas('specialties', function ($query) use ($specialtyId) {
                     $query->where('medical_tag_id', $specialtyId);
                     //->where('is_active', true);
-                          
+
                 })
-                ->whereHas('user', function ($query) {
-                    $query->where('isVerified', true);
-                })
+                // ->whereHas('user', function ($query) {
+                //     $query->where('isVerified', true);
+                // })
                 ->get();
 
             \Log::info('Doctors by specialty fetched successfully', [
@@ -107,7 +107,7 @@ class PublicDoctorController extends Controller
                 'file' => $e->getFile(),
                 'line' => $e->getLine()
             ]);
-            
+
             return response()->json([
                 'status' => 'error',
                 'message' => 'An error occurred while fetching doctors by specialty: ' . $e->getMessage()
@@ -135,7 +135,7 @@ class PublicDoctorController extends Controller
             if ($request->has('specialty')) {
                 $query->whereHas('specialties.medicalTag', function ($q) use ($request) {
                     $q->where('name', 'like', '%' . $request->specialty . '%')
-                      ->orWhere('name_ar', 'like', '%' . $request->specialty . '%');
+                        ->orWhere('name_ar', 'like', '%' . $request->specialty . '%');
                 });
             }
 
@@ -152,4 +152,4 @@ class PublicDoctorController extends Controller
             ], 500);
         }
     }
-} 
+}

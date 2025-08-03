@@ -9,6 +9,7 @@ use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Storage;
 
 class MessageEvent implements ShouldBroadcastNow
 {
@@ -25,10 +26,10 @@ class MessageEvent implements ShouldBroadcastNow
     {
         // تحديد المستلم (الطرف الآخر في المحادثة)
         $chat = $this->message->chat;
-        $recipientUserId = $chat->doctor->user_id == $this->message->sender_id 
-            ? $chat->patient->user_id 
+        $recipientUserId = $chat->doctor->user_id == $this->message->sender_id
+            ? $chat->patient->user_id
             : $chat->doctor->user_id;
-            
+
         return new PrivateChannel('user.' . $recipientUserId);
     }
 
@@ -46,12 +47,15 @@ class MessageEvent implements ShouldBroadcastNow
                 'id' => $this->message->sender->id,
                 'name' => $this->message->sender->fullName,
                 'email' => $this->message->sender->email,
+                'photo' => $this->message->sender->photoPath,
             ],
             'content' => $this->message->message_content,
             'type' => $this->message->message_type,
             'timestamp' => $this->message->created_at->toDateTimeString(),
-            'file_url' => $this->message->file_url,
+            'file_url' => $this->message->file_path
+                ? Storage::url($this->message->file_path)
+                : null,
             'file_path' => $this->message->file_path,
         ];
     }
-} 
+}
