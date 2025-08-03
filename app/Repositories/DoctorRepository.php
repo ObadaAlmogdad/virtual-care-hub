@@ -122,4 +122,13 @@ class DoctorRepository implements DoctorRepositoryInterface
         }
         return false;
     }
+    public function getByMedicalTag($medicalTagId)
+    {
+        return Doctor::whereHas('specialties', function ($query) use ($medicalTagId) {
+            $query->where('medical_tag_id', $medicalTagId);
+        })->with(['user', 'specialties' => function ($q) use ($medicalTagId) {
+           $q->where('medical_tag_id', $medicalTagId);
+        }])->get();
+    }
+
 }

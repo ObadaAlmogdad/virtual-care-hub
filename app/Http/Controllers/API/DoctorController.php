@@ -262,4 +262,10 @@ if ($validator->fails()) {
             ], 500);
         }
     }
+
+    public function getBySpecialty($medicalTagId)
+    {
+        return $this->doctorService->getDoctorsBySpecialty($medicalTagId);
+    }
+
 }

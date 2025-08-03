@@ -287,8 +287,9 @@ class UserController extends Controller
 
     public function getUserConsultations()
     {
+        // dd(auth()->user()->patient->id);
         try {
-            $consultations = $this->consultationService->getUserConsultations(auth()->id());
+            $consultations = $this->consultationService->getUserConsultations(auth()->user()->patient->id);
             return response()->json([
                 'status' => 'success',
                 'data' => $consultations
@@ -306,7 +307,7 @@ class UserController extends Controller
     {
         try {
             $status = $request->query('status');
-            $consultations = $this->consultationService->getUserConsultationsByStatus(auth()->id(), $status);
+            $consultations = $this->consultationService->getUserConsultationsByStatus(auth()->user()->patient->id, $status);
             return response()->json([
                 'status' => 'success',
                 'data' => $consultations
