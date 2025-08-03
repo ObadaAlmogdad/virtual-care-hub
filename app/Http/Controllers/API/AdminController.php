@@ -157,6 +157,7 @@ class AdminController extends Controller
             $specialty = $doctor->specialties->first();
             $medicalTag = $specialty && $specialty->medicalTag ? $specialty->medicalTag->name : null;
             return [
+                'id'=>$user ? $user->id : null,
                 'doctor_name' => $user ? $user->fullName : null,
                 'email' => $user ? $user->email : null,
                 'specialty' => $medicalTag,
@@ -187,6 +188,7 @@ class AdminController extends Controller
         $result = $patients->map(function ($patient) {
             $user = $patient->user;
             return [
+                'id'=>$user ? $user->id : null,
                 'name' => $user ? $user->fullName : null,
                 'email' => $user ? $user->email : null,
                 'address' => $user ? $user->address : null,

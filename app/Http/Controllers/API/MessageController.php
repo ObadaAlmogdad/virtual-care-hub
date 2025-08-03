@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Events\MessageEvent;
+use App\Events\MessageSentEvent;
 use App\Models\Message;
 use App\Models\Chat;
 use App\Models\User;
@@ -79,9 +80,12 @@ class MessageController extends Controller
         // تحديث وقت آخر تحديث للمحادثة
         $chat->update(['updated_at' => now()]);
 
-        // إرسال الإشعار عبر WebSocket للمستلم فقط
+        // إرسال الإشعار عبر WebSocket
         try {
+            // إرسال للمستلم
             broadcast(new MessageEvent($message));
+            // إرسال للمرسل أيضاً (اختياري)
+            broadcast(new MessageSentEvent($message));
         } catch (\Exception $e) {
             // تسجيل الخطأ ولكن لا نوقف العملية
             \Log::error('WebSocket broadcast failed: ' . $e->getMessage());

@@ -11,6 +11,8 @@ use App\Http\Controllers\API\QuestionController;
 use App\Http\Controllers\API\ConsultationController;
 use App\Http\Controllers\API\ComplaintController;
 use App\Http\Controllers\API\{ChatController, MessageController};
+use App\Http\Controllers\API\PublicDoctorController;
+use App\Http\Controllers\API\MedicalSpecialtyController;
 use Illuminate\Broadcasting\Broadcast;
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
@@ -53,6 +55,20 @@ Route::middleware(['auth:sanctum'])->prefix('doctor/specialties')->group(functio
 });
 Route::get('doctor/specialties', [DoctorController::class, 'getSpecialties']);
 Route::get('doctor/{doctor_id}/specialties', [DoctorController::class, 'getDoctorSpecialties']);
+
+// Public APIs without authentication
+Route::prefix('public')->group(function () {
+    // Doctor APIs
+    Route::get('doctors', [PublicDoctorController::class, 'index']);
+    Route::get('doctors/{id}', [PublicDoctorController::class, 'show']);
+    Route::get('doctors/specialty/{specialtyId}', [PublicDoctorController::class, 'getBySpecialty']);
+    Route::get('doctors/search', [PublicDoctorController::class, 'search']);
+    
+    // Medical Specialties APIs
+    Route::get('medical-specialties', [MedicalSpecialtyController::class, 'index']);
+    Route::get('medical-specialties/{id}', [MedicalSpecialtyController::class, 'show']);
+    Route::get('medical-specialties/{id}/doctors', [MedicalSpecialtyController::class, 'getDoctorsBySpecialty']);
+});
 
 // Medical Tags Routes
 Route::middleware(['auth:sanctum'])->prefix('admin/medical-tags')->group(function () {
@@ -132,10 +148,10 @@ Route::middleware('auth:sanctum')->group(function () {
 
 //Booking Appointment
 Route::middleware('auth:sanctum')->group(function () {
-    Route::get('/doctors/{doctor}/available-days', [AppointmentController::class, 'availableDays']);
-    Route::get('/doctors/{doctor}/available-slots', [AppointmentController::class, 'availableSlots']);
     Route::post('/doctors/{doctor}/book', [AppointmentController::class, 'book']);
 });
+Route::get('/doctors/{doctor}/available-days', [AppointmentController::class, 'availableDays']);
+Route::get('/doctors/{doctor}/available-slots', [AppointmentController::class, 'availableSlots']);
 
 
 Route::middleware('auth:sanctum')->group(function () {
