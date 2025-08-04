@@ -147,6 +147,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/doctor/consultations/filter', [DoctorController::class, 'getConsultationsByStatus']);
     Route::patch('/doctor/consultations/{consultationId}/status', [DoctorController::class, 'updateConsultationStatus']);
     Route::post('/doctor/consultations/{consultationId}/schedule', [DoctorController::class, 'scheduleConsultation']);
+Route::post('/doctor/consultations/{consultationId}/reply', [DoctorController::class, 'replyToAnswer']);
 });
 
 

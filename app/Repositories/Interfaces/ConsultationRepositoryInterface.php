@@ -15,4 +15,5 @@ interface ConsultationRepositoryInterface
     public function updateStatus($id, $status): bool;
     public function getUserConsultationsByStatus($userId, $status);
     public function getDoctorConsultationsByStatus($doctorId, $status);
+    public function storeDoctorReply(array $data);
 }

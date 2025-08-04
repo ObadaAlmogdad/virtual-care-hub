@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Models\Consultation;
+use App\Models\ConsultationResult;
 use App\Repositories\Interfaces\ConsultationRepositoryInterface;
 
 class ConsultationRepository implements ConsultationRepositoryInterface
@@ -85,4 +86,22 @@ class ConsultationRepository implements ConsultationRepositoryInterface
     {
         return $this->update($id, ['status' => $status]);
     }
+
+public function storeDoctorReply(array $data)
+{
+    $consultation = $this->model->findOrFail($data['consultation_id']);
+
+    // if ($consultation->doctor_id !== auth()->id()) {
+    //     throw new \Exception("Unauthorized access.");
+    // }
+
+    return ConsultationResult::create([
+        'consultation_id' => $data['consultation_id'],
+        'user_question_tag_answer_id' => $data['user_question_tag_answer_id'],
+        'replayOfDoctor' => $data['replayOfDoctor'],
+        'accepted' => $data['accepted'],
+    ]);
+}
+
+
 }

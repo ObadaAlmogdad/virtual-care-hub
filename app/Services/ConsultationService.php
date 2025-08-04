@@ -170,4 +170,11 @@ class ConsultationService
 
         return $this->consultationRepository->scheduleConsultation($id, $scheduledAt, $reminderBeforeMinutes);
     }
-} 
+
+public function storeDoctorReply(array $data)
+{
+    return $this->consultationRepository->storeDoctorReply($data);
+}
+
+
+}

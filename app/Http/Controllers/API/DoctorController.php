@@ -214,6 +214,40 @@ class DoctorController extends Controller
         }
     }
 
+public function replyToAnswer(Request $request, $consultationId, $answerId=1)
+{
+    $request->validate([
+        'replayOfDoctor' => 'required|string',
+        // 'accepted' => 'required|boolean',
+    ]);
+
+    try {
+        $data = [
+            'consultation_id' => $consultationId,
+            'user_question_tag_answer_id' => $answerId,
+            'replayOfDoctor' => $request->input('replayOfDoctor'),
+            'accepted' =>true,
+            // 'accepted' => $request->input('accepted'),
+        ];
+
+
+        $result = $this->consultationService->storeDoctorReply($data);
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Doctor reply saved',
+            'data' => $result
+        ]);
+    } catch (\Exception $e) {
+        return response()->json([
+            'status' => 'error',
+            'message' => 'Failed to save reply',
+            'error' => $e->getMessage()
+        ], 500);
+    }
+}
+
+
+
     public function getBySpecialty($medicalTagId)
     {
         return $this->doctorService->getDoctorsBySpecialty($medicalTagId);
