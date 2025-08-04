@@ -15,7 +15,6 @@ class PublicDoctorController extends Controller
     public function index()
     {
         try {
-            \Log::info('Starting doctors fetch');
 
             $doctors = Doctor::with(['user', 'specialties.medicalTag'])
                 ->whereHas('user', function ($query) {
@@ -23,18 +22,18 @@ class PublicDoctorController extends Controller
                 })
                 ->get();
 
-            \Log::info('Doctors fetched successfully', ['count' => $doctors->count()]);
+            // \Log::info('Doctors fetched successfully', ['count' => $doctors->count()]);
 
             return response()->json([
                 'status' => 'success',
                 'data' => $doctors
             ]);
         } catch (\Exception $e) {
-            \Log::error('Error fetching doctors', [
-                'message' => $e->getMessage(),
-                'file' => $e->getFile(),
-                'line' => $e->getLine()
-            ]);
+            // \Log::error('Error fetching doctors', [
+            //     'message' => $e->getMessage(),
+            //     'file' => $e->getFile(),
+            //     'line' => $e->getLine()
+            // ]);
 
             return response()->json([
                 'status' => 'error',
@@ -78,8 +77,6 @@ class PublicDoctorController extends Controller
     public function getBySpecialty($specialtyId)
     {
         try {
-            \Log::info('Starting doctors by specialty fetch', ['specialtyId' => $specialtyId]);
-
             $doctors = Doctor::with(['user', 'specialties.medicalTag'])
                 ->whereHas('specialties', function ($query) use ($specialtyId) {
                     $query->where('medical_tag_id', $specialtyId);
@@ -91,22 +88,22 @@ class PublicDoctorController extends Controller
                 // })
                 ->get();
 
-            \Log::info('Doctors by specialty fetched successfully', [
-                'specialtyId' => $specialtyId,
-                'count' => $doctors->count()
-            ]);
+            // \Log::info('Doctors by specialty fetched successfully', [
+            //     'specialtyId' => $specialtyId,
+            //     'count' => $doctors->count()
+            // ]);
 
             return response()->json([
                 'status' => 'success',
                 'data' => $doctors
             ]);
         } catch (\Exception $e) {
-            \Log::error('Error fetching doctors by specialty', [
-                'specialtyId' => $specialtyId,
-                'message' => $e->getMessage(),
-                'file' => $e->getFile(),
-                'line' => $e->getLine()
-            ]);
+            // \Log::error('Error fetching doctors by specialty', [
+            //     'specialtyId' => $specialtyId,
+            //     'message' => $e->getMessage(),
+            //     'file' => $e->getFile(),
+            //     'line' => $e->getLine()
+            // ]);
 
             return response()->json([
                 'status' => 'error',

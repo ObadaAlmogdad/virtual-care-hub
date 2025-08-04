@@ -19,7 +19,6 @@ class AppointmentController extends Controller
         $this->appointmentService = $appointmentService;
     }
 
-    // ⬅️ Return available days for booking
     public function availableDays(Doctor $doctor)
     {
 
@@ -27,7 +26,6 @@ class AppointmentController extends Controller
         return response()->json($days);
     }
 
-    // ⬅️ Return time slots for selected date
     public function availableSlots(Request $request, Doctor $doctor)
     {
         $request->validate([
@@ -38,7 +36,6 @@ class AppointmentController extends Controller
         return response()->json($slots);
     }
 
-    // ⬅️ Book appointment
     public function book(Request $request, Doctor $doctor)
     {
         $request->validate([
@@ -50,14 +47,14 @@ class AppointmentController extends Controller
         $user = Auth::user();
 
         $alreadyBooked = \App\Models\Appointment::where('patient_id', $user->patient->id)
-        ->where('doctor_id', $doctor->id)
-        ->exists();
+            ->where('doctor_id', $doctor->id)
+            ->exists();
 
-    if ($alreadyBooked) {
-        throw ValidationException::withMessages([
-            'appointment' => 'لقد قمت بحجز موعد سابق مع هذا الطبيب.'
-        ]);
-    }
+        if ($alreadyBooked) {
+            throw ValidationException::withMessages([
+                'appointment' => 'لقد قمت بحجز موعد سابق مع هذا الطبيب.'
+            ]);
+        }
         $slots = $this->appointmentService->getAvailableSlots($doctor, $request->date);
 
         if (!in_array($request->time, $slots)) {
@@ -70,7 +67,7 @@ class AppointmentController extends Controller
             'patient_id' => $user->patient->id,
             'doctor_id' => $doctor->id,
             'date' => $request->date,
-            'day' => strtolower(Carbon::parse($request->date,'Asia/Damascus')->format('l')),
+            'day' => strtolower(Carbon::parse($request->date, 'Asia/Damascus')->format('l')),
             'time' => $request->time,
             'user_note' => $request->user_note,
         ]);

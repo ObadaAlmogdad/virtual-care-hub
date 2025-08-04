@@ -6,16 +6,13 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Chat;
 use App\Models\User;
-use App\Models\Doctor;
-use App\Models\Patient;
+
 use Illuminate\Support\Facades\Auth;
 use App\Events\NewChatEvent;
 
 class ChatController extends Controller
 {
-    /**
-     * إنشاء محادثة جديدة (للطبيب فقط)
-     */
+
     public function createChat(Request $request)
     {
         /**  @var User $user*/
@@ -91,9 +88,6 @@ class ChatController extends Controller
         ], 201);
     }
 
-    /**
-     * الحصول على محادثات المستخدم (للطبيب والمريض)
-     */
     public function myChats(Request $request)
     {
         /**  @var User $user*/
@@ -118,9 +112,6 @@ class ChatController extends Controller
         ]);
     }
 
-    /**
-     * الحصول على محادثة محددة
-     */
     public function getChat($chat_id)
     {
         /**  @var User $user*/

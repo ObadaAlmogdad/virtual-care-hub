@@ -9,9 +9,6 @@ use Illuminate\Http\Request;
 
 class MedicalSpecialtyController extends Controller
 {
-    /**
-     * Get all medical specialties (without authentication)
-     */
     public function index()
     {
         try {
@@ -31,9 +28,6 @@ class MedicalSpecialtyController extends Controller
         }
     }
 
-    /**
-     * Get medical specialty by ID (without authentication)
-     */
     public function show($id)
     {
         try {
@@ -60,14 +54,11 @@ class MedicalSpecialtyController extends Controller
         }
     }
 
-    /**
-     * Get doctors by specialty ID (without authentication)
-     */
     public function getDoctorsBySpecialty($specialtyId)
     {
         try {
-            \Log::info('Starting medical specialty doctors fetch', ['specialtyId' => $specialtyId]);
-            
+            // \Log::info('Starting medical specialty doctors fetch', ['specialtyId' => $specialtyId]);
+
             $doctors = Doctor::with(['user', 'specialties.medicalTag'])
                 ->whereHas('specialties', function ($query) use ($specialtyId) {
                     $query->where('medical_tag_id', $specialtyId);
@@ -77,27 +68,22 @@ class MedicalSpecialtyController extends Controller
                 })
                 ->get();
 
-            \Log::info('Medical specialty doctors fetched successfully', [
-                'specialtyId' => $specialtyId,
-                'count' => $doctors->count()
-            ]);
-
             return response()->json([
                 'status' => 'success',
                 'data' => $doctors
             ]);
         } catch (\Exception $e) {
-            \Log::error('Error fetching medical specialty doctors', [
-                'specialtyId' => $specialtyId,
-                'message' => $e->getMessage(),
-                'file' => $e->getFile(),
-                'line' => $e->getLine()
-            ]);
-            
+            // \Log::error('Error fetching medical specialty doctors', [
+            //     'specialtyId' => $specialtyId,
+            //     'message' => $e->getMessage(),
+            //     'file' => $e->getFile(),
+            //     'line' => $e->getLine()
+            // ]);
+
             return response()->json([
                 'status' => 'error',
                 'message' => 'An error occurred while fetching doctors by specialty: ' . $e->getMessage()
             ], 500);
         }
     }
-} 
+}

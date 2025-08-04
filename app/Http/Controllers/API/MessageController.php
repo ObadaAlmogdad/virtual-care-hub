@@ -15,9 +15,7 @@ use Illuminate\Support\Str;
 
 class MessageController extends Controller
 {
-    /**
-     * إرسال رسالة نصية أو ملف
-     */
+
     public function sendMessage(Request $request, $chat_id)
     {
         $user = Auth::user();
