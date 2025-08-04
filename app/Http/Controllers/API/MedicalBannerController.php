@@ -45,7 +45,7 @@ class MedicalBannerController extends Controller
         // حفظ الصورة في التخزين (public disk)
         if ($request->hasFile('image')) {
             $path = $request->file('image')->store('medical_banners', 'public');
-            $validated['image_url'] = Storage::url($path);  // رابط الصورة قابل للوصول
+            $validated['image_url'] = $path;  // رابط الصورة قابل للوصول
         }
 
         $banner = MedicalBanner::create($validated);
@@ -77,7 +77,7 @@ class MedicalBannerController extends Controller
         }
 
         $banner->update($validated);
-        
+
         return response()->json($banner);
     }
 
