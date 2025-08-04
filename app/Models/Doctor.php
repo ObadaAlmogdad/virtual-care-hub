@@ -40,9 +40,9 @@ class Doctor extends Model
 
 
     public function specialties()
-{
-    return $this->hasMany(DoctorSpecialty::class);
-}
+    {
+        return $this->hasMany(DoctorSpecialty::class);
+    }
 
 
     public function consultations()
@@ -50,6 +50,13 @@ class Doctor extends Model
         return $this->hasMany(Consultation::class);
     }
 
+    public function doctorRatings()
+    {
+        return $this->hasMany(Rating::class, 'doctor_id');
+    }
 
-
+    public function getAverageRatingAttribute()
+    {
+        return round($this->Ratings()->avg('rating'), 2);
+    }
 }

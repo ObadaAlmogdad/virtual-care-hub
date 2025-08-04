@@ -1106,7 +1106,7 @@
 									},
 									{
 										"key": "Authorization",
-										"value": "Bearer 4|s1SzNKReZGBdrZv7Ntfg1nOgs9C2RHSLt5J5CCiM85873df7",
+										"value": "Bearer 2|08A3J29AR1gRpuk98gBp8M6Vdlw8OPM45AN7vcpN59753b32",
 										"type": "text"
 									}
 								],
@@ -1115,7 +1115,7 @@
 									"raw": ""
 								},
 								"url": {
-									"raw": "http://127.0.0.1:8000/api/admin/verification_account/1",
+									"raw": "http://127.0.0.1:8000/api/admin/verification_account/2",
 									"protocol": "http",
 									"host": [
 										"127",
@@ -1128,7 +1128,7 @@
 										"api",
 										"admin",
 										"verification_account",
-										"1"
+										"2"
 									]
 								}
 							},
@@ -1198,7 +1198,7 @@
 									},
 									{
 										"key": "Authorization",
-										"value": "Bearer 2|IuZ88EncNF2tmcpEnE0LnU5BmwHVJ4DmqmNf4Sibe6368756",
+										"value": "Bearer 2|08A3J29AR1gRpuk98gBp8M6Vdlw8OPM45AN7vcpN59753b32",
 										"type": "default"
 									}
 								],
@@ -3529,7 +3529,42 @@
 					"response": []
 				},
 				{
-					"name": "Get banners by id",
+					"name": "delete banners by id",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://127.0.0.1:8000/api/medical-banners/1",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"medical-banners",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get banners by id Copy",
 					"request": {
 						"method": "GET",
 						"header": [
@@ -3653,6 +3688,160 @@
 								"medical-banners",
 								"1",
 								"toggle-active"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "rating",
+			"item": [
+				{
+					"name": "get doctor rating",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "title",
+									"value": "test",
+									"type": "default"
+								},
+								{
+									"key": "image",
+									"type": "file",
+									"src": "/C:/Users/HP/Desktop/LIFE/1.png"
+								},
+								{
+									"key": "link",
+									"value": "test",
+									"type": "default"
+								},
+								{
+									"key": "expires_at",
+									"value": "2026/1/1",
+									"type": "default"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/api/doctors/3/ratings",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"doctors",
+								"3",
+								"ratings"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "top doctors",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/api/doctors/top-rated",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"doctors",
+								"top-rated"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "add doctor rating",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer 1|u8P8jLIenQrfakazOdeiPEJZ3FO7DZnlRaIjyjH753edb658",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"doctor_id\": 3,\r\n  \"rating\": 4,\r\n  \"comment\": \"طبيب ممتاز وشرح الحالة بشكل جيد\"\r\n}"
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/api/doctor-ratings",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"doctor-ratings"
 							]
 						}
 					},

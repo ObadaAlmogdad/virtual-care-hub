@@ -69,4 +69,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Chat::class, 'patient_id');
     }
+
+    public function doctorRatings()
+    {
+        return $this->hasMany(Rating::class, 'doctor_id');
+    }
 }

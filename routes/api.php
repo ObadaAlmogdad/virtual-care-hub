@@ -15,6 +15,7 @@ use App\Http\Controllers\API\PublicDoctorController;
 use App\Http\Controllers\API\MedicalSpecialtyController;
 use Illuminate\Broadcasting\Broadcast;
 use App\Http\Controllers\Api\MedicalBannerController;
+use App\Http\Controllers\Api\DoctorRatingController;
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
@@ -187,3 +188,10 @@ Route::middleware('auth:sanctum')->group(function () {
 
 Route::apiResource('medical-banners', MedicalBannerController::class);
 Route::patch('medical-banners/{id}/toggle-active', [MedicalBannerController::class, 'toggleActive']);
+
+
+Route::middleware('auth:sanctum')->group(function () {
+    Route::post('/doctor-ratings', [DoctorRatingController::class, 'store']);
+});
+Route::get('/doctors/{doctorId}/ratings', [DoctorRatingController::class, 'getDoctorRatings']);
+Route::get('/doctors/top-rated', [DoctorRatingController::class, 'topRatedDoctors']);
