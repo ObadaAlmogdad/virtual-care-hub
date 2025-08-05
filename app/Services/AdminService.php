@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Repositories\Interfaces\AdminRepositoryInterface;
 use App\Repositories\Interfaces\UserRepositoryInterface;
+use App\Notifications\AccountVerificationNotification;
 
 
 class AdminService
@@ -26,5 +27,8 @@ class AdminService
         }
 
         $this->userRepository->update($user, ['isVerified' => true]);
+        
+        // إرسال إشعار تأكيد الحساب
+        $user->notify(new AccountVerificationNotification($user));
     }
 }
