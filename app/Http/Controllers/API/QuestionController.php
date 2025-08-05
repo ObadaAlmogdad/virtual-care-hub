@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Services\QuestionService;
@@ -29,6 +29,11 @@ class QuestionController extends Controller
         if (!$question) return null;
         
         $formattedQuestion = $question->toArray();
+        
+        // Map question_text to content for API consistency
+        $formattedQuestion['content'] = $formattedQuestion['question_text'] ?? '';
+        unset($formattedQuestion['question_text']);
+        
         if (isset($formattedQuestion['medical_tags'])) {
             // Remove duplicate medical tags
             $uniqueTags = collect($formattedQuestion['medical_tags'])->unique('id')->values();
@@ -42,6 +47,7 @@ class QuestionController extends Controller
                 ];
             })->toArray();
         }
+        
         return $formattedQuestion;
     }
 

@@ -26,10 +26,16 @@ class QuestionRepository implements QuestionRepositoryInterface
 
     public function create(array $data)
     {
+        // Extract medical_tag_ids before creating the question
+        $medicalTagIds = $data['medical_tag_ids'] ?? [];
+        unset($data['medical_tag_ids']);
+        
         $question = $this->model->create($data);
-        if (isset($data['medical_tag_ids'])) {
-            $this->attachMedicalTags($question->id, $data['medical_tag_ids']);
+        
+        if (!empty($medicalTagIds)) {
+            $this->attachMedicalTags($question->id, $medicalTagIds);
         }
+        
         return $question->load('medicalTags');
     }
 
@@ -37,10 +43,16 @@ class QuestionRepository implements QuestionRepositoryInterface
     {
         $question = $this->model->find($id);
         if ($question) {
+            // Extract medical_tag_ids before updating the question
+            $medicalTagIds = $data['medical_tag_ids'] ?? [];
+            unset($data['medical_tag_ids']);
+            
             $question->update($data);
-            if (isset($data['medical_tag_ids'])) {
-                $this->syncMedicalTags($question->id, $data['medical_tag_ids']);
+            
+            if (!empty($medicalTagIds)) {
+                $this->syncMedicalTags($question->id, $medicalTagIds);
             }
+            
             return $question->load('medicalTags');
         }
         return null;

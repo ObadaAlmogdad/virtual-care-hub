@@ -81,6 +81,7 @@ Route::middleware(['auth:sanctum'])->prefix('admin/medical-tags')->group(functio
     Route::delete('/{id}', [AdminController::class, 'deleteMedicalTag']);
 });
 Route::get('admin/medical-tags', [AdminController::class, 'getMedicalTags']);
+
 // Question Routes
 Route::middleware(['auth:sanctum'])->prefix('questions')->group(function () {
     Route::get('/', [QuestionController::class, 'index']);
@@ -88,11 +89,12 @@ Route::middleware(['auth:sanctum'])->prefix('questions')->group(function () {
     Route::get('/{id}', [QuestionController::class, 'show']);
     Route::put('/{id}', [QuestionController::class, 'update']);
     Route::delete('/{id}', [QuestionController::class, 'destroy']);
-    Route::get('/medical-tag/{medicalTagId}', [QuestionController::class, 'getByMedicalTag']);
     Route::post('/{id}/attach-tags', [QuestionController::class, 'attachMedicalTags']);
     Route::post('/{id}/detach-tags', [QuestionController::class, 'detachMedicalTags']);
     Route::post('/{id}/sync-tags', [QuestionController::class, 'syncMedicalTags']);
 });
+Route::get('questions/medical-tag/{medicalTagId}', [QuestionController::class, 'getByMedicalTag']);
+
 
 
 //admin api
@@ -119,14 +121,6 @@ Route::get('/stripe/onboard/refresh', fn () => response()->json(['message' => 'P
 Route::get('/stripe/onboard/return', fn () => response()->json(['message' => 'Onboarding completed successfully.']));
 
 
-// Route::middleware(['auth:sanctum', 'verified'])->group(function () {
-//     Route::prefix('medicalHistory/')->group(function () {
-//         Route::post('store', [MedicalHistoryController::class, 'store']);
-//         Route::put('update', [MedicalHistoryController::class, 'update']);
-//     });
-// });
-
-
 Route::group(["middleware" => ["auth:sanctum"]], function () {
 
     Route::prefix('admin/')->group(function () {
@@ -147,7 +141,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/doctor/consultations/filter', [DoctorController::class, 'getConsultationsByStatus']);
     Route::patch('/doctor/consultations/{consultationId}/status', [DoctorController::class, 'updateConsultationStatus']);
     Route::post('/doctor/consultations/{consultationId}/schedule', [DoctorController::class, 'scheduleConsultation']);
-Route::post('/doctor/consultations/{consultationId}/reply', [DoctorController::class, 'replyToAnswer']);
+    Route::post('/doctor/consultations/{consultationId}/reply', [DoctorController::class, 'replyToAnswer']);
 });
 
 
@@ -186,13 +180,15 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('/chats/{chat_id}/messages/{message_id}', [MessageController::class, 'deleteMessage']);
 });
 
-
+//banner
 Route::apiResource('medical-banners', MedicalBannerController::class);
 Route::patch('medical-banners/{id}/toggle-active', [MedicalBannerController::class, 'toggleActive']);
+// end //banner
 
-
+//rationg
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/doctor-ratings', [DoctorRatingController::class, 'store']);
 });
 Route::get('/doctors/{doctorId}/ratings', [DoctorRatingController::class, 'getDoctorRatings']);
 Route::get('/doctors/top-rated', [DoctorRatingController::class, 'topRatedDoctors']);
+//end rating

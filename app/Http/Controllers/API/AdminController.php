@@ -56,16 +56,21 @@ class AdminController extends Controller
      */
     public function addMedicalTag(Request $request)
     {
-        $request->validate([
+        $validated = $request->validate([
             'name' => 'required|string|max:255|unique:medical_tags',
             'name_ar' => 'nullable|string|max:255',
             'description' => 'nullable|string',
-            'icon' => 'nullable|string|max:255',
+            'icon' => 'required|image|max:2048',
             'is_active' => 'boolean',
             'order' => 'integer|min:0'
         ]);
 
-        $tag = MedicalTag::create($request->all());
+        if ($request->hasFile('icon')) {
+            $path = $request->file('icon')->store('medical_tage', 'public');
+            $validated['icon'] = $path;  // رابط الصورة قابل للوصول
+        }
+
+        $tag = MedicalTag::create($validated);
 
         return response()->json([
             'status' => 'success',
@@ -157,7 +162,7 @@ class AdminController extends Controller
             $specialty = $doctor->specialties->first();
             $medicalTag = $specialty && $specialty->medicalTag ? $specialty->medicalTag->name : null;
             return [
-                'id'=>$user ? $user->id : null,
+                'id' => $user ? $user->id : null,
                 'doctor_name' => $user ? $user->fullName : null,
                 'email' => $user ? $user->email : null,
                 'specialty' => $medicalTag,
@@ -188,7 +193,7 @@ class AdminController extends Controller
         $result = $patients->map(function ($patient) {
             $user = $patient->user;
             return [
-                'id'=>$user ? $user->id : null,
+                'id' => $user ? $user->id : null,
                 'name' => $user ? $user->fullName : null,
                 'email' => $user ? $user->email : null,
                 'address' => $user ? $user->address : null,
