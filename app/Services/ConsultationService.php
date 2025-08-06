@@ -176,5 +176,11 @@ public function storeDoctorReply(array $data)
     return $this->consultationRepository->storeDoctorReply($data);
 }
 
+public function getGeneralConsultations()
+{
+    return $this->consultationRepository->getGeneralConsultations();
+}
+
+
 
 }

@@ -1,21 +1,23 @@
 <?php
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\API\UserController;
 use App\Http\Controllers\API\AdminController;
 use App\Http\Controllers\API\AppointmentController;
-use App\Http\Controllers\API\MedicalHistoryController;
-use App\Http\Controllers\API\DoctorController;
-use App\Http\Controllers\API\QuestionController;
-use App\Http\Controllers\API\ConsultationController;
+
+use App\Http\Controllers\API\ChatController;
 use App\Http\Controllers\API\ComplaintController;
-use App\Http\Controllers\API\{ChatController, MessageController};
-use App\Http\Controllers\API\PublicDoctorController;
-use App\Http\Controllers\API\MedicalSpecialtyController;
-use Illuminate\Broadcasting\Broadcast;
-use App\Http\Controllers\Api\MedicalBannerController;
+use App\Http\Controllers\API\ConsultationController;
+use App\Http\Controllers\API\DoctorController;
 use App\Http\Controllers\Api\DoctorRatingController;
+use App\Http\Controllers\Api\MedicalBannerController;
+use App\Http\Controllers\API\MedicalHistoryController;
+use App\Http\Controllers\API\MedicalSpecialtyController;
+
+use App\Http\Controllers\API\MessageController;use App\Http\Controllers\API\PublicDoctorController;
+use App\Http\Controllers\API\QuestionController;
+use App\Http\Controllers\API\UserController;
+use Illuminate\Broadcasting\Broadcast;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
@@ -70,6 +72,14 @@ Route::prefix('public')->group(function () {
     Route::get('medical-specialties', [MedicalSpecialtyController::class, 'index']);
     Route::get('medical-specialties/{id}', [MedicalSpecialtyController::class, 'show']);
     Route::get('medical-specialties/{id}/doctors', [MedicalSpecialtyController::class, 'getDoctorsBySpecialty']);
+
+
+
+});
+
+Route::prefix('all')->group(function () {
+    Route::get('/consultations/general', [ConsultationController::class, 'getGeneralConsultations']);
+
 });
 
 // Medical Tags Routes
@@ -95,8 +105,6 @@ Route::middleware(['auth:sanctum'])->prefix('questions')->group(function () {
 });
 Route::get('questions/medical-tag/{medicalTagId}', [QuestionController::class, 'getByMedicalTag']);
 
-
-
 //admin api
 Route::post('/register-admin', [UserController::class, 'registerAdmin']);
 Route::middleware(['auth:sanctum'])->prefix('admin')->group(function () {
@@ -117,9 +125,8 @@ Route::middleware('auth:sanctum')->group(function () {
 Route::post('stripe/webhook', [\App\Http\Controllers\Api\StripeWebhookController::class, 'handle']);
 
 Route::get('/stripe/onboard/{doctor_id}', [\App\Http\Controllers\Api\StripeConnectController::class, 'createOnboardingLink']);
-Route::get('/stripe/onboard/refresh', fn () => response()->json(['message' => 'Please try again.']));
-Route::get('/stripe/onboard/return', fn () => response()->json(['message' => 'Onboarding completed successfully.']));
-
+Route::get('/stripe/onboard/refresh', fn() => response()->json(['message' => 'Please try again.']));
+Route::get('/stripe/onboard/return', fn() => response()->json(['message' => 'Onboarding completed successfully.']));
 
 Route::group(["middleware" => ["auth:sanctum"]], function () {
 
@@ -144,14 +151,18 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/doctor/consultations/{consultationId}/reply', [DoctorController::class, 'replyToAnswer']);
 });
 
-
 //Booking Appointment
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/doctors/{doctor}/book', [AppointmentController::class, 'book']);
+    Route::get('/doctors/{doctor}/available-days', [AppointmentController::class, 'availableDays']);
+    Route::get('/doctors/{doctor}/available-slots', [AppointmentController::class, 'availableSlots']);
 });
-Route::get('/doctors/{doctor}/available-days', [AppointmentController::class, 'availableDays']);
-Route::get('/doctors/{doctor}/available-slots', [AppointmentController::class, 'availableSlots']);
 
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/user/getAllappointments', [AppointmentController::class, 'getPatientAppointments']);
+    Route::get('/user/appointments/filter', [AppointmentController::class, 'filterPatientAppointments']);
+
+});
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/complaints', [ComplaintController::class, 'index']);

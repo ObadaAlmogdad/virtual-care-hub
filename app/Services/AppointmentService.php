@@ -16,22 +16,24 @@ class AppointmentService
 
     public function getAvailableDays(Doctor $doctor, int $daysAhead = 14): array
     {
+        // dd($doctor->toArray());
         $availableDays = [];
         $workDays      = $doctor->work_days;
         $today         = Carbon::today('Asia/Damascus');
         for ($i = 0; $i < $daysAhead; $i++) {
             $date    = $today->copy()->addDays($i);
-            $dayName = strtolower($date->format('l'));
-            // dd($dayName);
+            $dayName = $date->format('l');
 
             if (in_array($dayName, $workDays)) {
                 $availableSlots = $this->getAvailableSlots($doctor, $date->toDateString());
+                // dd($availableSlots);
 
                 if (! empty($availableSlots)) {
                     $availableDays[] = [
                         'date' => $date->toDateString(),
                         'day'  => $dayName,
                     ];
+                    // dd($availableDays);
                 }
             }
         }
@@ -42,7 +44,7 @@ class AppointmentService
     public function getAvailableSlots(Doctor $doctor, string $date): array
     {
         $workDays = $doctor->work_days;
-        $dayName  = strtolower(Carbon::parse($date,'Asia/Damascus')->format('l'));
+        $dayName  = Carbon::parse($date,'Asia/Damascus')->format('l');
 
         if (! in_array($dayName, $workDays)) {
             return []; // doctor doesn't work on this day
@@ -74,4 +76,14 @@ class AppointmentService
     {
         return $this->appointmentRepo->create($data);
     }
+    public function getAppointmentsByPatient($patientId)
+{
+    return $this->appointmentRepo->getAppointmentsByPatient($patientId);
+}
+public function filterAppointmentsByTime($patientId, $type)
+{
+    return $this->appointmentRepo->filterByTime($patientId, $type);
+}
+
+
 }

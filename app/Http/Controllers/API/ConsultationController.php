@@ -54,4 +54,23 @@ class ConsultationController extends Controller
             ], 500);
         }
     }
+
+    public function getGeneralConsultations()
+{
+    try {
+        $consultations = $this->consultationService->getGeneralConsultations();
+
+        return response()->json([
+            'status' => 'success',
+            'data' => $consultations
+        ]);
+    } catch (\Exception $e) {
+        return response()->json([
+            'status' => 'error',
+            'message' => 'An error occurred while fetching consultations',
+            'errors' => $e->getMessage()
+        ], 500);
+    }
+}
+
 }

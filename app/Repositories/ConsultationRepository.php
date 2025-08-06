@@ -103,5 +103,15 @@ public function storeDoctorReply(array $data)
     ]);
 }
 
+public function getGeneralConsultations()
+{
+    return $this->model
+        ->where('isSpecial', 0)
+        ->with(['user', 'doctor', 'medicalTag'])
+        ->orderByDesc('created_at')
+        ->get();
+}
+
+
 
 }
