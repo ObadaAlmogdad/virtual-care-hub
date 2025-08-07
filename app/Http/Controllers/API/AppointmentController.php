@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
@@ -56,7 +57,7 @@ class AppointmentController extends Controller
         }
         $slots = $this->appointmentService->getAvailableSlots($doctor, $request->date);
 
-        if (! in_array($request->time, $slots)) {
+        if (!in_array($request->time, $slots)) {
             throw ValidationException::withMessages([
                 'time' => 'هذا الوقت غير متاح.',
             ]);
@@ -80,18 +81,19 @@ class AppointmentController extends Controller
             ],
         ]);
     }
+
     public function getPatientAppointments()
     {
         $user = auth()->user();
-    if (!$user) {
-        return response()->json(['error' => 'Unauthenticated'], 401);
-    }
+        if (!$user) {
+            return response()->json(['error' => 'Unauthenticated'], 401);
+        }
 
-    if (!$user->patient) {
-        return response()->json(['error' => 'Patient data not found'], 404);
-    }
+        if (!$user->patient) {
+            return response()->json(['error' => 'Patient data not found'], 404);
+        }
         $patientId    = Auth::user()->patient->id;
-        $appointments = $this->appointmentService->getAppointmentsByPatient($patientId);
+        $appointments = $this->appointmentService->getAppointmentsByPatient($user->id);
 
         return response()->json([
             'status' => 'success',
@@ -100,24 +102,22 @@ class AppointmentController extends Controller
     }
 
     public function filterPatientAppointments(Request $request)
-{
-    $patientId = auth()->user()->patient->id;
-    $status = $request->query('type'); // 'past' or 'upcoming'
+    {
+        $patientId = auth()->user()->patient->id;
+        $status = $request->query('type'); // 'past' or 'upcoming'
 
-    if (!in_array($status, ['past', 'upcoming'])) {
+        if (!in_array($status, ['past', 'upcoming'])) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Invalid filter type. Use "past" or "upcoming".'
+            ], 422);
+        }
+
+        $appointments = $this->appointmentService->filterAppointmentsByTime($patientId, $status);
+
         return response()->json([
-            'status' => 'error',
-            'message' => 'Invalid filter type. Use "past" or "upcoming".'
-        ], 422);
+            'status' => 'success',
+            'data' => $appointments
+        ]);
     }
-
-    $appointments = $this->appointmentService->filterAppointmentsByTime($patientId, $status);
-
-    return response()->json([
-        'status' => 'success',
-        'data' => $appointments
-    ]);
-}
-
-
 }

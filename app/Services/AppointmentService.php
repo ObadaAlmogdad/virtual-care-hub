@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Services;
 
 use App\Models\Doctor;
@@ -28,7 +29,7 @@ class AppointmentService
                 $availableSlots = $this->getAvailableSlots($doctor, $date->toDateString());
                 // dd($availableSlots);
 
-                if (! empty($availableSlots)) {
+                if (!empty($availableSlots)) {
                     $availableDays[] = [
                         'date' => $date->toDateString(),
                         'day'  => $dayName,
@@ -44,26 +45,26 @@ class AppointmentService
     public function getAvailableSlots(Doctor $doctor, string $date): array
     {
         $workDays = $doctor->work_days;
-        $dayName  = Carbon::parse($date,'Asia/Damascus')->format('l');
+        $dayName  = Carbon::parse($date, 'Asia/Damascus')->format('l');
 
-        if (! in_array($dayName, $workDays)) {
+        if (!in_array($dayName, $workDays)) {
             return []; // doctor doesn't work on this day
         }
 
-        $start        = Carbon::parse($doctor->work_time_in,'Asia/Damascus');
-        $end          = Carbon::parse($doctor->work_time_out,'Asia/Damascus');
-        $slotDuration = $doctor->time_for_waiting?? 20;
+        $start        = Carbon::parse($doctor->work_time_in, 'Asia/Damascus');
+        $end          = Carbon::parse($doctor->work_time_out, 'Asia/Damascus');
+        $slotDuration = $doctor->time_for_waiting ?? 20;
 
         $bookedTimes = $this->appointmentRepo
             ->getAppointmentsByDoctorAndDate($doctor->id, $date)
             ->pluck('time')
-            ->map(fn($t) => Carbon::parse($t,'Asia/Damascus')->format('H:i'))
+            ->map(fn ($t) => Carbon::parse($t, 'Asia/Damascus')->format('H:i'))
             ->toArray();
 
         $slots = [];
         while ($start->lt($end)) {
             $time = $start->format('H:i');
-            if (! in_array($time, $bookedTimes)) {
+            if (!in_array($time, $bookedTimes)) {
                 $slots[] = $time;
             }
             $start->addMinutes($slotDuration);
@@ -76,14 +77,14 @@ class AppointmentService
     {
         return $this->appointmentRepo->create($data);
     }
+
     public function getAppointmentsByPatient($patientId)
-{
-    return $this->appointmentRepo->getAppointmentsByPatient($patientId);
-}
-public function filterAppointmentsByTime($patientId, $type)
-{
-    return $this->appointmentRepo->filterByTime($patientId, $type);
-}
+    {
+        return $this->appointmentRepo->getAppointmentsByPatient($patientId);
+    }
 
-
+    public function filterAppointmentsByTime($patientId, $type)
+    {
+        return $this->appointmentRepo->filterByTime($patientId, $type);
+    }
 }

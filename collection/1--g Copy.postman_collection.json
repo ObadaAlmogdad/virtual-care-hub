@@ -1,9 +1,8 @@
 {
 	"info": {
-		"_postman_id": "2aa0ad75-9b8a-4e48-be68-2cfc6d62fbdb",
+		"_postman_id": "752cacc3-6e59-4737-8068-fea2a72440c7",
 		"name": "1--g Copy",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "29936059"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
 		{
@@ -560,7 +559,7 @@
 									},
 									"status": "OK",
 									"code": 200,
-									"_postman_previewlanguage": null,
+									"_postman_previewlanguage": "Text",
 									"header": [
 										{
 											"key": "Host",
@@ -649,7 +648,7 @@
 									},
 									"status": "OK",
 									"code": 200,
-									"_postman_previewlanguage": null,
+									"_postman_previewlanguage": "Text",
 									"header": [
 										{
 											"key": "Host",
@@ -715,7 +714,7 @@
 									}
 								],
 								"url": {
-									"raw": "http://127.0.0.1:8000/api/doctors/173/available-days",
+									"raw": "http://127.0.0.1:8000/api/doctors/1/available-days",
 									"protocol": "http",
 									"host": [
 										"127",
@@ -727,7 +726,7 @@
 									"path": [
 										"api",
 										"doctors",
-										"173",
+										"1",
 										"available-days"
 									]
 								}
@@ -763,7 +762,7 @@
 									"formdata": []
 								},
 								"url": {
-									"raw": "http://127.0.0.1:8000/api/doctors/173/available-slots?date=2025-08-14",
+									"raw": "http://127.0.0.1:8000/api/doctors/1/available-slots?date=2025-08-14",
 									"protocol": "http",
 									"host": [
 										"127",
@@ -775,7 +774,7 @@
 									"path": [
 										"api",
 										"doctors",
-										"173",
+										"1",
 										"available-slots"
 									],
 									"query": [
@@ -805,7 +804,7 @@
 									},
 									{
 										"key": "Authorization",
-										"value": "Bearer {{token}}",
+										"value": "Bearer 9|fOwhhk7NibpslPFQP8k8ajv8wtAJBmKxbyAQpb2u39f92feb",
 										"type": "default"
 									}
 								],
@@ -819,7 +818,7 @@
 									}
 								},
 								"url": {
-									"raw": "http://127.0.0.1:8000/api/doctors/173/book",
+									"raw": "http://127.0.0.1:8000/api/doctors/1/book",
 									"protocol": "http",
 									"host": [
 										"127",
@@ -831,7 +830,7 @@
 									"path": [
 										"api",
 										"doctors",
-										"173",
+										"1",
 										"book"
 									]
 								}
@@ -840,27 +839,36 @@
 						},
 						{
 							"name": "get my All appointments",
+							"protocolProfileBehavior": {
+								"disabledSystemHeaders": {
+									"accept": true,
+									"accept-encoding": true,
+									"connection": true,
+									"user-agent": true,
+									"host": true
+								}
+							},
 							"request": {
 								"method": "GET",
 								"header": [
-									{
-										"key": "Accept",
-										"value": "application/json",
-										"type": "text"
-									},
 									{
 										"key": "Content-Type",
 										"value": "application/json",
 										"type": "text"
 									},
 									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
 										"key": "Authorization",
-										"value": "Bearer {{token}}",
+										"value": "Bearer 9|fOwhhk7NibpslPFQP8k8ajv8wtAJBmKxbyAQpb2u39f92feb",
 										"type": "text"
 									}
 								],
 								"url": {
-									"raw": "http://127.0.0.1:8000/api/user/getAllappointments",
+									"raw": "http://127.0.0.1:8000/api/user/appointments/getAll",
 									"protocol": "http",
 									"host": [
 										"127",
@@ -872,7 +880,8 @@
 									"path": [
 										"api",
 										"user",
-										"getAllappointments"
+										"appointments",
+										"getAll"
 									]
 								}
 							},
@@ -898,8 +907,7 @@
 											"const token = pm.response.json().user.token;\r",
 											"pm.collectionVariables.set('token',token)"
 										],
-										"type": "text/javascript",
-										"packages": {}
+										"type": "text/javascript"
 									}
 								}
 							],
@@ -939,10 +947,7 @@
 										{
 											"key": "certificate_images[]",
 											"type": "file",
-											"src": [
-												"/C:/Users/ASUSD/Pictures/Screenshots/Screenshot 2023-10-10 154653.png",
-												"/C:/Users/ASUSD/Pictures/Screenshots/Screenshot 2023-10-21 175407.png"
-											]
+											"src": "/C:/Users/HP/Desktop/LIFE/1.png"
 										},
 										{
 											"key": "medical_tag_id",
