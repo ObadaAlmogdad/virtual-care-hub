@@ -13,4 +13,5 @@ interface QuestionRepositoryInterface
     public function attachMedicalTags($questionId, array $medicalTagIds);
     public function detachMedicalTags($questionId, array $medicalTagIds);
     public function syncMedicalTags($questionId, array $medicalTagIds);
+    public function attachQuestionsToMedicalTag($medicalTagId, array $questionIds);
 } 

@@ -104,4 +104,23 @@ class QuestionRepository implements QuestionRepositoryInterface
         }
         return false;
     }
+
+    public function attachQuestionsToMedicalTag($medicalTagId, array $questionIds)
+    {
+        $medicalTag = \App\Models\MedicalTag::find($medicalTagId);
+        if (!$medicalTag) {
+            return false;
+        }
+
+        $questions = $this->model->whereIn('id', $questionIds)->get();
+        
+        foreach ($questions as $question) {
+            // Check if the relationship already exists to avoid duplicates
+            if (!$question->medicalTags()->where('medical_tag_id', $medicalTagId)->exists()) {
+                $question->medicalTags()->attach($medicalTagId);
+            }
+        }
+        
+        return true;
+    }
 } 

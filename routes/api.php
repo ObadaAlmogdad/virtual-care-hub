@@ -102,6 +102,11 @@ Route::middleware(['auth:sanctum'])->prefix('questions')->group(function () {
 });
 Route::get('questions/medical-tag/{medicalTagId}', [QuestionController::class, 'getByMedicalTag']);
 
+// Medical Tag Questions Routes
+Route::middleware(['auth:sanctum'])->prefix('medical-tags')->group(function () {
+    Route::post('/{medicalTagId}/attach-questions', [QuestionController::class, 'attachQuestionsToMedicalTag']);
+});
+
 //admin api
 Route::post('/register-admin', [UserController::class, 'registerAdmin']);
 Route::middleware(['auth:sanctum'])->prefix('admin')->group(function () {

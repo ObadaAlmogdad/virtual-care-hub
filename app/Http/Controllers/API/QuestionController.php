@@ -177,4 +177,29 @@ class QuestionController extends Controller
             return $this->handleError($e);
         }
     }
+
+    public function attachQuestionsToMedicalTag(Request $request, $medicalTagId)
+    {
+        try {
+            $request->validate([
+                'question_ids' => 'required|array',
+                'question_ids.*' => 'exists:questions,id'
+            ]);
+
+            // Remove duplicates from the input
+            $uniqueQuestionIds = array_unique($request->question_ids);
+            $this->questionService->attachQuestionsToMedicalTag($medicalTagId, $uniqueQuestionIds);
+            
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Questions attached to medical tag successfully',
+                'data' => [
+                    'medical_tag_id' => $medicalTagId,
+                    'attached_questions_count' => count($uniqueQuestionIds)
+                ]
+            ]);
+        } catch (\Exception $e) {
+            return $this->handleError($e);
+        }
+    }
 } 

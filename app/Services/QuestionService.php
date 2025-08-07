@@ -156,4 +156,26 @@ class QuestionService
         }
         return true;
     }
+
+    public function attachQuestionsToMedicalTag($medicalTagId, array $questionIds)
+    {
+        $validator = Validator::make([
+            'medical_tag_id' => $medicalTagId,
+            'question_ids' => $questionIds
+        ], [
+            'medical_tag_id' => 'required|exists:medical_tags,id',
+            'question_ids' => 'required|array',
+            'question_ids.*' => 'exists:questions,id'
+        ]);
+
+        if ($validator->fails()) {
+            throw new ValidationException($validator);
+        }
+
+        $result = $this->questionRepository->attachQuestionsToMedicalTag($medicalTagId, $questionIds);
+        if (!$result) {
+            throw new \Exception('Medical tag not found', 404);
+        }
+        return true;
+    }
 }

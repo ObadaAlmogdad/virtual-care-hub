@@ -13,31 +13,25 @@
 					"item": [
 						{
 							"name": "register",
-							"event": [
-								{
-									"listen": "test",
-									"script": {
-										"exec": [
-											"const token = pm.response.json().user.token;\r",
-											"pm.collectionVariables.set('token',token)"
-										],
-										"type": "text/javascript",
-										"packages": {}
-									}
-								}
-							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
 							"request": {
-								"method": "POST",
+								"method": "GET",
 								"header": [
 									{
 										"key": "Content-Type",
-										"value": "multipart/form-data",
-										"type": "default",
-										"disabled": true
+										"value": "application/json",
+										"type": "default"
 									},
 									{
 										"key": "Accept",
 										"value": "application/json",
+										"type": "default"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer {{token}}",
 										"type": "default"
 									}
 								],
@@ -67,7 +61,7 @@
 										{
 											"key": "photo",
 											"type": "file",
-											"src": "/C:/Users/ASUSD/Pictures/Screenshots/Screenshot 2023-10-10 154653.png"
+											"src": "/C:/Users/HP/Desktop/LIFE/1.png"
 										},
 										{
 											"key": "address",
@@ -87,7 +81,7 @@
 									]
 								},
 								"url": {
-									"raw": "http://127.0.0.1:8000/api/register",
+									"raw": "http://127.0.0.1:8000/api/user/appointments/filter?type=past",
 									"protocol": "http",
 									"host": [
 										"127",
@@ -98,7 +92,15 @@
 									"port": "8000",
 									"path": [
 										"api",
-										"register"
+										"user",
+										"appointments",
+										"filter"
+									],
+									"query": [
+										{
+											"key": "type",
+											"value": "past"
+										}
 									]
 								}
 							},
@@ -1760,13 +1762,29 @@
 									},
 									{
 										"key": "Authorization",
-										"value": "Bearer 2|08A3J29AR1gRpuk98gBp8M6Vdlw8OPM45AN7vcpN59753b32",
+										"value": "Bearer 9|fOwhhk7NibpslPFQP8k8ajv8wtAJBmKxbyAQpb2u39f92feb",
 										"type": "default"
 									}
 								],
 								"body": {
-									"mode": "raw",
-									"raw": "{\r\n    \"name\": \"عصبية\",\r\n    \"is_active\": true\r\n\r\n}"
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "name",
+											"value": "test",
+											"type": "text"
+										},
+										{
+											"key": "is_active",
+											"value": "1",
+											"type": "text"
+										},
+										{
+											"key": "icon",
+											"type": "file",
+											"src": []
+										}
+									]
 								},
 								"url": {
 									"raw": "http://127.0.0.1:8000/api/admin/medical-tags/",
@@ -1873,6 +1891,51 @@
 										"admin",
 										"medical-tags",
 										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "add many q to tage",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer 9|fOwhhk7NibpslPFQP8k8ajv8wtAJBmKxbyAQpb2u39f92feb",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"question_ids\": [1, 2, 3]\r\n}"
+								},
+								"url": {
+									"raw": "http://127.0.0.1:8000/api/medical-tags/1/attach-questions",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8000",
+									"path": [
+										"api",
+										"medical-tags",
+										"1",
+										"attach-questions"
 									]
 								}
 							},
@@ -2013,7 +2076,7 @@
 							},
 							{
 								"key": "Authorization",
-								"value": "Bearer 3|KBzx9SpBDuE6ekpGHJyMUvJIQk0Kow7QhtODoxPt0dbd90e9",
+								"value": "Bearer 9|fOwhhk7NibpslPFQP8k8ajv8wtAJBmKxbyAQpb2u39f92feb",
 								"type": "text"
 							}
 						],
@@ -2053,13 +2116,13 @@
 							},
 							{
 								"key": "Authorization",
-								"value": "Bearer 3|KBzx9SpBDuE6ekpGHJyMUvJIQk0Kow7QhtODoxPt0dbd90e9",
+								"value": "Bearer 9|fOwhhk7NibpslPFQP8k8ajv8wtAJBmKxbyAQpb2u39f92feb",
 								"type": "text"
 							}
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"content\": \"q2\",\r\n    \"isActive\": true,\r\n    \"medical_tag_ids\":[1]\r\n}"
+							"raw": "{\r\n    \"content\": \"q3\",\r\n    \"isActive\": true,\r\n    \"specialty_ids\":[1]\r\n}"
 						},
 						"url": {
 							"raw": "http://127.0.0.1:8000/api/questions/",
@@ -2097,12 +2160,12 @@
 							},
 							{
 								"key": "Authorization",
-								"value": "Bearer 3|RkfnMkgqftmxQQRsXogl8gp4rdkTN0ExOFDEgUVM195767b3",
+								"value": "Bearer 9|fOwhhk7NibpslPFQP8k8ajv8wtAJBmKxbyAQpb2u39f92feb",
 								"type": "text"
 							}
 						],
 						"url": {
-							"raw": "http://127.0.0.1:8000/api/questions/7",
+							"raw": "http://127.0.0.1:8000/api/questions/1",
 							"protocol": "http",
 							"host": [
 								"127",
@@ -2114,7 +2177,7 @@
 							"path": [
 								"api",
 								"questions",
-								"7"
+								"1"
 							]
 						}
 					},
@@ -2246,7 +2309,7 @@
 					"response": []
 				},
 				{
-					"name": "add q to tages",
+					"name": "add q to many tages",
 					"request": {
 						"method": "POST",
 						"header": [
@@ -2262,7 +2325,7 @@
 							},
 							{
 								"key": "Authorization",
-								"value": "Bearer 3|RkfnMkgqftmxQQRsXogl8gp4rdkTN0ExOFDEgUVM195767b3",
+								"value": "Bearer 9|fOwhhk7NibpslPFQP8k8ajv8wtAJBmKxbyAQpb2u39f92feb",
 								"type": "text"
 							}
 						],
@@ -2271,7 +2334,7 @@
 							"raw": "{\r\n    \"medical_tag_ids\":[1]\r\n}"
 						},
 						"url": {
-							"raw": "http://127.0.0.1:8000/api/questions/7/attach-tags",
+							"raw": "http://127.0.0.1:8000/api/questions/1/attach-tags",
 							"protocol": "http",
 							"host": [
 								"127",
@@ -2283,7 +2346,7 @@
 							"path": [
 								"api",
 								"questions",
-								"7",
+								"1",
 								"attach-tags"
 							]
 						}
@@ -2307,7 +2370,7 @@
 							},
 							{
 								"key": "Authorization",
-								"value": "Bearer 3|RkfnMkgqftmxQQRsXogl8gp4rdkTN0ExOFDEgUVM195767b3",
+								"value": "Bearer 9|fOwhhk7NibpslPFQP8k8ajv8wtAJBmKxbyAQpb2u39f92feb",
 								"type": "text"
 							}
 						],
@@ -2316,7 +2379,7 @@
 							"raw": "{\r\n    \"medical_tag_ids\":[1]\r\n}"
 						},
 						"url": {
-							"raw": "http://127.0.0.1:8000/api/questions/1/attach-tags",
+							"raw": "http://127.0.0.1:8000/api/questions/1/detach-tags",
 							"protocol": "http",
 							"host": [
 								"127",
@@ -2329,7 +2392,7 @@
 								"api",
 								"questions",
 								"1",
-								"attach-tags"
+								"detach-tags"
 							]
 						}
 					},
