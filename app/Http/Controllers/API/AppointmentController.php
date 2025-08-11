@@ -93,7 +93,7 @@ class AppointmentController extends Controller
             return response()->json(['error' => 'Patient data not found'], 404);
         }
         $patientId    = Auth::user()->patient->id;
-        $appointments = $this->appointmentService->getAppointmentsByPatient($user->id);
+        $appointments = $this->appointmentService->getAppointmentsByPatient($patientId);
 
         return response()->json([
             'status' => 'success',
