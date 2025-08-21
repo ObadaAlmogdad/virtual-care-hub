@@ -6,6 +6,7 @@ use App\Http\Controllers\API\AppointmentController;
 use App\Http\Controllers\API\ChatController;
 use App\Http\Controllers\API\ComplaintController;
 use App\Http\Controllers\API\ConsultationController;
+use App\Http\Controllers\API\ConsultationResultController;
 use App\Http\Controllers\API\DoctorController;
 use App\Http\Controllers\Api\DoctorRatingController;
 use App\Http\Controllers\Api\MedicalBannerController;
@@ -144,6 +145,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/consultations', [UserController::class, 'getUserConsultations']);
     Route::get('/consultations/filter', [UserController::class, 'getUserConsultationsByStatus']);
     Route::get('/doctors/by-specialty/{medical_tag_id}', [DoctorController::class, 'getBySpecialty']);
+    Route::get('/patient/consultations/{consultationId}/reply',[ConsultationResultController::class, 'getMyDoctorReply']);
 
     // Doctor routes
     Route::get('/doctor/consultations/pending', [DoctorController::class, 'getPendingConsultations']);
@@ -163,6 +165,8 @@ Route::middleware('auth:sanctum')->group(function () {
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user/appointments/getAll', [AppointmentController::class, 'getPatientAppointments']);
     Route::get('/user/appointments/filter', [AppointmentController::class, 'filterPatientAppointments']);
+    Route::get('/doctor/appointments', [AppointmentController::class, 'getDoctorAppointments']);
+
 });
 
 Route::middleware('auth:sanctum')->group(function () {

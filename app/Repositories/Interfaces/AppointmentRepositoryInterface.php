@@ -8,5 +8,5 @@ interface AppointmentRepositoryInterface
     public function create(array $data);
     public function getAppointmentsByPatient($patientId);
     public function filterByTime($patientId, $type);
-
+    public function getDoctorAppointments(int $doctorId, ?string $filter = null);
 }

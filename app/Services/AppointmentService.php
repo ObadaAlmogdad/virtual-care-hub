@@ -3,14 +3,14 @@
 namespace App\Services;
 
 use App\Models\Doctor;
-use App\Repositories\AppointmentRepository;
+use App\Repositories\Interfaces\AppointmentRepositoryInterface;
 use Carbon\Carbon;
 
 class AppointmentService
 {
     protected $appointmentRepo;
 
-    public function __construct(AppointmentRepository $appointmentRepo)
+    public function __construct(AppointmentRepositoryInterface $appointmentRepo)
     {
         $this->appointmentRepo = $appointmentRepo;
     }
@@ -87,4 +87,10 @@ class AppointmentService
     {
         return $this->appointmentRepo->filterByTime($patientId, $type);
     }
+
+    public function getDoctorAppointments(int $doctorId, ?string $filter = null)
+    {
+        return $this->appointmentRepo->getDoctorAppointments($doctorId, $filter);
+    }
+
 }

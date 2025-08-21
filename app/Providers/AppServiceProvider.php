@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Repositories\AppointmentRepository;
 use Illuminate\Support\ServiceProvider;
 use App\Repositories\Interfaces\UserRepositoryInterface;
 use App\Repositories\UserRepository;
@@ -15,6 +16,9 @@ use App\Repositories\QuestionRepository;
 use App\Services\QuestionService;
 use App\Repositories\Interfaces\ConsultationRepositoryInterface;
 use App\Repositories\ConsultationRepository;
+use App\Repositories\ConsultationResultRepository;
+use App\Repositories\Interfaces\AppointmentRepositoryInterface;
+use App\Repositories\Interfaces\ConsultationResultRepositoryInterface;
 use App\Services\ConsultationService;
 
 class AppServiceProvider extends ServiceProvider
@@ -42,6 +46,14 @@ class AppServiceProvider extends ServiceProvider
         $this->app->singleton(ConsultationService::class, function ($app) {
             return new ConsultationService($app->make(ConsultationRepositoryInterface::class));
         });
+        $this->app->bind(
+        ConsultationResultRepositoryInterface::class,
+        ConsultationResultRepository::class
+        );
+        $this->app->bind(
+        AppointmentRepositoryInterface::class,
+        AppointmentRepository::class
+        );
     }
 
     /**

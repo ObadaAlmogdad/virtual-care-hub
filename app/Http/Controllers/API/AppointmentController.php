@@ -120,4 +120,25 @@ class AppointmentController extends Controller
             'data' => $appointments
         ]);
     }
+
+    public function getDoctorAppointments(Request $request)
+{
+    try {
+        $doctor=auth()->user()->doctor;
+        $filter = $request->query('filter');
+        $appointments = $this->appointmentService->getDoctorAppointments($doctor->id, $filter);
+
+        return response()->json([
+            'status' => 'success',
+            'data' => $appointments
+        ]);
+    } catch (\Exception $e) {
+        return response()->json([
+            'status' => 'error',
+            'message' => 'An error occurred while fetching appointments',
+            'errors' => $e->getMessage()
+        ], 500);
+    }
+}
+
 }
