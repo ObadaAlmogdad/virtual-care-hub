@@ -1,0 +1,80 @@
+@startuml "المحادثة النصية مع Pusher"
+!theme plain
+skinparam backgroundColor #FFFFFF
+skinparam sequenceMessageAlign center
+skinparam responseMessageBelowArrow true
+
+title "مخطط تسلسل: المحادثة النصية مع Pusher"
+
+actor "المريض" as Patient
+actor "الطبيب" as Doctor
+participant "Frontend" as Frontend
+participant "ChatController" as ChatCtrl
+participant "PusherService" as PusherService
+participant "Chat" as Chat
+participant "Message" as Message
+participant "Pusher" as Pusher
+
+== بدء المحادثة ==
+
+Patient -> Frontend: "طلب محادثة نصية"
+Frontend -> ChatCtrl: "POST /chats/start"
+ChatCtrl -> Chat: "create(consultation_id, patient_id, doctor_id)"
+Chat -> ChatCtrl: "chat_id"
+ChatCtrl -> PusherService: "trigger('chat-started', chat_data)"
+PusherService -> Pusher: "publish to 'chat-channel'"
+Pusher -> Doctor: "إشعار: محادثة جديدة"
+
+== انضمام الطبيب ==
+
+Doctor -> Frontend: "قبول المحادثة"
+Frontend -> ChatCtrl: "POST /chats/{id}/join"
+ChatCtrl -> Chat: "update(doctor_joined: true)"
+ChatCtrl -> PusherService: "trigger('doctor-joined', chat_data)"
+PusherService -> Pusher: "publish to 'chat-channel'"
+Pusher -> Patient: "إشعار: انضم الطبيب للمحادثة"
+
+== تبادل الرسائل ==
+
+Patient -> Frontend: "إرسال رسالة نصية"
+Frontend -> ChatCtrl: "POST /chats/{id}/messages"
+ChatCtrl -> Message: "create(message_data)"
+Message -> ChatCtrl: "message_id"
+ChatCtrl -> PusherService: "trigger('new-message', message_data)"
+PusherService -> Pusher: "publish to 'chat-channel'"
+Pusher -> Doctor: "رسالة جديدة من المريض"
+
+Doctor -> Frontend: "إرسال رد نصي"
+Frontend -> ChatCtrl: "POST /chats/{id}/messages"
+ChatCtrl -> Message: "create(message_data)"
+Message -> ChatCtrl: "message_id"
+ChatCtrl -> PusherService: "trigger('new-message', message_data)"
+PusherService -> Pusher: "publish to 'chat-channel'"
+Pusher -> Patient: "رسالة جديدة من الطبيب"
+
+== استمرار المحادثة ==
+
+Patient -> Frontend: "إرسال رسالة إضافية"
+Frontend -> ChatCtrl: "POST /chats/{id}/messages"
+ChatCtrl -> Message: "create(message_data)"
+ChatCtrl -> PusherService: "trigger('new-message', message_data)"
+PusherService -> Pusher: "publish to 'chat-channel'"
+Pusher -> Doctor: "رسالة جديدة من المريض"
+
+Doctor -> Frontend: "إرسال رد إضافي"
+Frontend -> ChatCtrl: "POST /chats/{id}/messages"
+ChatCtrl -> Message: "create(message_data)"
+ChatCtrl -> PusherService: "trigger('new-message', message_data)"
+PusherService -> Pusher: "publish to 'chat-channel'"
+Pusher -> Patient: "رسالة جديدة من الطبيب"
+
+== إنهاء المحادثة ==
+
+Patient -> Frontend: "إنهاء المحادثة"
+Frontend -> ChatCtrl: "POST /chats/{id}/end"
+ChatCtrl -> Chat: "update(status: 'completed')"
+Chat -> ChatCtrl: "chat_completed"
+ChatCtrl -> Frontend: "200 OK + chat_ended"
+Frontend -> Patient: "تم إنهاء المحادثة"
+
+@enduml

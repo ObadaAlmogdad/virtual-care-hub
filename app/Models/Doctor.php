@@ -59,4 +59,9 @@ class Doctor extends Model
     {
         return round($this->Ratings()->avg('rating'), 2);
     }
+
+    public function medicalArticles()
+    {
+        return $this->hasMany(MedicalArticle::class);
+    }
 }

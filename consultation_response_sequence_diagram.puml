@@ -1,0 +1,164 @@
+@startuml "الرد على الاستشارة - ثلاث طرق"
+!theme plain
+skinparam backgroundColor #FFFFFF
+skinparam sequenceMessageAlign center
+skinparam responseMessageBelowArrow true
+
+title "مخطط تسلسل: الرد على الاستشارة - ثلاث طرق مختلفة"
+
+actor "المريض" as Patient
+actor "الطبيب" as Doctor
+participant "Frontend" as Frontend
+participant "ConsultationController" as ConsultationCtrl
+participant "ChatController" as ChatCtrl
+participant "VideoCallController" as VideoCtrl
+participant "PusherService" as PusherService
+participant "WebSocketService" as WebSocketService
+participant "WebRTCService" as WebRTCService
+participant "Consultation" as Consultation
+participant "Message" as Message
+participant "Chat" as Chat
+participant "Pusher" as Pusher
+participant "WebSocket" as WebSocket
+participant "STUN/TURN" as STUNServer
+
+== الطريقة الأولى: الرد النصي التقليدي ==
+
+Patient -> Frontend: "عرض الاستشارة"
+Frontend -> Consultation: "GET /consultations/{id}"
+Consultation -> Frontend: "consultation_data"
+Frontend -> Patient: "عرض تفاصيل الاستشارة"
+
+Doctor -> Frontend: "عرض الاستشارات المعلقة"
+Frontend -> Consultation: "GET /doctor/consultations/pending"
+Consultation -> Frontend: "pending_consultations"
+Frontend -> Doctor: "قائمة الاستشارات المعلقة"
+
+Doctor -> Frontend: "اختيار استشارة للرد"
+Frontend -> Doctor: "عرض نموذج الرد"
+Doctor -> Frontend: "كتابة الرد"
+Frontend -> ConsultationCtrl: "POST /doctor/consultations/{id}/reply"
+ConsultationCtrl -> Consultation: "update(replyOfDoctor, status: 'replied')"
+Consultation -> ConsultationCtrl: "consultation_updated"
+ConsultationCtrl -> Frontend: "200 OK + updated_consultation"
+Frontend -> Doctor: "تم إرسال الرد بنجاح"
+
+== إشعار المريض ==
+Consultation -> Patient: "إشعار: تم الرد على الاستشارة"
+Patient -> Frontend: "عرض الرد الجديد"
+Frontend -> Consultation: "GET /consultations/{id}"
+Consultation -> Frontend: "consultation_with_reply"
+Frontend -> Patient: "عرض رد الطبيب"
+
+== الطريقة الثانية: محادثة نصية مع Pusher ==
+
+Patient -> Frontend: "طلب محادثة نصية"
+Frontend -> ChatCtrl: "POST /chats/start"
+ChatCtrl -> Chat: "create(consultation_id, patient_id, doctor_id)"
+Chat -> ChatCtrl: "chat_id"
+ChatCtrl -> PusherService: "trigger('chat-started', chat_data)"
+PusherService -> Pusher: "publish to 'chat-channel'"
+Pusher -> Doctor: "إشعار: محادثة جديدة"
+
+Doctor -> Frontend: "قبول المحادثة"
+Frontend -> ChatCtrl: "POST /chats/{id}/join"
+ChatCtrl -> Chat: "update(doctor_joined: true)"
+ChatCtrl -> PusherService: "trigger('doctor-joined', chat_data)"
+PusherService -> Pusher: "publish to 'chat-channel'"
+Pusher -> Patient: "إشعار: انضم الطبيب للمحادثة"
+
+== تبادل الرسائل ==
+Patient -> Frontend: "إرسال رسالة نصية"
+Frontend -> ChatCtrl: "POST /chats/{id}/messages"
+ChatCtrl -> Message: "create(message_data)"
+Message -> ChatCtrl: "message_id"
+ChatCtrl -> PusherService: "trigger('new-message', message_data)"
+PusherService -> Pusher: "publish to 'chat-channel'"
+Pusher -> Doctor: "رسالة جديدة من المريض"
+
+Doctor -> Frontend: "إرسال رد نصي"
+Frontend -> ChatCtrl: "POST /chats/{id}/messages"
+ChatCtrl -> Message: "create(message_data)"
+Message -> ChatCtrl: "message_id"
+ChatCtrl -> PusherService: "trigger('new-message', message_data)"
+PusherService -> Pusher: "publish to 'chat-channel'"
+Pusher -> Patient: "رسالة جديدة من الطبيب"
+
+== الطريقة الثالثة: محادثة فيديو مع WebRTC و WebSocket ==
+
+Patient -> Frontend: "طلب محادثة فيديو"
+Frontend -> VideoCtrl: "POST /video-calls/start"
+VideoCtrl -> WebSocketService: "createVideoCall(consultation_id)"
+WebSocketService -> WebSocket: "create room"
+WebSocket -> VideoCtrl: "room_id"
+VideoCtrl -> Frontend: "room_id + signaling_server_url"
+
+== إعداد WebRTC ==
+Frontend -> WebRTCService: "initializeWebRTC(room_id)"
+WebRTCService -> STUNServer: "get STUN/TURN servers"
+STUNServer -> WebRTCService: "stun_turn_servers"
+WebRTCService -> Frontend: "RTCConfiguration"
+
+== إشعار الطبيب ==
+VideoCtrl -> PusherService: "trigger('video-call-request', call_data)"
+PusherService -> Pusher: "publish to 'video-call-channel'"
+Pusher -> Doctor: "إشعار: طلب محادثة فيديو"
+
+Doctor -> Frontend: "قبول المحادثة المرئية"
+Frontend -> VideoCtrl: "POST /video-calls/{id}/accept"
+VideoCtrl -> WebSocketService: "joinVideoCall(room_id)"
+WebSocketService -> WebSocket: "join room"
+WebSocket -> VideoCtrl: "joined_room"
+
+== إشارات WebRTC ==
+Patient -> WebSocket: "offer SDP"
+WebSocket -> Doctor: "forward offer SDP"
+Doctor -> WebSocket: "answer SDP"
+WebSocket -> Patient: "forward answer SDP"
+
+Patient -> WebSocket: "ICE candidate"
+WebSocket -> Doctor: "forward ICE candidate"
+Doctor -> WebSocket: "ICE candidate"
+WebSocket -> Patient: "forward ICE candidate"
+
+== إنشاء اتصال P2P ==
+Patient -> WebRTCService: "createPeerConnection"
+WebRTCService -> Patient: "local_stream"
+Patient -> WebRTCService: "addStream(local_stream)"
+WebRTCService -> Patient: "peer_connection_ready"
+
+Doctor -> WebRTCService: "createPeerConnection"
+WebRTCService -> Doctor: "local_stream"
+Doctor -> WebRTCService: "addStream(local_stream)"
+WebRTCService -> Doctor: "peer_connection_ready"
+
+== تبادل الفيديو ==
+Patient -> WebRTCService: "start video/audio"
+WebRTCService -> Patient: "media_stream_active"
+Patient -> WebRTCService: "send media stream"
+WebRTCService -> Doctor: "receive media stream"
+
+Doctor -> WebRTCService: "start video/audio"
+WebRTCService -> Doctor: "media_stream_active"
+Doctor -> WebRTCService: "send media stream"
+WebRTCService -> Patient: "receive media stream"
+
+== انتهاء المحادثة ==
+Patient -> Frontend: "إنهاء المحادثة"
+Frontend -> VideoCtrl: "POST /video-calls/{id}/end"
+VideoCtrl -> WebSocketService: "endVideoCall(room_id)"
+WebSocketService -> WebSocket: "close room"
+WebSocket -> VideoCtrl: "room_closed"
+
+VideoCtrl -> Consultation: "update(status: 'completed')"
+Consultation -> VideoCtrl: "consultation_completed"
+VideoCtrl -> Frontend: "200 OK + call_ended"
+Frontend -> Patient: "تم إنهاء المحادثة"
+
+== تسجيل المحادثة ==
+VideoCtrl -> Message: "create(call_summary)"
+Message -> VideoCtrl: "summary_id"
+VideoCtrl -> Frontend: "call_summary_created"
+Frontend -> Patient: "ملخص المحادثة"
+
+@enduml

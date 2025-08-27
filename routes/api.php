@@ -15,6 +15,7 @@ use App\Http\Controllers\API\MedicalSpecialtyController;
 
 use App\Http\Controllers\API\MessageController;
 use App\Http\Controllers\API\PublicDoctorController;
+use App\Http\Controllers\API\MedicalArticleController;
 use App\Http\Controllers\API\QuestionController;
 use App\Http\Controllers\API\UserController;
 use Illuminate\Broadcasting\Broadcast;
@@ -153,6 +154,14 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::patch('/doctor/consultations/{consultationId}/status', [DoctorController::class, 'updateConsultationStatus']);
     Route::post('/doctor/consultations/{consultationId}/schedule', [DoctorController::class, 'scheduleConsultation']);
     Route::post('/doctor/consultations/{consultationId}/reply', [DoctorController::class, 'replyToAnswer']);
+
+    // Medical Articles (Doctor only for write operations)
+    Route::middleware(['ensure.role:Doctor'])->group(function () {
+        Route::post('/articles', [MedicalArticleController::class, 'store']);
+        Route::put('/articles/{id}', [MedicalArticleController::class, 'update']);
+        Route::delete('/articles/{id}', [MedicalArticleController::class, 'destroy']);
+        Route::patch('/articles/{id}/toggle-publish', [MedicalArticleController::class, 'togglePublish']);
+    });
 });
 
 //Booking Appointment
@@ -208,3 +217,7 @@ Route::middleware('auth:sanctum')->group(function () {
 Route::get('/doctors/{doctorId}/ratings', [DoctorRatingController::class, 'getDoctorRatings']);
 Route::get('/doctors/top-rated', [DoctorRatingController::class, 'topRatedDoctors']);
 //end rating
+
+// Public Articles
+Route::get('/articles', [MedicalArticleController::class, 'index']);
+Route::get('/articles/{id}', [MedicalArticleController::class, 'show']);
