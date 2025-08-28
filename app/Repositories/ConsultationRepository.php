@@ -107,7 +107,7 @@ public function getGeneralConsultations()
 {
     return $this->model
         ->where('isSpecial', 0)
-        ->with(['user', 'doctor', 'medicalTag'])
+        ->with(['user', 'doctor.user', 'medicalTag'])
         ->orderByDesc('created_at')
         ->paginate(10);
 }
