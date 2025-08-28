@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Repositories\AppointmentRepository;
+use App\Repositories\ComplaintRepository;
 use Illuminate\Support\ServiceProvider;
 use App\Repositories\Interfaces\UserRepositoryInterface;
 use App\Repositories\UserRepository;
@@ -18,6 +19,7 @@ use App\Repositories\Interfaces\ConsultationRepositoryInterface;
 use App\Repositories\ConsultationRepository;
 use App\Repositories\ConsultationResultRepository;
 use App\Repositories\Interfaces\AppointmentRepositoryInterface;
+use App\Repositories\Interfaces\ComplaintRepositoryInterface;
 use App\Repositories\Interfaces\ConsultationResultRepositoryInterface;
 use App\Services\ConsultationService;
 
@@ -54,6 +56,7 @@ class AppServiceProvider extends ServiceProvider
         AppointmentRepositoryInterface::class,
         AppointmentRepository::class
         );
+         $this->app->bind(ComplaintRepositoryInterface::class, ComplaintRepository::class);
     }
 
     /**

@@ -73,4 +73,23 @@ class ConsultationController extends Controller
     }
 }
 
+
+public function GeneralConsultationsCount()
+    {
+        $count = $this->consultationService->getGeneralConsultationsCount();
+
+        return response()->json([
+            'General_consultations_count' => $count,
+        ]);
+    }
+
+    public function SpecialConsultationsCount()
+    {
+        $count = $this->consultationService->getSpecialConsultationsCount();
+
+        return response()->json([
+            'Special_consultations_count' => $count,
+        ]);
+    }
+
 }
