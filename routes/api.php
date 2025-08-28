@@ -75,6 +75,11 @@ Route::prefix('public')->group(function () {
     Route::get('medical-specialties', [MedicalSpecialtyController::class, 'index']);
     Route::get('medical-specialties/{id}', [MedicalSpecialtyController::class, 'show']);
     Route::get('medical-specialties/{id}/doctors', [MedicalSpecialtyController::class, 'getDoctorsBySpecialty']);
+
+    // Consultation API
+    Route::get('/patient/{patientId}/consultations/{consultationId}/reply',[ConsultationResultController::class, 'getMyDoctorReply']);
+
+
 });
 
 Route::prefix('all')->group(function () {
@@ -146,7 +151,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/consultations', [UserController::class, 'getUserConsultations']);
     Route::get('/consultations/filter', [UserController::class, 'getUserConsultationsByStatus']);
     Route::get('/doctors/by-specialty/{medical_tag_id}', [DoctorController::class, 'getBySpecialty']);
-    Route::get('/patient/consultations/{consultationId}/reply',[ConsultationResultController::class, 'getMyDoctorReply']);
 
     // Doctor routes
     Route::get('/doctor/consultations/pending', [DoctorController::class, 'getPendingConsultations']);
