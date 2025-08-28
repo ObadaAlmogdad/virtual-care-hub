@@ -12,7 +12,10 @@ use App\Http\Controllers\Api\DoctorRatingController;
 use App\Http\Controllers\Api\MedicalBannerController;
 use App\Http\Controllers\API\MedicalHistoryController;
 use App\Http\Controllers\API\MedicalSpecialtyController;
-
+use App\Http\Controllers\API\WalletTopupController;
+use App\Http\Controllers\API\StripeWebhookController;
+use App\Http\Controllers\API\StripeConnectController;
+use App\Http\Controllers\API\PaymentController;
 use App\Http\Controllers\API\MessageController;
 use App\Http\Controllers\API\PublicDoctorController;
 use App\Http\Controllers\API\MedicalArticleController;
@@ -77,9 +80,7 @@ Route::prefix('public')->group(function () {
     Route::get('medical-specialties/{id}/doctors', [MedicalSpecialtyController::class, 'getDoctorsBySpecialty']);
 
     // Consultation API
-    Route::get('/patient/{patientId}/consultations/{consultationId}/reply',[ConsultationResultController::class, 'getMyDoctorReply']);
-
-
+    Route::get('/patient/{patientId}/consultations/{consultationId}/reply', [ConsultationResultController::class, 'getMyDoctorReply']);
 });
 
 Route::prefix('all')->group(function () {
@@ -127,16 +128,16 @@ Route::middleware(['auth:sanctum'])->prefix('admin')->group(function () {
 });
 
 Route::middleware('auth:sanctum')->group(function () {
-    Route::post('payments/create-intent', [\App\Http\Controllers\Api\PaymentController::class, 'createIntent']);
-    Route::post('payments/{payment}/refund', [\App\Http\Controllers\Api\PaymentController::class, 'refund']);
-    Route::get('payments/status/{payment}', [\App\Http\Controllers\Api\PaymentController::class, 'getPaymentStatus']);
-    Route::post('wallet/topup', [\App\Http\Controllers\Api\WalletTopupController::class, 'topup']);
-    Route::post('/wallet/confirm', [\App\Http\Controllers\Api\WalletTopupController::class, 'confirmTopup']);
+    Route::post('payments/create-intent', [PaymentController::class, 'createIntent']);
+    Route::post('payments/{payment}/refund', [PaymentController::class, 'refund']);
+    Route::get('payments/status/{payment}', [PaymentController::class, 'getPaymentStatus']);
+    Route::post('wallet/topup', [WalletTopupController::class, 'topup']);
+    Route::post('/wallet/confirm', [WalletTopupController::class, 'confirmTopup']);
 });
 
-Route::post('stripe/webhook', [\App\Http\Controllers\Api\StripeWebhookController::class, 'handle']);
+Route::post('stripe/webhook', [StripeWebhookController::class, 'handle']);
 
-Route::get('/stripe/onboard/{doctor_id}', [\App\Http\Controllers\Api\StripeConnectController::class, 'createOnboardingLink']);
+Route::get('/stripe/onboard/{doctor_id}', [StripeConnectController::class, 'createOnboardingLink']);
 Route::get('/stripe/onboard/refresh', fn () => response()->json(['message' => 'Please try again.']));
 Route::get('/stripe/onboard/return', fn () => response()->json(['message' => 'Onboarding completed successfully.']));
 
@@ -182,7 +183,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user/appointments/getAll', [AppointmentController::class, 'getPatientAppointments']);
     Route::get('/user/appointments/filter', [AppointmentController::class, 'filterPatientAppointments']);
     Route::get('/doctor/appointments', [AppointmentController::class, 'getDoctorAppointments']);
-
 });
 
 Route::middleware('auth:sanctum')->group(function () {
