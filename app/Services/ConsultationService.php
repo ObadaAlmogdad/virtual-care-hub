@@ -181,6 +181,13 @@ public function getGeneralConsultations()
     return $this->consultationRepository->getGeneralConsultations();
 }
 
-
+public function getGeneralConsultationsCount(): int
+    {
+        return $this->consultationRepository->countGeneralConsultations();
+    }
+public function getSpecialConsultationsCount(): int
+    {
+        return $this->consultationRepository->countSpecialConsultations();
+    }
 
 }

@@ -5,11 +5,19 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Complaint;
+use App\Services\ComplaintService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
-
 class ComplaintController extends Controller
 {
+
+    protected $complaintService;
+
+    public function __construct(ComplaintService $complaintService)
+    {
+        $this->complaintService = $complaintService;
+    }
+
     // List complaints
     public function index()
     {
@@ -201,4 +209,17 @@ class ComplaintController extends Controller
         $count = \App\Models\Complaint::count();
         return response()->json(['count' => $count]);
     }
+
+    public function complaintsByType(Request $request)
+    {
+        $request->validate([
+            'type' => 'required|in:patient,doctor',
+        ]);
+
+        $result = $this->complaintService->getComplaintsByType($request->type);
+
+        return response()->json($result);
+    }
+
+
 }
