@@ -87,6 +87,7 @@ Route::prefix('public')->group(function () {
 
 Route::prefix('all')->group(function () {
     Route::get('/consultations/general', [ConsultationController::class, 'getGeneralConsultations']);
+    Route::get('/web/consultations/general', [ConsultationController::class, 'getwebGeneralConsultations']);
 });
 
 // Medical Tags Routes
