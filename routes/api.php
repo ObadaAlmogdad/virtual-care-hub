@@ -17,6 +17,8 @@ use App\Http\Controllers\API\StripeWebhookController;
 use App\Http\Controllers\API\StripeConnectController;
 use App\Http\Controllers\API\PaymentController;
 use App\Http\Controllers\API\MessageController;
+use App\Http\Controllers\API\VideoCallController;
+use App\Http\Controllers\API\VideoCallTokenController;
 use App\Http\Controllers\API\PublicDoctorController;
 use App\Http\Controllers\API\MedicalArticleController;
 use App\Http\Controllers\API\QuestionController;
@@ -210,6 +212,16 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/chats/{chat_id}/messages', [MessageController::class, 'getMessages']);
     Route::post('/chats/{chat_id}/messages', [MessageController::class, 'sendMessage']);
     Route::delete('/chats/{chat_id}/messages/{message_id}', [MessageController::class, 'deleteMessage']);
+
+    // Video Call Routes
+    Route::post('/video-calls/start', [VideoCallController::class, 'start']);
+    Route::post('/video-calls/accept', [VideoCallController::class, 'accept']);
+    Route::post('/video-calls/decline', [VideoCallController::class, 'decline']);
+    Route::post('/video-calls/end', [VideoCallController::class, 'end']);
+
+    // Agora Token Routes
+    Route::get('/agora/token', [VideoCallTokenController::class, 'getToken']);
+    Route::post('/agora/token/renew', [VideoCallTokenController::class, 'renewToken']);
 });
 
 //banner
