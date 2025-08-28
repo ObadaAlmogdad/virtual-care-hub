@@ -92,4 +92,14 @@ class AppointmentRepository implements AppointmentRepositoryInterface
 
         return $query->orderBy('date')->orderBy('time')->get();
     }
+
+    public function getAllDoctorAppointments()
+{
+    return $this->model
+        ->with(['doctor.user', 'patient.user'])
+        ->orderBy('date')
+        ->orderBy('time')
+        ->get();
+}
+
 }

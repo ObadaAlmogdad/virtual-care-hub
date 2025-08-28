@@ -20,5 +20,9 @@ interface ConsultationRepositoryInterface
     public function getwebGeneralConsultations();
     public function countGeneralConsultations(): int;
     public function countSpecialConsultations(): int;
+    public function countByMedicalTag();
+    public function getDoctorResponseRatesBySpecialty();
+
+
 
 }

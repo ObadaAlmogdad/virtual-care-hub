@@ -128,6 +128,14 @@ Route::middleware(['auth:sanctum'])->prefix('admin')->group(function () {
     Route::get('/consultations/general/count', [ConsultationController::class, 'GeneralConsultationsCount']);
     Route::get('/consultations/special/count', [ConsultationController::class, 'SpecialConsultationsCount']);
     Route::get('/complaintsByType', [ComplaintController::class, 'complaintsByType']);
+
+    Route::get('/consultations/count-by-specialty', [ConsultationController::class, 'countBySpecialty']);
+    Route::get('/consultations/response-rates-by-specialty', [ConsultationController::class, 'doctorResponseRatesBySpecialty']);
+
+    Route::get('web/appointments/doctors', [AppointmentController::class, 'getAllDoctorAppointments']);
+
+
+
 });
 
 Route::middleware('auth:sanctum')->group(function () {

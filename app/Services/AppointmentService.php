@@ -93,4 +93,10 @@ class AppointmentService
         return $this->appointmentRepo->getDoctorAppointments($doctorId, $filter);
     }
 
+    public function getAllDoctorAppointments()
+{
+    return $this->appointmentRepo->getAllDoctorAppointments();
+}
+
+
 }

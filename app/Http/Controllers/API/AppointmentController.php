@@ -141,4 +141,15 @@ class AppointmentController extends Controller
     }
 }
 
+public function getAllDoctorAppointments()
+{
+    $appointments = $this->appointmentService->getAllDoctorAppointments();
+
+    return response()->json([
+        'status' => true,
+        'data' => $appointments
+    ]);
+}
+
+
 }

@@ -110,4 +110,26 @@ public function GeneralConsultationsCount()
         ]);
     }
 
+    public function countBySpecialty()
+{
+    $data = $this->consultationService->countByMedicalTag();
+
+    return response()->json([
+        'status' => true,
+        'data' => $data
+    ]);
+}
+
+public function doctorResponseRatesBySpecialty()
+{
+    $data = $this->consultationService->getDoctorResponseRatesBySpecialty();
+
+    return response()->json([
+        'status' => true,
+        'data' => $data
+    ]);
+}
+
+
+
 }

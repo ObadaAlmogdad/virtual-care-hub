@@ -9,4 +9,5 @@ interface AppointmentRepositoryInterface
     public function getAppointmentsByPatient($patientId);
     public function filterByTime($patientId, $type);
     public function getDoctorAppointments(int $doctorId, ?string $filter = null);
+        public function getAllDoctorAppointments();
 }

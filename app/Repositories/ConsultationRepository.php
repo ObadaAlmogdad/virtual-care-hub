@@ -132,4 +132,41 @@ public function countSpecialConsultations(): int
         return $this->model->where('isSpecial', 1)->count();
     }
 
+    public function countByMedicalTag()
+{
+    return $this->model
+        ->selectRaw('medical_tag_id, COUNT(*) as consultations_count')
+        ->groupBy('medical_tag_id')
+        ->with('medicalTag')
+        ->get();
+}
+
+public function getDoctorResponseRatesBySpecialty()
+{
+    return $this->model
+        ->selectRaw('
+            medical_tag_id,
+            COUNT(consultations.id) as total_consultations,
+            COUNT(DISTINCT consultation_results.consultation_id) as responded_consultations
+        ')
+        ->leftJoin('consultation_results', 'consultations.id', '=', 'consultation_results.consultation_id')
+        ->groupBy('medical_tag_id')
+        ->with('medicalTag')
+        ->get()
+        ->map(function ($item) {
+            $responseRate = $item->total_consultations > 0
+                ? round(($item->responded_consultations / $item->total_consultations) * 100, 2)
+                : 0;
+
+            return [
+                'medical_tag' => $item->medicalTag ? $item->medicalTag->name : null,
+                'total_consultations' => $item->total_consultations,
+                'responded_consultations' => $item->responded_consultations,
+                'response_rate' => $responseRate . '%',
+            ];
+        });
+}
+
+
+
 }

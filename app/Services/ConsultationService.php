@@ -192,4 +192,16 @@ public function getSpecialConsultationsCount(): int
         return $this->consultationRepository->countSpecialConsultations();
     }
 
+    public function countByMedicalTag()
+{
+    return $this->consultationRepository->countByMedicalTag();
+}
+
+public function getDoctorResponseRatesBySpecialty()
+{
+    return $this->consultationRepository->getDoctorResponseRatesBySpecialty();
+}
+
+
+
 }
