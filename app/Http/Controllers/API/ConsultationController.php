@@ -58,7 +58,7 @@ class ConsultationController extends Controller
     public function getGeneralConsultations()
 {
     try {
-        $consultations = $this->consultationService->getGeneralConsultations();
+        $consultations = $this->consultationService->getGeneralConsultations(0);
 
         return response()->json([
             'status' => 'success',
@@ -73,6 +73,24 @@ class ConsultationController extends Controller
     }
 }
 
+    public function getwebGeneralConsultations()
+{
+    try {
+        $consultations = $this->consultationService->getGeneralConsultations(1);
+
+        return response()->json([
+            'status' => 'success',
+            'data' => $consultations
+        ]);
+    } catch (\Exception $e) {
+        return response()->json([
+            'status' => 'error',
+            'message' => 'An error occurred while fetching consultations',
+            'errors' => $e->getMessage()
+        ], 500);
+    }
+
+}
 
 public function GeneralConsultationsCount()
     {

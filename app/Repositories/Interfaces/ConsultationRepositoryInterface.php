@@ -17,6 +17,7 @@ interface ConsultationRepositoryInterface
     public function getDoctorConsultationsByStatus($doctorId, $status);
     public function storeDoctorReply(array $data);
     public function getGeneralConsultations();
+    public function getwebGeneralConsultations();
     public function countGeneralConsultations(): int;
     public function countSpecialConsultations(): int;
 

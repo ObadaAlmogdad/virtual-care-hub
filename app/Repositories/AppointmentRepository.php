@@ -70,7 +70,7 @@ class AppointmentRepository implements AppointmentRepositoryInterface
 
     public function getDoctorAppointments(int $doctorId, ?string $filter = null)
     {
-        $query = $this->model->where('doctor_id', $doctorId);
+        $query = $this->model->where('doctor_id', $doctorId)->with('patient.user');
 
         if ($filter === 'past') {
             $query->where(function ($q) {

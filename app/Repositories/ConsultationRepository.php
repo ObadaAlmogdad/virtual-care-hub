@@ -107,10 +107,20 @@ public function getGeneralConsultations()
 {
     return $this->model
         ->where('isSpecial', 0)
+        ->with(['user', 'doctor', 'medicalTag'])
+        ->orderByDesc('created_at')
+        ->get();
+}
+
+public function getwebGeneralConsultations()
+{
+    return $this->model
+        ->where('isSpecial', 0)
         ->with(['user', 'doctor.user', 'medicalTag'])
         ->orderByDesc('created_at')
         ->paginate(10);
 }
+
 
 public function countGeneralConsultations(): int
     {
