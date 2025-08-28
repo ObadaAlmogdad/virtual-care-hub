@@ -16,52 +16,6 @@ class DoctorService
         $this->doctorRepository = $doctorRepository;
     }
 
-public function updateProfile($userId, array $data)
-{
-    $doctor = $this->doctorRepository->findByUserId($userId);
-    if (!$doctor) throw new \Exception('Doctor not found', 404);
-
-    $user = $doctor->user;
-    $specialty = $doctor->specialties()->first();
-
-$userData = [
-        'fullName' => $data['fullName'] ?? $user->fullName,
-        'phoneNumber' => $data['phoneNumber'] ?? $user->phoneNumber,
-        'address' => $data['address'] ?? $user->address,
-        'birthday' => $data['birthday'] ?? $user->birthday,
-        'gender' => $data['gender'] ?? $user->gender,
-        'photoPath' => $data['photoPath'] ?? $user->photoPath,
-    ];
-
-    $doctorData = [
-        'bio' => $data['bio'] ?? $doctor->bio,
-        'facebook_url' => $data['facebook_url'] ?? $doctor->facebook_url,
-        'instagram_url' => $data['instagram_url'] ?? $doctor->instagram_url,
-        'twitter_url' => $data['twitter_url'] ?? $doctor->twitter_url,
-        'address' => $data['doctor_address'] ?? $doctor->address,
-        'work_days' => isset($data['work_days']) ? $data['work_days'] : $doctor->work_days,
-        'work_time_in' => $data['work_time_in'] ?? $doctor->work_time_in,
-        'work_time_out' => $data['work_time_out'] ?? $doctor->work_time_out,
-        'time_for_waiting' => $data['time_for_waiting'] ?? $doctor->time_for_waiting,
-    ];
-
-    $specialtyData = [];
-    if ($specialty) {
-         if (isset($data['photo']) && $data['photo'] instanceof \Illuminate\Http\UploadedFile) {
-            $specialtyData['photo'] = $data['photo']->store('specialties', 'public');
-        }
-
-        $specialtyData = [
-            'start_time' => $data['start_time'] ?? $specialty->start_time,
-            'end_time' => $data['end_time'] ?? $specialty->end_time,
-            'consultation_fee' => $data['consultation_fee'] ?? $specialty->consultation_fee,
-            'description' => $data['description'] ?? $specialty->description,
-            'yearOfExper' => $data['yearOfExper'] ?? $specialty->yearOfExper,
-        ];
-    }
-
-    return $this->doctorRepository->updateProfileFull($userId, $userData, $doctorData, $specialtyData);
-}
 
     public function addSpecialtyBySystem($doctorId, array $data)
     {
@@ -167,5 +121,63 @@ $userData = [
         }
 
         return $this->doctorRepository->deleteSpecialty($doctor->id, $specialtyId);
+    }
+    public function getDoctorsBySpecialty($medicalTagId)
+    {
+        $doctors = $this->doctorRepository->getByMedicalTag($medicalTagId);
+        return response()->json($doctors);
+    }
+
+    public function updateProfile($userId, array $data)
+    {
+        $doctor = $this->doctorRepository->findByUserId($userId);
+        if (!$doctor) throw new \Exception('Doctor not found', 404);
+
+        $user = $doctor->user;
+        $specialty = $doctor->specialties()->first();
+
+        // معالجة رفع صورة الملف الشخصي للطبيب (photoPath)
+        if (isset($data['photoPath']) && $data['photoPath'] instanceof \Illuminate\Http\UploadedFile) {
+            // تخزين الصورة في مجلد profiles داخل التخزين العام
+            $storedPath = $data['photoPath']->store('profiles', 'public');
+            $data['photoPath'] = $storedPath;
+        }
+        $userData = [
+            'fullName' => $data['fullName'] ?? $user->fullName,
+            'phoneNumber' => $data['phoneNumber'] ?? $user->phoneNumber,
+            'address' => $data['address'] ?? $user->address,
+            'birthday' => $data['birthday'] ?? $user->birthday,
+            'gender' => $data['gender'] ?? $user->gender,
+            'photoPath' => $data['photoPath'] ?? $user->photoPath,
+        ];
+
+        $doctorData = [
+            'bio' => $data['bio'] ?? $doctor->bio,
+            'facebook_url' => $data['facebook_url'] ?? $doctor->facebook_url,
+            'instagram_url' => $data['instagram_url'] ?? $doctor->instagram_url,
+            'twitter_url' => $data['twitter_url'] ?? $doctor->twitter_url,
+            'address' => $data['doctor_address'] ?? $doctor->address,
+            'work_days' => isset($data['work_days']) ? $data['work_days'] : $doctor->work_days,
+            'work_time_in' => $data['work_time_in'] ?? $doctor->work_time_in,
+            'work_time_out' => $data['work_time_out'] ?? $doctor->work_time_out,
+            'time_for_waiting' => $data['time_for_waiting'] ?? $doctor->time_for_waiting,
+        ];
+
+        $specialtyData = [];
+        if ($specialty) {
+            if (isset($data['photo']) && $data['photo'] instanceof \Illuminate\Http\UploadedFile) {
+                $specialtyData['photo'] = $data['photo']->store('specialties', 'public');
+            }
+
+            $specialtyData = [
+                'start_time' => $data['start_time'] ?? $specialty->start_time,
+                'end_time' => $data['end_time'] ?? $specialty->end_time,
+                'consultation_fee' => $data['consultation_fee'] ?? $specialty->consultation_fee,
+                'description' => $data['description'] ?? $specialty->description,
+                'yearOfExper' => $data['yearOfExper'] ?? $specialty->yearOfExper,
+            ];
+        }
+
+        return $this->doctorRepository->updateProfileFull($userId, $userData, $doctorData, $specialtyData);
     }
 }

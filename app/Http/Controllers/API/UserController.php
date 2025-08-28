@@ -5,7 +5,6 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use App\Services\UserService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\Validator;
 use App\Services\ConsultationService;
@@ -56,68 +55,36 @@ class UserController extends Controller
     }
 
     public function registerDuctor(Request $request)
-{
-    try {
-        $validator = Validator::make($request->all(), [
-            'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:8',
-            'certificate_images' => 'required|array',
-            'certificate_images.*' => 'image|mimes:jpeg,png,jpg|max:2048',
-            'medical_tag_id' => 'required|exists:medical_tags,id',
-            'start_time' => 'required|date_format:Y-m-d H:i:s',
-            'end_time' => 'required|date_format:Y-m-d H:i:s|after:start_time',
-            'yearOfExper' => 'nullable|string',
-        ]);
+    {
+        try {
+            $validator = Validator::make($request->all(), [
+                'email' => 'required|string|email|max:255|unique:users',
+                'password' => 'required|string|min:8',
+                'certificate_images' => 'required|array',
+                'certificate_images.*' => 'image|mimes:jpeg,png,jpg|max:2048',
+                'medical_tag_id' => 'required|exists:medical_tags,id',
+                'start_time' => 'required|date_format:Y-m-d H:i:s',
+                'end_time' => 'required|date_format:Y-m-d H:i:s|after:start_time',
+                'yearOfExper' => 'nullable|string',
+            ]);
 
-        if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()], 422);
+            if ($validator->fails()) {
+                return response()->json(['errors' => $validator->errors()], 422);
+            }
+
+            $data = $request->except('certificate_images');
+            $data['certificate_images'] = $request->file('certificate_images');
+            $data['role'] = 'Doctor';
+
+            $user = $this->userService->registerDuctorMinimal($data);
+
+            return response()->json(['user' => $user], 201);
+        } catch (ValidationException $e) {
+            return response()->json(['errors' => $e->errors()], 422);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'An error occurred while registering the doctor'], 500);
         }
-
-        // $data = $request->all();
-        $data = $request->except('certificate_images');
-        $data['certificate_images'] = $request->file('certificate_images');
-        $data['role'] = 'Ductor';
-
-        $user = $this->userService->registerDuctorMinimal($data);
-
-
-        return response()->json(['user' => $user], 201);
-    } catch (ValidationException $e) {
-        return response()->json(['errors' => $e->errors()], 422);
-    } catch (\Exception $e) {
-        return response()->json(['message' => 'An error occurred while registering the doctor'], 500);
     }
-}
-
-
-    // public function registerDuctor(Request $request)
-    // {
-    //     try {
-    //         $validator = Validator::make($request->all(), [
-    //             'fullName' => 'required|string|max:255',
-    //             'email' => 'required|string|email|max:255|unique:users',
-    //             'password' => 'required|string|min:8',
-    //             'phoneNumber' => 'required|string',
-    //             'photo' => 'required|image|mimes:jpeg,png,jpg|max:2048',
-    //             'address' => 'required|string',
-    //             'birthday' => 'required|date',
-    //             'gender' => 'required|string',
-    //             'bio' => 'required|string',
-    //             'yearOfExper' => 'required|string',
-    //         ]);
-
-    //         if ($validator->fails()) {
-    //             return response()->json(['errors' => $validator->errors()], 422);
-    //         }
-
-    //         $user = $this->userService->register($request->all(), "Ductor");
-    //         return response()->json(['user' => $user], 201);
-    //     } catch (ValidationException $e) {
-    //         return response()->json(['errors' => $e->errors()], 422);
-    //     } catch (\Exception $e) {
-    //         return response()->json(['message' => 'An error occurred while registering the doctor'], 500);
-    //     }
-    // }
 
     public function registerAdmin(Request $request)
     {
@@ -169,46 +136,44 @@ class UserController extends Controller
         ]);
     }
     public function updateProfile(Request $request)
-{
-    try {
-        $validator = Validator::make($request->all(), [
-            'fullName' => 'sometimes|string|max:255',
-            'phoneNumber' => 'sometimes|string|max:20',
-            'address' => 'sometimes|string|max:255',
-            'birthday' => 'sometimes|date',
-            'gender' => 'sometimes|in:man,woman',
-            'photo' => 'sometimes|image|mimes:jpeg,png,jpg|max:2048',
+    {
+        try {
+            $validator = Validator::make($request->all(), [
+                'fullName' => 'sometimes|string|max:255',
+                'phoneNumber' => 'sometimes|string|max:20',
+                'address' => 'sometimes|string|max:255',
+                'birthday' => 'sometimes|date',
+                'gender' => 'sometimes|in:man,woman',
+                'photo' => 'sometimes|image|mimes:jpeg,png,jpg|max:2048',
 
-            'fakeName' => 'sometimes|string|max:255',
-            'height' => 'sometimes|numeric|min:0',
-            'weight' => 'sometimes|numeric|min:0',
+                'fakeName' => 'sometimes|string|max:255',
+                'height' => 'sometimes|numeric|min:0',
+                'weight' => 'sometimes|numeric|min:0',
 
-            'general_diseases' => 'sometimes|array',
-            'chronic_diseases' => 'sometimes|array',
-            'surgeries' => 'sometimes|string|nullable',
-            'allergies' => 'sometimes|string|nullable',
-            'permanent_medications' => 'sometimes|string|nullable',
-            'medical_documents' => 'sometimes|array',
-            'medical_documents.*' => 'file|mimes:jpeg,png,pdf,jpg|max:2048',
-        ]);
+                'general_diseases' => 'sometimes|array',
+                'chronic_diseases' => 'sometimes|array',
+                'surgeries' => 'sometimes|string|nullable',
+                'allergies' => 'sometimes|string|nullable',
+                'permanent_medications' => 'sometimes|string|nullable',
+                'medical_documents' => 'sometimes|array',
+                'medical_documents.*' => 'file|mimes:jpeg,png,pdf,jpg|max:2048',
+            ]);
 
-        if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()], 422);
+            if ($validator->fails()) {
+                return response()->json(['errors' => $validator->errors()], 422);
+            }
+
+            $user = $this->userService->updateProfile(auth()->id(), $request);
+            return response()->json([
+                'message' => 'Profile updated successfully',
+                'user' => $user
+            ]);
+        } catch (ValidationException $e) {
+            return response()->json(['errors' => $e->errors()], 422);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'An error occurred while updating profile'], 500);
         }
-
-        $user = $this->userService->updateProfile(auth()->id(), $request);
-        return response()->json([
-            'message' => 'Profile updated successfully',
-            'user' => $user
-        ]);
-    } catch (ValidationException $e) {
-        return response()->json(['errors' => $e->errors()], 422);
-    } catch (\Exception $e) {
-        return response()->json(['message' => 'An error occurred while updating profile'], 500);
     }
-}
-
-
 
     public function logout()
     {
@@ -259,7 +224,7 @@ class UserController extends Controller
             // Format the response to include media URLs
             if ($consultation->media) {
                 $mediaPaths = explode(',', $consultation->media);
-                $mediaUrls = array_map(function($path) {
+                $mediaUrls = array_map(function ($path) {
                     return Storage::url($path);
                 }, $mediaPaths);
                 $consultation->media_urls = $mediaUrls;
@@ -287,8 +252,9 @@ class UserController extends Controller
 
     public function getUserConsultations()
     {
+        // dd(auth()->user()->patient->id);
         try {
-            $consultations = $this->consultationService->getUserConsultations(auth()->id());
+            $consultations = $this->consultationService->getUserConsultations(auth()->user()->patient->id);
             return response()->json([
                 'status' => 'success',
                 'data' => $consultations
@@ -306,7 +272,7 @@ class UserController extends Controller
     {
         try {
             $status = $request->query('status');
-            $consultations = $this->consultationService->getUserConsultationsByStatus(auth()->id(), $status);
+            $consultations = $this->consultationService->getUserConsultationsByStatus(auth()->user()->patient->id, $status);
             return response()->json([
                 'status' => 'success',
                 'data' => $consultations

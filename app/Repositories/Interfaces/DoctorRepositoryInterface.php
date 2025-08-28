@@ -14,4 +14,5 @@ interface DoctorRepositoryInterface
     public function addSpecialty($doctorId, array $data);
     public function updateSpecialty($doctorId, $specialtyId, array $data);
     public function deleteSpecialty($doctorId, $specialtyId);
+    public function getByMedicalTag($medicalTagId);
 }

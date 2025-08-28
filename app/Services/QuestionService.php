@@ -34,15 +34,23 @@ class QuestionService
         $validator = Validator::make($data, [
             'content' => 'required|string|max:1000',
             'isActive' => 'required|boolean',
-            'medical_tag_ids' => 'required|array',
-            'medical_tag_ids.*' => 'exists:medical_tags,id'
+            'specialty_ids' => 'required|array',
+            'specialty_ids.*' => 'exists:medical_tags,id'
         ]);
 
         if ($validator->fails()) {
             throw new ValidationException($validator);
         }
 
-        return $this->questionRepository->create($data);
+        // Transform the data to match the database schema
+        $transformedData = [
+            'question_text' => $data['content'],
+            'isActive' => $data['isActive'],
+            'specialty_id' => $data['specialty_ids'][0], // Use the first specialty as the main one
+            'medical_tag_ids' => $data['specialty_ids'] // Store all specialty IDs for the many-to-many relationship
+        ];
+
+        return $this->questionRepository->create($transformedData);
     }
 
     public function updateQuestion($id, array $data)
@@ -50,15 +58,31 @@ class QuestionService
         $validator = Validator::make($data, [
             'content' => 'sometimes|required|string|max:1000',
             'isActive' => 'sometimes|required|boolean',
-            'medical_tag_ids' => 'sometimes|required|array',
-            'medical_tag_ids.*' => 'exists:medical_tags,id'
+            'specialty_ids' => 'sometimes|required|array',
+            'specialty_ids.*' => 'exists:medical_tags,id'
         ]);
 
         if ($validator->fails()) {
             throw new ValidationException($validator);
         }
 
-        $question = $this->questionRepository->update($id, $data);
+        // Transform the data to match the database schema
+        $transformedData = [];
+        
+        if (isset($data['content'])) {
+            $transformedData['question_text'] = $data['content'];
+        }
+        
+        if (isset($data['isActive'])) {
+            $transformedData['isActive'] = $data['isActive'];
+        }
+        
+        if (isset($data['specialty_ids'])) {
+            $transformedData['specialty_id'] = $data['specialty_ids'][0]; // Use the first specialty as the main one
+            $transformedData['medical_tag_ids'] = $data['specialty_ids']; // Store all specialty IDs for the many-to-many relationship
+        }
+
+        $question = $this->questionRepository->update($id, $transformedData);
         if (!$question) {
             throw new \Exception('Question not found', 404);
         }
@@ -132,4 +156,26 @@ class QuestionService
         }
         return true;
     }
-} 
+
+    public function attachQuestionsToMedicalTag($medicalTagId, array $questionIds)
+    {
+        $validator = Validator::make([
+            'medical_tag_id' => $medicalTagId,
+            'question_ids' => $questionIds
+        ], [
+            'medical_tag_id' => 'required|exists:medical_tags,id',
+            'question_ids' => 'required|array',
+            'question_ids.*' => 'exists:questions,id'
+        ]);
+
+        if ($validator->fails()) {
+            throw new ValidationException($validator);
+        }
+
+        $result = $this->questionRepository->attachQuestionsToMedicalTag($medicalTagId, $questionIds);
+        if (!$result) {
+            throw new \Exception('Medical tag not found', 404);
+        }
+        return true;
+    }
+}

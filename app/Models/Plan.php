@@ -12,7 +12,12 @@ class Plan extends Model
     protected $fillable = [
         'name',
         'price',
-        'duration',
+        //'duration',
+        //اولوية
+        //فترة انتظار
+        //عدد الاستشارات الخاصة
+        //اسءلة ai
+        //نسة التوفير
     ];
 
     public function subscriptions()

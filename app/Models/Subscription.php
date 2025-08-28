@@ -17,6 +17,9 @@ class Subscription extends Model
         'status',
         'payment_method',
         'payment_id',
+        //رصيد الاسئلة 
+        //رصيد ai
+        //الكود
     ];
 
     public function user()

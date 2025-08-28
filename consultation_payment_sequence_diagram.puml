@@ -1,0 +1,133 @@
+@startuml "استشارة خاصة ودفع إلكتروني"
+!theme plain
+skinparam backgroundColor #FFFFFF
+skinparam sequenceMessageAlign center
+skinparam responseMessageBelowArrow true
+
+title "مخطط تسلسل: آلية الاستشارة الخاصة والدفع الإلكتروني"
+
+actor "المريض" as Patient
+participant "Frontend" as Frontend
+participant "ConsultationController" as ConsultationCtrl
+participant "ConsultationService" as ConsultationService
+participant "PaymentController" as PaymentCtrl
+participant "WalletTopupController" as WalletCtrl
+participant "StripeService" as StripeService
+participant "Wallet" as Wallet
+participant "Transaction" as Transaction
+participant "Payment" as Payment
+participant "Consultation" as Consultation
+participant "Stripe" as Stripe
+participant "Doctor" as Doctor
+
+== إنشاء استشارة خاصة ==
+
+Patient -> Frontend: "إنشاء استشارة خاصة"
+Frontend -> ConsultationCtrl: "POST /consultations"
+ConsultationCtrl -> ConsultationService: "createConsultation(data)"
+ConsultationService -> Consultation: "create(consultation_data)"
+Consultation -> ConsultationService: "consultation_id"
+ConsultationService -> ConsultationCtrl: "consultation object"
+ConsultationCtrl -> Frontend: "201 Created + consultation data"
+Frontend -> Patient: "تم إنشاء الاستشارة بنجاح"
+
+== اختيار طريقة الدفع ==
+
+Patient -> Frontend: "اختيار طريقة الدفع"
+Frontend -> Patient: "عرض خيارات الدفع:\n1. المحفظة الإلكترونية\n2. Stripe مباشرة"
+
+alt الدفع عبر المحفظة الإلكترونية
+    == فحص رصيد المحفظة ==
+    Patient -> Frontend: "اختيار الدفع عبر المحفظة"
+    Frontend -> Wallet: "GET /wallet/balance"
+    Wallet -> Frontend: "wallet_balance"
+    
+    alt رصيد كافي
+        Frontend -> Patient: "عرض تأكيد الدفع من المحفظة"
+        Patient -> Frontend: "تأكيد الدفع"
+        Frontend -> Wallet: "POST /wallet/pay"
+        Wallet -> Transaction: "create(debit transaction)"
+        Transaction -> Wallet: "transaction_id"
+        Wallet -> Consultation: "update(status: 'paid')"
+        Wallet -> Frontend: "تم الدفع بنجاح"
+        Frontend -> Patient: "تم الدفع بنجاح"
+        
+    else رصيد غير كافي
+        Frontend -> Patient: "رصيد غير كافي - شحن المحفظة مطلوب"
+        Patient -> Frontend: "شحن المحفظة"
+        Frontend -> WalletCtrl: "POST /wallet/topup"
+        WalletCtrl -> StripeService: "createWalletTopupIntent(amount)"
+        StripeService -> Stripe: "createPaymentIntent"
+        Stripe -> StripeService: "payment_intent"
+        StripeService -> WalletCtrl: "client_secret"
+        WalletCtrl -> Transaction: "create(pending charge transaction)"
+        WalletCtrl -> Frontend: "client_secret"
+        Frontend -> Patient: "إدخال بيانات البطاقة"
+        Patient -> Frontend: "بيانات البطاقة"
+        Frontend -> WalletCtrl: "POST /wallet/confirm"
+        WalletCtrl -> Stripe: "confirmPaymentIntent"
+        Stripe -> WalletCtrl: "payment_succeeded"
+        WalletCtrl -> Wallet: "increment(balance)"
+        Wallet -> Transaction: "update(status: 'completed')"
+        WalletCtrl -> Frontend: "تم شحن المحفظة"
+        Frontend -> Patient: "تم شحن المحفظة - إعادة محاولة الدفع"
+        
+        == إعادة محاولة الدفع ==
+        Frontend -> Wallet: "POST /wallet/pay"
+        Wallet -> Transaction: "create(debit transaction)"
+        Transaction -> Wallet: "transaction_id"
+        Wallet -> Consultation: "update(status: 'paid')"
+        Wallet -> Frontend: "تم الدفع بنجاح"
+        Frontend -> Patient: "تم الدفع بنجاح"
+    end
+    
+else الدفع عبر Stripe مباشرة
+    == الدفع المباشر عبر Stripe ==
+    Patient -> Frontend: "اختيار الدفع عبر Stripe"
+    Frontend -> PaymentCtrl: "POST /payments/create-intent"
+    PaymentCtrl -> Payment: "create(pending payment)"
+    Payment -> PaymentCtrl: "payment_id"
+    PaymentCtrl -> StripeService: "createPaymentIntent(amount, doctor_stripe_id)"
+    StripeService -> Stripe: "createPaymentIntent"
+    Stripe -> StripeService: "payment_intent"
+    StripeService -> PaymentCtrl: "client_secret"
+    PaymentCtrl -> Frontend: "client_secret + payment_id"
+    Frontend -> Patient: "إدخال بيانات البطاقة"
+    Patient -> Frontend: "بيانات البطاقة"
+    Frontend -> Stripe: "confirmPayment(client_secret)"
+    Stripe -> Frontend: "payment_result"
+    
+    alt الدفع ناجح
+        Frontend -> PaymentCtrl: "webhook: payment.succeeded"
+        PaymentCtrl -> Payment: "update(status: 'succeeded')"
+        Payment -> Consultation: "update(status: 'paid')"
+        PaymentCtrl -> Frontend: "تم الدفع بنجاح"
+        Frontend -> Patient: "تم الدفع بنجاح"
+        
+    else الدفع فاشل
+        Frontend -> PaymentCtrl: "webhook: payment.failed"
+        PaymentCtrl -> Payment: "update(status: 'failed')"
+        PaymentCtrl -> Frontend: "فشل في الدفع"
+        Frontend -> Patient: "فشل في الدفع - إعادة المحاولة"
+    end
+end
+
+== إشعار الطبيب ==
+
+Consultation -> Doctor: "إشعار: استشارة جديدة مدفوعة"
+Doctor -> Frontend: "عرض الاستشارة الجديدة"
+Frontend -> Doctor: "تفاصيل الاستشارة"
+
+== معالجة الاستشارة ==
+
+Doctor -> Frontend: "إرسال الرد على الاستشارة"
+Frontend -> Consultation: "update(replyOfDoctor)"
+Consultation -> Patient: "إشعار: تم الرد على الاستشارة"
+Patient -> Frontend: "عرض رد الطبيب"
+
+== انتهاء الاستشارة ==
+
+Consultation -> Payment: "trigger: consultation completed"
+Payment -> Doctor: "transfer payment to doctor account"
+
+@enduml

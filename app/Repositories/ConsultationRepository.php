@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Models\Consultation;
+use App\Models\ConsultationResult;
 use App\Repositories\Interfaces\ConsultationRepositoryInterface;
 
 class ConsultationRepository implements ConsultationRepositoryInterface
@@ -45,29 +46,29 @@ class ConsultationRepository implements ConsultationRepositoryInterface
     {
         $query = $this->model->where('doctor_id', $doctorId)
             ->with(['user', 'medicalTag']);
-        
+
         if ($status) {
             $query->where('status', $status);
         }
-        
+
         return $query->get();
     }
 
     public function getUserConsultationsByStatus($userId, $status = null)
     {
-        $query = $this->model->where('user_id', $userId)
+        $query = $this->model->where('patient_id', $userId)
             ->with(['doctor', 'medicalTag']);
-        
+
         if ($status) {
             $query->where('status', $status);
         }
-        
+
         return $query->get();
     }
 
     public function getUserConsultations($userId)
     {
-        return $this->model->where('user_id', $userId)
+        return $this->model->where('patient_id', $userId)
             ->with(['doctor', 'medicalTag'])
             ->get();
     }
@@ -85,4 +86,32 @@ class ConsultationRepository implements ConsultationRepositoryInterface
     {
         return $this->update($id, ['status' => $status]);
     }
-} 
+
+public function storeDoctorReply(array $data)
+{
+    $consultation = $this->model->findOrFail($data['consultation_id']);
+
+    // if ($consultation->doctor_id !== auth()->id()) {
+    //     throw new \Exception("Unauthorized access.");
+    // }
+
+    return ConsultationResult::create([
+        'consultation_id' => $data['consultation_id'],
+        'user_question_tag_answer_id' => $data['user_question_tag_answer_id'],
+        'replayOfDoctor' => $data['replayOfDoctor'],
+        'accepted' => $data['accepted'],
+    ]);
+}
+
+public function getGeneralConsultations()
+{
+    return $this->model
+        ->where('isSpecial', 0)
+        ->with(['user', 'doctor', 'medicalTag'])
+        ->orderByDesc('created_at')
+        ->get();
+}
+
+
+
+}

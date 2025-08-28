@@ -125,7 +125,8 @@ class UserService
         ]);
 
         DB::commit();
-
+         $token = $user->createToken('auth_token')->plainTextToken;
+         $user['token']=$token;
         return $user;
     } catch (\Exception $e) {
         DB::rollBack();

@@ -1,0 +1,48 @@
+@startuml "الرد النصي التقليدي على الاستشارة"
+!theme plain
+skinparam backgroundColor #FFFFFF
+skinparam sequenceMessageAlign center
+skinparam responseMessageBelowArrow true
+
+title "مخطط تسلسل: الرد النصي التقليدي على الاستشارة"
+
+actor "المريض" as Patient
+actor "الطبيب" as Doctor
+participant "Frontend" as Frontend
+participant "ConsultationController" as ConsultationCtrl
+participant "Consultation" as Consultation
+
+== عرض الاستشارة ==
+
+Patient -> Frontend: "عرض الاستشارة"
+Frontend -> Consultation: "GET /consultations/{id}"
+Consultation -> Frontend: "consultation_data"
+Frontend -> Patient: "عرض تفاصيل الاستشارة"
+
+== عرض الاستشارات المعلقة ==
+
+Doctor -> Frontend: "عرض الاستشارات المعلقة"
+Frontend -> Consultation: "GET /doctor/consultations/pending"
+Consultation -> Frontend: "pending_consultations"
+Frontend -> Doctor: "قائمة الاستشارات المعلقة"
+
+== كتابة وإرسال الرد ==
+
+Doctor -> Frontend: "اختيار استشارة للرد"
+Frontend -> Doctor: "عرض نموذج الرد"
+Doctor -> Frontend: "كتابة الرد"
+Frontend -> ConsultationCtrl: "POST /doctor/consultations/{id}/reply"
+ConsultationCtrl -> Consultation: "update(replyOfDoctor, status: 'replied')"
+Consultation -> ConsultationCtrl: "consultation_updated"
+ConsultationCtrl -> Frontend: "200 OK + updated_consultation"
+Frontend -> Doctor: "تم إرسال الرد بنجاح"
+
+== إشعار المريض ==
+
+Consultation -> Patient: "إشعار: تم الرد على الاستشارة"
+Patient -> Frontend: "عرض الرد الجديد"
+Frontend -> Consultation: "GET /consultations/{id}"
+Consultation -> Frontend: "consultation_with_reply"
+Frontend -> Patient: "عرض رد الطبيب"
+
+@enduml

@@ -13,10 +13,13 @@ return new class extends Migration
     {
         Schema::create('ratings', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('consultation_id')->constrained();
-            $table->integer('rate');
-            $table->string('comment');
+            $table->foreignId('doctor_id')->constrained('users')->onDelete('cascade');
+            $table->foreignId('patient_id')->constrained('users')->onDelete('cascade');
+            $table->tinyInteger('rating')->comment('1 to 5');
+            $table->text('comment')->nullable();
             $table->timestamps();
+
+            $table->unique(['doctor_id', 'patient_id']); // مريض واحد لكل طبيب
         });
     }
 

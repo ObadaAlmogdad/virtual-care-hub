@@ -1,0 +1,105 @@
+@startuml "المحادثة المرئية مع WebRTC و WebSocket"
+!theme plain
+skinparam backgroundColor #FFFFFF
+skinparam sequenceMessageAlign center
+skinparam responseMessageBelowArrow true
+
+title "مخطط تسلسل: المحادثة المرئية مع WebRTC و WebSocket"
+
+actor "المريض" as Patient
+actor "الطبيب" as Doctor
+participant "Frontend" as Frontend
+participant "VideoCallController" as VideoCtrl
+participant "PusherService" as PusherService
+participant "WebSocketService" as WebSocketService
+participant "WebRTCService" as WebRTCService
+participant "Pusher" as Pusher
+participant "WebSocket" as WebSocket
+participant "STUN/TURN" as STUNServer
+
+== بدء المكالمة المرئية ==
+
+Patient -> Frontend: "طلب محادثة فيديو"
+Frontend -> VideoCtrl: "POST /video-calls/start"
+VideoCtrl -> WebSocketService: "createVideoCall(consultation_id)"
+WebSocketService -> WebSocket: "create room"
+WebSocket -> VideoCtrl: "room_id"
+VideoCtrl -> Frontend: "room_id + signaling_server_url"
+
+== إعداد WebRTC ==
+
+Frontend -> WebRTCService: "initializeWebRTC(room_id)"
+WebRTCService -> STUNServer: "get STUN/TURN servers"
+STUNServer -> WebRTCService: "stun_turn_servers"
+WebRTCService -> Frontend: "RTCConfiguration"
+
+== إشعار الطبيب ==
+
+VideoCtrl -> PusherService: "trigger('video-call-request', call_data)"
+PusherService -> Pusher: "publish to 'video-call-channel'"
+Pusher -> Doctor: "إشعار: طلب محادثة فيديو"
+
+== قبول المكالمة ==
+
+Doctor -> Frontend: "قبول المحادثة المرئية"
+Frontend -> VideoCtrl: "POST /video-calls/{id}/accept"
+VideoCtrl -> WebSocketService: "joinVideoCall(room_id)"
+WebSocketService -> WebSocket: "join room"
+WebSocket -> VideoCtrl: "joined_room"
+
+== إشارات WebRTC ==
+
+Patient -> WebSocket: "offer SDP"
+WebSocket -> Doctor: "forward offer SDP"
+Doctor -> WebSocket: "answer SDP"
+WebSocket -> Patient: "forward answer SDP"
+
+Patient -> WebSocket: "ICE candidate"
+WebSocket -> Doctor: "forward ICE candidate"
+Doctor -> WebSocket: "ICE candidate"
+WebSocket -> Patient: "forward ICE candidate"
+
+== إنشاء اتصال P2P ==
+
+Patient -> WebRTCService: "createPeerConnection"
+WebRTCService -> Patient: "local_stream"
+Patient -> WebRTCService: "addStream(local_stream)"
+WebRTCService -> Patient: "peer_connection_ready"
+
+Doctor -> WebRTCService: "createPeerConnection"
+WebRTCService -> Doctor: "local_stream"
+Doctor -> WebRTCService: "addStream(local_stream)"
+WebRTCService -> Doctor: "peer_connection_ready"
+
+== تبادل الفيديو ==
+
+Patient -> WebRTCService: "start video/audio"
+WebRTCService -> Patient: "media_stream_active"
+Patient -> WebRTCService: "send media stream"
+WebRTCService -> Doctor: "receive media stream"
+
+Doctor -> WebRTCService: "start video/audio"
+WebRTCService -> Doctor: "media_stream_active"
+Doctor -> WebRTCService: "send media stream"
+WebRTCService -> Patient: "receive media stream"
+
+== استمرار المحادثة ==
+
+Patient -> WebRTCService: "continue video stream"
+WebRTCService -> Doctor: "receive continuous stream"
+
+Doctor -> WebRTCService: "continue video stream"
+WebRTCService -> Patient: "receive continuous stream"
+
+== انتهاء المحادثة ==
+
+Patient -> Frontend: "إنهاء المحادثة"
+Frontend -> VideoCtrl: "POST /video-calls/{id}/end"
+VideoCtrl -> WebSocketService: "endVideoCall(room_id)"
+WebSocketService -> WebSocket: "close room"
+WebSocket -> VideoCtrl: "room_closed"
+
+VideoCtrl -> Frontend: "200 OK + call_ended"
+Frontend -> Patient: "تم إنهاء المحادثة"
+
+@enduml

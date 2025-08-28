@@ -31,6 +31,7 @@ class ConsultationController extends Controller
             if ($request->hasFile('media')) {
                 $data['media'] = $request->file('media');
             }
+            $data['patient_id']=Auth::user()->patient->id;
 
             $consultation = $this->consultationService->createConsultation($data);
 
@@ -53,4 +54,23 @@ class ConsultationController extends Controller
             ], 500);
         }
     }
+
+    public function getGeneralConsultations()
+{
+    try {
+        $consultations = $this->consultationService->getGeneralConsultations();
+
+        return response()->json([
+            'status' => 'success',
+            'data' => $consultations
+        ]);
+    } catch (\Exception $e) {
+        return response()->json([
+            'status' => 'error',
+            'message' => 'An error occurred while fetching consultations',
+            'errors' => $e->getMessage()
+        ], 500);
+    }
+}
+
 }

@@ -3,12 +3,8 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Models\Doctor;
-use App\Models\File;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
-use App\Models\DoctorSpecialty;
 use App\Services\DoctorService;
 use App\Services\ConsultationService;
 use Illuminate\Support\Facades\Log;
@@ -23,51 +19,6 @@ class DoctorController extends Controller
     {
         $this->doctorService = $doctorService;
         $this->consultationService = $consultationService;
-    }
-
-    public function updateProfile(Request $request)
-    {
-        // dd($request->toArray());
-
-        $validator = Validator::make($request->all(), [
-    'fullName' => 'sometimes|string|max:255',
-    'phoneNumber' => 'sometimes|string|max:20',
-    'address' => 'sometimes|string|max:255',
-    'birthday' => 'sometimes|date',
-    'gender' => 'sometimes|in:man,woman',
-    'photoPath' => 'sometimes|file|image|max:2048',
-
-    'bio' => 'sometimes|string|max:1000',
-    'facebook_url' => 'nullable|url',
-    'instagram_url' => 'nullable|url',
-    'twitter_url' => 'nullable|url',
-    'doctor_address' => 'nullable|string|max:255',
-    'work_days' => 'sometimes|array',
-    'work_days.*' => 'in:mon,tue,wed,thu,fri,sat,sun',
-    'work_time_in' => 'sometimes|date_format:H:i:s',
-    'work_time_out' => 'sometimes|date_format:H:i:s',
-    'time_for_waiting' => 'sometimes|integer|min:0',
-
-    'start_time' => 'sometimes|date',
-    'end_time' => 'sometimes|date|after_or_equal:start_time',
-    'consultation_fee' => 'sometimes|numeric|min:0',
-    'description' => 'nullable|string|max:1000',
-    'yearOfExper' => 'sometimes|string|max:50',
-    'photo' => 'sometimes|file|image|max:2048',
-]);
-
-if ($validator->fails()) {
-    throw new ValidationException($validator);
-}
-        try {
-            $doctor = $this->doctorService->updateProfile(auth()->id(), $request->all());
-            return response()->json([
-                'message' => 'Profile updated successfully',
-                'doctor' => $doctor
-            ]);
-        } catch (\Exception $e) {
-            return response()->json(['message' => $e->getMessage()], $e->getCode() ?: 500);
-        }
     }
 
     public function getProfile()
@@ -249,7 +200,7 @@ if ($validator->fails()) {
                 'message' => 'Validation failed',
                 'errors' => $e->errors()
             ], 422);
-        }  catch (\Exception $e) {
+        } catch (\Exception $e) {
             Log::error('Schedule consultation error', [
                 'id' => $consultationId,
                 'error' => $e->getMessage(),
@@ -260,6 +211,90 @@ if ($validator->fails()) {
                 'status' => 'error',
                 'message' => 'An error occurred while scheduling the consultation'
             ], 500);
+        }
+    }
+
+public function replyToAnswer(Request $request, $consultationId, $answerId=1)
+{
+    $request->validate([
+        'replayOfDoctor' => 'required|string',
+        // 'accepted' => 'required|boolean',
+    ]);
+
+    try {
+        $data = [
+            'consultation_id' => $consultationId,
+            'user_question_tag_answer_id' => $answerId,
+            'replayOfDoctor' => $request->input('replayOfDoctor'),
+            'accepted' =>true,
+            // 'accepted' => $request->input('accepted'),
+        ];
+
+
+        $result = $this->consultationService->storeDoctorReply($data);
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Doctor reply saved',
+            'data' => $result
+        ]);
+    } catch (\Exception $e) {
+        return response()->json([
+            'status' => 'error',
+            'message' => 'Failed to save reply',
+            'error' => $e->getMessage()
+        ], 500);
+    }
+}
+
+
+
+    public function getBySpecialty($medicalTagId)
+    {
+        return $this->doctorService->getDoctorsBySpecialty($medicalTagId);
+    }
+
+    public function updateProfile(Request $request)
+    {
+        // dd($request->toArray());
+
+        $validator = Validator::make($request->all(), [
+            'fullName' => 'sometimes|string|max:255',
+            'phoneNumber' => 'sometimes|string|max:20',
+            'address' => 'sometimes|string|max:255',
+            'birthday' => 'sometimes|date',
+            'gender' => 'sometimes|in:man,woman',
+            'photoPath' => 'sometimes|file|image|max:2048',
+
+            'bio' => 'sometimes|string|max:1000',
+            'facebook_url' => 'nullable|url',
+            'instagram_url' => 'nullable|url',
+            'twitter_url' => 'nullable|url',
+            'doctor_address' => 'nullable|string|max:255',
+            'work_days' => 'sometimes|array',
+            'work_days.*' => 'in:Monday,Tuesday,Wednesday,Thursday,Friday,Saturday,Sunday',
+            'work_time_in' => 'sometimes|date_format:H:i:s',
+            'work_time_out' => 'sometimes|date_format:H:i:s',
+            'time_for_waiting' => 'sometimes|integer|min:0',
+
+            'start_time' => 'sometimes|date',
+            'end_time' => 'sometimes|date|after_or_equal:start_time',
+            'consultation_fee' => 'sometimes|numeric|min:0',
+            'description' => 'nullable|string|max:1000',
+            'yearOfExper' => 'sometimes|string|max:50',
+            'photo' => 'sometimes|file|image|max:2048',
+        ]);
+
+        if ($validator->fails()) {
+            throw new ValidationException($validator);
+        }
+        try {
+            $doctor = $this->doctorService->updateProfile(auth()->id(), $request->all());
+            return response()->json([
+                'message' => 'Profile updated successfully',
+                'doctor' => $doctor
+            ]);
+        } catch (\Exception $e) {
+            return response()->json(['message' => $e->getMessage()], $e->getCode() ?: 500);
         }
     }
 }

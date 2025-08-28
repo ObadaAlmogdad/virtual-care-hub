@@ -28,8 +28,8 @@ class MedicalTag extends Model
     public function doctors(): BelongsToMany
     {
         return $this->belongsToMany(Doctor::class, 'doctor_specialties')
-                    ->withPivot(['time', 'photo', 'consultationFee'])
-                    ->withTimestamps();
+            ->withPivot(['time', 'photo', 'consultationFee'])
+            ->withTimestamps();
     }
 
     public function questions()
@@ -37,8 +37,14 @@ class MedicalTag extends Model
         return $this->hasMany(Question::class);
     }
 
+    public function questionMedicalTags(): BelongsToMany
+    {
+        return $this->belongsToMany(Question::class, 'question_medical_tags');
+    }
+
     public function doctorSpecialties()
     {
         return $this->hasMany(DoctorSpecialty::class);
     }
+
 }

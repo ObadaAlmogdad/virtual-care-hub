@@ -3,7 +3,7 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
-use App\Models\DoctorSpecialty;
+use App\Models\MedicalTag;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Question>
@@ -18,7 +18,7 @@ class QuestionFactory extends Factory
     public function definition(): array
     {
         return [
-            'specialty_id' => DoctorSpecialty::factory(),
+            'specialty_id' => MedicalTag::factory(),
             'parent_question_id' => null,
             'parent_answer_value' => null,
             'question_text' => $this->faker->sentence(),

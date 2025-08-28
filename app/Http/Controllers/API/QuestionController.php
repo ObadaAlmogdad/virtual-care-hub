@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Services\QuestionService;
@@ -29,6 +29,11 @@ class QuestionController extends Controller
         if (!$question) return null;
         
         $formattedQuestion = $question->toArray();
+        
+        // Map question_text to content for API consistency
+        $formattedQuestion['content'] = $formattedQuestion['question_text'] ?? '';
+        unset($formattedQuestion['question_text']);
+        
         if (isset($formattedQuestion['medical_tags'])) {
             // Remove duplicate medical tags
             $uniqueTags = collect($formattedQuestion['medical_tags'])->unique('id')->values();
@@ -42,6 +47,7 @@ class QuestionController extends Controller
                 ];
             })->toArray();
         }
+        
         return $formattedQuestion;
     }
 
@@ -166,6 +172,31 @@ class QuestionController extends Controller
             return response()->json([
                 'status' => 'success',
                 'message' => 'Medical tags synced successfully'
+            ]);
+        } catch (\Exception $e) {
+            return $this->handleError($e);
+        }
+    }
+
+    public function attachQuestionsToMedicalTag(Request $request, $medicalTagId)
+    {
+        try {
+            $request->validate([
+                'question_ids' => 'required|array',
+                'question_ids.*' => 'exists:questions,id'
+            ]);
+
+            // Remove duplicates from the input
+            $uniqueQuestionIds = array_unique($request->question_ids);
+            $this->questionService->attachQuestionsToMedicalTag($medicalTagId, $uniqueQuestionIds);
+            
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Questions attached to medical tag successfully',
+                'data' => [
+                    'medical_tag_id' => $medicalTagId,
+                    'attached_questions_count' => count($uniqueQuestionIds)
+                ]
             ]);
         } catch (\Exception $e) {
             return $this->handleError($e);
