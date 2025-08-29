@@ -1,9 +1,8 @@
 {
 	"info": {
-		"_postman_id": "0e568892-cb86-492a-a3ea-abc4e98d2714",
+		"_postman_id": "b4032646-c381-4c60-b56c-fe159d3f62ed",
 		"name": "1--g Final",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "29936059"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
 		{
@@ -5826,6 +5825,338 @@
 						}
 					},
 					"response": []
+				}
+			]
+		},
+		{
+			"name": "plan & sup",
+			"item": [
+				{
+					"name": "plan user",
+					"item": [
+						{
+							"name": "Public - List Active Plans",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://127.0.0.1:8000/api/plans",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8000",
+									"path": [
+										"api",
+										"plans"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Subscriptions - My Current Subscription",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer 3|pdyRQZqFTqFRp0AX0Soxc3PW9RQ1O1MjJyYaKFg54d89e241",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "http://127.0.0.1:8000/api/subscriptions/my",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8000",
+									"path": [
+										"api",
+										"subscriptions",
+										"my"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Public - Show Plan by ID",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer 3|pdyRQZqFTqFRp0AX0Soxc3PW9RQ1O1MjJyYaKFg54d89e241",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "http://127.0.0.1:8000/api/plans/1",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8000",
+									"path": [
+										"api",
+										"plans",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Subscriptions - Subscribe with Wallet",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer 3|pdyRQZqFTqFRp0AX0Soxc3PW9RQ1O1MjJyYaKFg54d89e241",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "http://127.0.0.1:8000/api/plans/1/subscribe/wallet",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8000",
+									"path": [
+										"api",
+										"plans",
+										"1",
+										"subscribe",
+										"wallet"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Subscriptions - Join by Family Code",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer 3|pdyRQZqFTqFRp0AX0Soxc3PW9RQ1O1MjJyYaKFg54d89e241",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"family_code\": \"CUSILNIKDG\"\n}"
+								},
+								"url": {
+									"raw": "http://127.0.0.1:8000/api/subscriptions/join",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8000",
+									"path": [
+										"api",
+										"subscriptions",
+										"join"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "New Folder",
+					"item": [
+						{
+							"name": "Admin - Create Plan",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer 2|BMqUdfoindGWBOByBMH302nVDbd3fNCdlUPLUJbe315e261a",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"name\": \"Gold\",\n  \"price\": 99.99,\n  \"duration\": 30,\n  \"is_active\": true,\n  \"priority\": 1,\n  \"expected_wait_minutes\": 5,\n  \"private_consultations_quota\": 3,\n  \"ai_consultations_quota\": 20,\n  \"max_family_members\": 4,\n  \"savings_percent\": 15\n}"
+								},
+								"url": {
+									"raw": "http://127.0.0.1:8000/api/plans",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8000",
+									"path": [
+										"api",
+										"plans"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Admin - Update Plan",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer 2|BMqUdfoindGWBOByBMH302nVDbd3fNCdlUPLUJbe315e261a",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"price\": 89.99,\n  \"is_active\": true\n}"
+								},
+								"url": {
+									"raw": "http://127.0.0.1:8000/api/plans/1",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8000",
+									"path": [
+										"api",
+										"plans",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Admin - Toggle Plan Active",
+							"request": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer 2|BMqUdfoindGWBOByBMH302nVDbd3fNCdlUPLUJbe315e261a",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "http://127.0.0.1:8000/api/plans/1/toggle",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8000",
+									"path": [
+										"api",
+										"plans",
+										"1",
+										"toggle"
+									]
+								}
+							},
+							"response": []
+						}
+					]
 				}
 			]
 		}
