@@ -5,6 +5,8 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Complaint;
+use App\Models\User;
+use App\Notifications\ComplaintCreatedNotification;
 use App\Services\ComplaintService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -96,6 +98,11 @@ class ComplaintController extends Controller
         $data['media'] = $mediaPaths;
 
         $complaint = Complaint::create($data);
+        $admins = User::where('role', 'admin')->get();
+        foreach ($admins as $admin) {
+        $admin->notify(new ComplaintCreatedNotification($complaint));
+    }
+
         return response()->json(['data' => $complaint], 201);
     }
 
@@ -108,7 +115,7 @@ class ComplaintController extends Controller
         if (!$user->isAdmin() && $complaint->user_id !== $user->id) {
             return response()->json(['error' => 'Unauthorized'], 403);
         }
-        // جلب بيانات الطبيب
+
         $doctorName = null;
         $doctorEmail = null;
         $doctorId = null;
