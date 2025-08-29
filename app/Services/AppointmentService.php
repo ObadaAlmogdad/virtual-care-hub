@@ -4,15 +4,18 @@ namespace App\Services;
 
 use App\Models\Doctor;
 use App\Repositories\Interfaces\AppointmentRepositoryInterface;
+use App\Services\BillingService;
 use Carbon\Carbon;
 
 class AppointmentService
 {
     protected $appointmentRepo;
+    protected $billingService;
 
-    public function __construct(AppointmentRepositoryInterface $appointmentRepo)
+    public function __construct(AppointmentRepositoryInterface $appointmentRepo, BillingService $billingService)
     {
         $this->appointmentRepo = $appointmentRepo;
+        $this->billingService = $billingService;
     }
 
     public function getAvailableDays(Doctor $doctor, int $daysAhead = 14): array
@@ -75,7 +78,33 @@ class AppointmentService
 
     public function bookAppointment(array $data)
     {
-        return $this->appointmentRepo->create($data);
+        // Create appointment first
+        $appointment = $this->appointmentRepo->create($data);
+
+        // Determine fee: prefer active specialty fee; fallback to any specialty
+        $doctor = \App\Models\Doctor::findOrFail($appointment->doctor_id);
+        $specialty = $doctor->specialties()->where('is_active', true)->orderByDesc('consultation_fee')->first();
+        if (!$specialty) {
+            $specialty = $doctor->specialties()->orderByDesc('consultation_fee')->first();
+        }
+        $amount = (float) ($specialty?->consultation_fee ?? 0);
+
+        if ($amount > 0) {
+            // Fetch user ids
+            $patientUserId = \App\Models\Patient::find($appointment->patient_id)->user_id;
+            $doctorUserId = $doctor->user_id;
+
+            // Process payment via subscription or wallet
+            $this->billingService->processAppointmentPayment(
+                $patientUserId,
+                $doctorUserId,
+                $amount,
+                $appointment->id,
+                \App\Models\Appointment::class
+            );
+        }
+
+        return $appointment;
     }
 
     public function getAppointmentsByPatient($patientId)
@@ -94,9 +123,7 @@ class AppointmentService
     }
 
     public function getAllDoctorAppointments()
-{
-    return $this->appointmentRepo->getAllDoctorAppointments();
-}
-
-
+    {
+        return $this->appointmentRepo->getAllDoctorAppointments();
+    }
 }
