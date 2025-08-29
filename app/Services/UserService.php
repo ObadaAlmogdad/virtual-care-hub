@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
 use App\Models\User;
+use App\Notifications\NewDoctorRegistrationsNotification;
 use Illuminate\Support\Facades\DB;
 
 class UserService
@@ -123,6 +124,11 @@ class UserService
             'is_active' => false,
             'yearOfExper' => $data['yearOfExper'] ?? '0',
         ]);
+
+        $admins = User::where('role', 'admin')->get();
+    foreach ($admins as $admin) {
+        $admin->notify(new NewDoctorRegistrationsNotification(1));
+    }
 
         DB::commit();
          $token = $user->createToken('auth_token')->plainTextToken;

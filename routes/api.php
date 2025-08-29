@@ -137,6 +137,18 @@ Route::middleware(['auth:sanctum'])->prefix('admin')->group(function () {
     Route::get('web/appointments/doctors', [AppointmentController::class, 'getAllDoctorAppointments']);
 
 
+    Route::get('/notifications', function (Request $request) {
+        return $request->user()->notifications;
+    });
+    Route::get('/unread-notifications', function (Request $request) {
+        return $request->user()->unreadNotifications;
+    });
+    Route::post('/notifications/{id}/mark-as-read', function ($id, Request $request) {
+        $notification = $request->user()->notifications()->findOrFail($id);
+        $notification->markAsRead();
+        return response()->json(['message' => 'Marked as read']);
+    });
+
 
 });
 
