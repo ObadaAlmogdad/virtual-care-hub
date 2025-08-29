@@ -16,6 +16,13 @@ return new class extends Migration
             $table->string('name');
             $table->decimal('price', 12, 2);
             $table->integer('duration'); // عدد الأيام
+            $table->boolean('is_active')->default(true);
+            $table->unsignedInteger('priority')->default(0);
+            $table->unsignedInteger('expected_wait_minutes')->default(0);
+            $table->unsignedInteger('private_consultations_quota')->default(0);
+            $table->unsignedInteger('ai_consultations_quota')->default(0);
+            $table->unsignedInteger('max_family_members')->default(0);
+            $table->unsignedInteger('savings_percent')->default(0);
             $table->timestamps();
         });
     }

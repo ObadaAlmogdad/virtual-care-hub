@@ -21,6 +21,8 @@ use App\Http\Controllers\API\VideoCallController;
 use App\Http\Controllers\API\VideoCallTokenController;
 use App\Http\Controllers\API\PublicDoctorController;
 use App\Http\Controllers\API\MedicalArticleController;
+use App\Http\Controllers\API\PlanController;
+use App\Http\Controllers\API\SubscriptionController;
 use App\Http\Controllers\API\QuestionController;
 use App\Http\Controllers\API\UserController;
 use Illuminate\Broadcasting\Broadcast;
@@ -249,3 +251,19 @@ Route::get('/doctors/top-rated', [DoctorRatingController::class, 'topRatedDoctor
 // Public Articles
 Route::get('/articles', [MedicalArticleController::class, 'index']);
 Route::get('/articles/{id}', [MedicalArticleController::class, 'show']);
+
+// Plans (public list, admin manage)
+Route::get('/plans', [PlanController::class, 'index']);
+Route::get('/plans/{plan}', [PlanController::class, 'show']);
+Route::middleware(['auth:sanctum', 'ensure.role:Admin'])->group(function () {
+    Route::post('/plans', [PlanController::class, 'store']);
+    Route::put('/plans/{plan}', [PlanController::class, 'update']);
+    Route::patch('/plans/{plan}/toggle', [PlanController::class, 'toggle']);
+});
+
+// Subscriptions (patient)
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/subscriptions/my', [SubscriptionController::class, 'my']);
+    Route::post('/plans/{plan}/subscribe/wallet', [SubscriptionController::class, 'subscribeWithWallet']);
+    Route::post('/subscriptions/join', [SubscriptionController::class, 'joinByCode']);
+});

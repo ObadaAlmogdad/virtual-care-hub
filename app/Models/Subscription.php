@@ -17,9 +17,10 @@ class Subscription extends Model
         'status',
         'payment_method',
         'payment_id',
-        //رصيد الاسئلة 
-        //رصيد ai
-        //الكود
+        'remaining_private_consultations',
+        'remaining_ai_consultations',
+        'family_code',
+        'max_family_members',
     ];
 
     public function user()
@@ -30,5 +31,11 @@ class Subscription extends Model
     public function plan()
     {
         return $this->belongsTo(Plan::class);
+    }
+
+    public function members()
+    {
+        return $this->belongsToMany(User::class, 'subscription_members')
+            ->withTimestamps();
     }
 } 

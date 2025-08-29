@@ -20,6 +20,10 @@ return new class extends Migration
             $table->enum('status', ['active', 'expired', 'cancelled']);
             $table->enum('payment_method', ['wallet', 'stripe']);
             $table->unsignedBigInteger('payment_id')->nullable();
+            $table->unsignedInteger('remaining_private_consultations')->default(0);
+            $table->unsignedInteger('remaining_ai_consultations')->default(0);
+            $table->string('family_code', 12)->unique()->nullable();
+            $table->unsignedInteger('max_family_members')->default(0);
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
