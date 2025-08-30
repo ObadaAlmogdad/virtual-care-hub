@@ -169,6 +169,11 @@ Route::middleware(['auth:sanctum'])->prefix('admin')->group(function () {
     });
 
 
+    Route::get('/doctors/unverified', [DoctorController::class, 'unverified']);
+
+    Route::post('/doctors/{doctorId}/rejectVerification', [DoctorController::class, 'rejectVerification']);
+
+
 });
 
 Route::middleware('auth:sanctum')->group(function () {

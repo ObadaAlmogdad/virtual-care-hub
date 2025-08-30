@@ -180,4 +180,19 @@ class DoctorService
 
         return $this->doctorRepository->updateProfileFull($userId, $userData, $doctorData, $specialtyData);
     }
+
+    public function getUnverifiedDoctors()
+    {
+        return $this->doctorRepository->getUnverifiedDoctors();
+    }
+
+
+
+public function rejectDoctor(int $doctorId, string $reason)
+{
+    $doctor = $this->doctorRepository->rejectDoctorVerification($doctorId, $reason);
+
+    return $doctor;
+}
+
 }

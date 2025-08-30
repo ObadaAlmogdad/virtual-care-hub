@@ -131,4 +131,27 @@ class DoctorRepository implements DoctorRepositoryInterface
         }])->get();
     }
 
+    public function getUnverifiedDoctors()
+    {
+        return $this->model
+        ->whereHas('user', function ($q) {
+            $q->where('isVerified', 0);
+        })
+        ->with('user')
+        ->orderByDesc('created_at')
+        ->get();
+    }
+
+    public function rejectDoctorVerification(int $doctorId, string $reason)
+{
+    $doctor = $this->model->with('user')->findOrFail($doctorId);
+
+    $doctor->user->update([
+        'isVerified' => -1,
+        'rejection_reason' => $reason,
+    ]);
+
+    return $doctor;
+}
+
 }
