@@ -50,16 +50,15 @@ class AgoraService
     }
 
     /**
-     * Build Agora RTC token using HMAC-SHA256
+     * Build Agora RTC token using correct algorithm
      */
     private function buildToken(string $channelName, int $uid, int $role, int $expireAt): string
     {
-        // Token structure: version + app_id + channel_name + uid + role + expire_at + random_int
-        $version = '006'; // Agora token version
-        $randomInt = random_int(0, 999999);
+        // Agora token version 006
+        $version = '006';
         
-        // Build message
-        $message = $version . $this->appId . $channelName . $uid . $role . $expireAt . $randomInt;
+        // Build message string (without signature)
+        $message = $version . $this->appId . $channelName . $uid . $role . $expireAt;
         
         // Generate HMAC-SHA256 signature
         $signature = hash_hmac('sha256', $message, $this->appCertificate, true);
@@ -67,7 +66,7 @@ class AgoraService
         // Encode signature to base64
         $signatureBase64 = base64_encode($signature);
         
-        // Build final token
+        // Build final token: message + signature
         $token = $message . $signatureBase64;
         
         return $token;
