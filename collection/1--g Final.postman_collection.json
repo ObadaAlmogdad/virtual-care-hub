@@ -1,8 +1,9 @@
 {
 	"info": {
-		"_postman_id": "b4032646-c381-4c60-b56c-fe159d3f62ed",
+		"_postman_id": "a782ad40-e6e4-4528-8b11-baa684d52022",
 		"name": "1--g Final",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "29936059"
 	},
 	"item": [
 		{
@@ -1589,85 +1590,6 @@
 				{
 					"name": "auth",
 					"item": [
-						{
-							"name": "register",
-							"request": {
-								"method": "POST",
-								"header": [
-									{
-										"key": "Content-Type",
-										"value": "application/json",
-										"type": "default"
-									},
-									{
-										"key": "Accept",
-										"value": "application/json",
-										"type": "default"
-									}
-								],
-								"body": {
-									"mode": "formdata",
-									"formdata": [
-										{
-											"key": "fullName",
-											"value": "test",
-											"type": "text"
-										},
-										{
-											"key": "email",
-											"value": "admin1@example.com",
-											"type": "text"
-										},
-										{
-											"key": "password",
-											"value": "123123123",
-											"type": "text"
-										},
-										{
-											"key": "phoneNumber",
-											"value": "1234567890",
-											"type": "text"
-										},
-										{
-											"key": "photo",
-											"type": "file",
-											"src": "/C:/Users/HP/Desktop/LIFE/1.png"
-										},
-										{
-											"key": "address",
-											"value": "test",
-											"type": "text"
-										},
-										{
-											"key": "birthday",
-											"value": "1990-01-01",
-											"type": "text"
-										},
-										{
-											"key": "gender",
-											"value": " m",
-											"type": "text"
-										}
-									]
-								},
-								"url": {
-									"raw": "http://127.0.0.1:8000/api/register-admin",
-									"protocol": "http",
-									"host": [
-										"127",
-										"0",
-										"0",
-										"1"
-									],
-									"port": "8000",
-									"path": [
-										"api",
-										"register-admin"
-									]
-								}
-							},
-							"response": []
-						},
 						{
 							"name": "login",
 							"event": [
@@ -6157,6 +6079,302 @@
 							"response": []
 						}
 					]
+				}
+			]
+		},
+		{
+			"name": "Super Admin",
+			"item": [
+				{
+					"name": "Admin register",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "default"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "default"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "fullName",
+									"value": "test",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "admin1@example.com",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "123123123",
+									"type": "text"
+								},
+								{
+									"key": "phoneNumber",
+									"value": "1234567890",
+									"type": "text"
+								},
+								{
+									"key": "photo",
+									"type": "file",
+									"src": "/C:/Users/HP/Desktop/LIFE/1.png"
+								},
+								{
+									"key": "address",
+									"value": "test",
+									"type": "text"
+								},
+								{
+									"key": "birthday",
+									"value": "1990-01-01",
+									"type": "text"
+								},
+								{
+									"key": "gender",
+									"value": " m",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/api/superAdmin/register-admin",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"superAdmin",
+								"register-admin"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Admins index",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "default"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "default"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://127.0.0.1:8000/api/superAdmin/admins",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"superAdmin",
+								"admins"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get Admin by ID",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "default"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "default"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://127.0.0.1:8000/api/superAdmin/admins/2",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"superAdmin",
+								"admins",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update Admin by ID",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "default"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "default"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "fullName",
+									"value": "testgvhghgffhh",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "gffvghfhgf@example.com",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "123123123",
+									"type": "text"
+								},
+								{
+									"key": "phoneNumber",
+									"value": "1234567890",
+									"type": "text"
+								},
+								{
+									"key": "address",
+									"value": "test",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "birthday",
+									"value": "1990-01-01",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "gender",
+									"value": " m",
+									"type": "text",
+									"disabled": true
+								}
+							]
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/api/superAdmin/admins/2",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"superAdmin",
+								"admins",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Admin by ID",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "default"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "default"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://127.0.0.1:8000/api/superAdmin/admins/2",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"superAdmin",
+								"admins",
+								"2"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		}
