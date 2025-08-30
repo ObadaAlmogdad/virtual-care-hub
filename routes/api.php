@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\API\AdminController;
 use App\Http\Controllers\API\AppointmentController;
+use App\Http\Controllers\API\FinancialController;
 
 use App\Http\Controllers\API\ChatController;
 use App\Http\Controllers\API\ComplaintController;
@@ -9,7 +10,7 @@ use App\Http\Controllers\API\ConsultationController;
 use App\Http\Controllers\API\ConsultationResultController;
 use App\Http\Controllers\API\DoctorController;
 use App\Http\Controllers\Api\DoctorRatingController;
-use App\Http\Controllers\Api\MedicalBannerController;
+use App\Http\Controllers\API\MedicalBannerController;
 use App\Http\Controllers\API\MedicalHistoryController;
 use App\Http\Controllers\API\MedicalSpecialtyController;
 use App\Http\Controllers\API\WalletTopupController;
@@ -147,6 +148,13 @@ Route::middleware(['auth:sanctum'])->prefix('admin')->group(function () {
 
     Route::get('web/appointments/doctors', [AppointmentController::class, 'getAllDoctorAppointments']);
 
+    // Financial APIs
+    Route::get('/financial/summary', [FinancialController::class, 'getFinancialSummary']);
+    Route::get('/financial/monthly-revenue', [FinancialController::class, 'getMonthlyRevenue']);
+    Route::get('/financial/revenue-by-specialty', [FinancialController::class, 'getRevenueBySpecialty']);
+    Route::get('/financial/transactions', [FinancialController::class, 'getTransactionRecords']);
+    Route::get('/financial/debug', [FinancialController::class, 'debugTransactions']);
+
 
     Route::get('/notifications', function (Request $request) {
         return $request->user()->notifications;
@@ -266,7 +274,11 @@ Route::middleware('auth:sanctum')->group(function () {
 });
 
 //banner
-Route::apiResource('medical-banners', MedicalBannerController::class);
+Route::get('/medical-banners', [MedicalBannerController::class, 'index']);
+Route::get('/medical-banners/{id}', [MedicalBannerController::class, 'show']);
+Route::post('/medical-banners', [MedicalBannerController::class, 'store']);
+Route::put('/medical-banners/{id}', [MedicalBannerController::class, 'update']);
+Route::delete('/medical-banners/{id}', [MedicalBannerController::class, 'destroy']);
 Route::patch('medical-banners/{id}/toggle-active', [MedicalBannerController::class, 'toggleActive']);
 // end //banner
 
@@ -282,6 +294,11 @@ Route::get('/doctors/top-rated', [DoctorRatingController::class, 'topRatedDoctor
 Route::get('/articles', [MedicalArticleController::class, 'index']);
 Route::get('/articles/{id}', [MedicalArticleController::class, 'show']);
 
+// Debug routes (temporary, remove in production)
+Route::get('/debug/transactions', [FinancialController::class, 'debugTransactions']);
+Route::get('/debug/financial-summary', [FinancialController::class, 'getFinancialSummary']);
+Route::get('/debug/monthly-revenue', [FinancialController::class, 'getMonthlyRevenue']);
+
 // Plans (public list, admin manage)
 Route::get('/plans', [PlanController::class, 'index']);
 Route::get('/plans/{plan}', [PlanController::class, 'show']);
@@ -289,6 +306,7 @@ Route::middleware(['auth:sanctum', 'ensure.role:Admin'])->group(function () {
     Route::post('/plans', [PlanController::class, 'store']);
     Route::put('/plans/{plan}', [PlanController::class, 'update']);
     Route::patch('/plans/{plan}/toggle', [PlanController::class, 'toggle']);
+    Route::delete('/plans/{plan}', [PlanController::class, 'destroy']);
 });
 
 // Subscriptions (patient)

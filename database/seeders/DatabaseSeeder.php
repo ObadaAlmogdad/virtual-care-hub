@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -12,29 +11,16 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        // Run essential seeders in order
         $this->call([
-            ComplaintSeeder::class,
-            UserQuestionTagAnswerSeeder::class,
-            AppointmentSeeder::class,
-            ConsultationSeeder::class,
-            ConsultationAnswerSeeder::class,
-            ConsultationResultSeeder::class,
-            ConsultationResultHistorySeeder::class,
-            DoctorSeeder::class,
-            DoctorSpecialtySeeder::class,
-            FileSeeder::class,
-            MedicalHistorySeeder::class,
-            MedicalTagSeeder::class,
-            PatientSeeder::class,
-            PlanSeeder::class,
-            QuestionSeeder::class,
-            RatingSeeder::class,
-            SubscriptionSeeder::class,
-            TransactionSeeder::class,
-            WalletSeeder::class,
-            PaymentSeeder::class,
-            QuestionMedicalTagSeeder::class,
-            DoctorSpecialtiesSeeder::class,
+            MedicalTagSeeder::class,      // Medical specialties
+            DoctorSeeder::class,          // Create doctors
+            PatientSeeder::class,         // Create patients
+            DoctorSpecialtySeeder::class, // Assign specialties to doctors
+            PlanSeeder::class,            // Create subscription plans
+            WalletSeeder::class,          // Create wallets for users
+            SubscriptionSeeder::class,    // Create subscriptions
+            TransactionSeeder::class,     // Create financial transactions
         ]);
     }
 }

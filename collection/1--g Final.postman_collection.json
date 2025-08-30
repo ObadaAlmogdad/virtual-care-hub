@@ -2550,100 +2550,6 @@
 								}
 							},
 							"response": []
-						},
-						{
-							"name": "get Unverified",
-							"protocolProfileBehavior": {
-								"disableBodyPruning": true
-							},
-							"request": {
-								"method": "GET",
-								"header": [
-									{
-										"key": "Content-Type",
-										"value": "application/json",
-										"type": "default"
-									},
-									{
-										"key": "Accept",
-										"value": "application/json",
-										"type": "default"
-									},
-									{
-										"key": "Authorization",
-										"value": "Bearer {{token}}",
-										"type": "default"
-									}
-								],
-								"body": {
-									"mode": "formdata",
-									"formdata": []
-								},
-								"url": {
-									"raw": "http://127.0.0.1:8000/api/admin/doctors/unverified",
-									"protocol": "http",
-									"host": [
-										"127",
-										"0",
-										"0",
-										"1"
-									],
-									"port": "8000",
-									"path": [
-										"api",
-										"admin",
-										"doctors",
-										"unverified"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "reject Doctor Verification",
-							"request": {
-								"method": "POST",
-								"header": [
-									{
-										"key": "Content-Type",
-										"value": "application/json",
-										"type": "default"
-									},
-									{
-										"key": "Accept",
-										"value": "application/json",
-										"type": "default"
-									},
-									{
-										"key": "Authorization",
-										"value": "Bearer {{token}}",
-										"type": "default"
-									}
-								],
-								"body": {
-									"mode": "raw",
-									"raw": "{\r\n  \"reason\": \"لم يتم استكمال الأوراق المطلوبة للتوثيق\"\r\n}\r\n"
-								},
-								"url": {
-									"raw": "http://127.0.0.1:8000/api/admin/doctors/176/rejectVerification",
-									"protocol": "http",
-									"host": [
-										"127",
-										"0",
-										"0",
-										"1"
-									],
-									"port": "8000",
-									"path": [
-										"api",
-										"admin",
-										"doctors",
-										"176",
-										"rejectVerification"
-									]
-								}
-							},
-							"response": []
 						}
 					]
 				}
@@ -6147,7 +6053,7 @@
 									},
 									{
 										"key": "Authorization",
-										"value": "Bearer 2|BMqUdfoindGWBOByBMH302nVDbd3fNCdlUPLUJbe315e261a",
+										"value": "Bearer 2|ytmLcZ7P8ntZqCYlGZIZ6CVpDftj9CEotbQTwWLUbc0c7236",
 										"type": "text"
 									}
 								],
@@ -6260,6 +6166,50 @@
 										"api",
 										"admin",
 										"subscriptions"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "delete",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer 2|ytmLcZ7P8ntZqCYlGZIZ6CVpDftj9CEotbQTwWLUbc0c7236",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"name\": \"Gold\",\n  \"price\": 99.99,\n  \"duration\": 30,\n  \"is_active\": true,\n  \"priority\": 1,\n  \"expected_wait_minutes\": 5,\n  \"private_consultations_quota\": 3,\n  \"ai_consultations_quota\": 20,\n  \"max_family_members\": 4,\n  \"savings_percent\": 15\n}"
+								},
+								"url": {
+									"raw": "http://127.0.0.1:8000/api/plans/1",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8000",
+									"path": [
+										"api",
+										"plans",
+										"1"
 									]
 								}
 							},
@@ -6419,7 +6369,7 @@
 							}
 						],
 						"url": {
-							"raw": "http://127.0.0.1:8000/api/superAdmin/admins/382",
+							"raw": "http://127.0.0.1:8000/api/superAdmin/admins/2",
 							"protocol": "http",
 							"host": [
 								"127",
@@ -6432,7 +6382,7 @@
 								"api",
 								"superAdmin",
 								"admins",
-								"382"
+								"2"
 							]
 						}
 					},
@@ -6464,26 +6414,23 @@
 							"urlencoded": [
 								{
 									"key": "fullName",
-									"value": "test111",
+									"value": "testgvhghgffhh",
 									"type": "text"
 								},
 								{
 									"key": "email",
 									"value": "gffvghfhgf@example.com",
-									"type": "text",
-									"disabled": true
+									"type": "text"
 								},
 								{
 									"key": "password",
-									"value": "12312312344",
-									"type": "text",
-									"disabled": true
+									"value": "123123123",
+									"type": "text"
 								},
 								{
 									"key": "phoneNumber",
 									"value": "1234567890",
-									"type": "text",
-									"disabled": true
+									"type": "text"
 								},
 								{
 									"key": "address",
@@ -6506,7 +6453,7 @@
 							]
 						},
 						"url": {
-							"raw": "http://127.0.0.1:8000/api/superAdmin/admins/382",
+							"raw": "http://127.0.0.1:8000/api/superAdmin/admins/2",
 							"protocol": "http",
 							"host": [
 								"127",
@@ -6519,7 +6466,7 @@
 								"api",
 								"superAdmin",
 								"admins",
-								"382"
+								"2"
 							]
 						}
 					},
@@ -6561,6 +6508,202 @@
 								"superAdmin",
 								"admins",
 								"2"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Financial",
+			"item": [
+				{
+					"name": "financial/summary",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer 2|ytmLcZ7P8ntZqCYlGZIZ6CVpDftj9CEotbQTwWLUbc0c7236",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Gold\",\n  \"price\": 99.99,\n  \"duration\": 30,\n  \"is_active\": true,\n  \"priority\": 1,\n  \"expected_wait_minutes\": 5,\n  \"private_consultations_quota\": 3,\n  \"ai_consultations_quota\": 20,\n  \"max_family_members\": 4,\n  \"savings_percent\": 15\n}"
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/api/financial/summary",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"financial",
+								"summary"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "monthly-revenue",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer 2|ytmLcZ7P8ntZqCYlGZIZ6CVpDftj9CEotbQTwWLUbc0c7236",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Gold\",\n  \"price\": 99.99,\n  \"duration\": 30,\n  \"is_active\": true,\n  \"priority\": 1,\n  \"expected_wait_minutes\": 5,\n  \"private_consultations_quota\": 3,\n  \"ai_consultations_quota\": 20,\n  \"max_family_members\": 4,\n  \"savings_percent\": 15\n}"
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/api/admin/financial/monthly-revenue",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"admin",
+								"financial",
+								"monthly-revenue"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "revenue-by-specialty",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer 2|ytmLcZ7P8ntZqCYlGZIZ6CVpDftj9CEotbQTwWLUbc0c7236",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Gold\",\n  \"price\": 99.99,\n  \"duration\": 30,\n  \"is_active\": true,\n  \"priority\": 1,\n  \"expected_wait_minutes\": 5,\n  \"private_consultations_quota\": 3,\n  \"ai_consultations_quota\": 20,\n  \"max_family_members\": 4,\n  \"savings_percent\": 15\n}"
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/api/admin/financial/revenue-by-specialty",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"admin",
+								"financial",
+								"revenue-by-specialty"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "transactions",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer 2|ytmLcZ7P8ntZqCYlGZIZ6CVpDftj9CEotbQTwWLUbc0c7236",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Gold\",\n  \"price\": 99.99,\n  \"duration\": 30,\n  \"is_active\": true,\n  \"priority\": 1,\n  \"expected_wait_minutes\": 5,\n  \"private_consultations_quota\": 3,\n  \"ai_consultations_quota\": 20,\n  \"max_family_members\": 4,\n  \"savings_percent\": 15\n}"
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/api/admin/financial/transactions",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"admin",
+								"financial",
+								"transactions"
 							]
 						}
 					},
