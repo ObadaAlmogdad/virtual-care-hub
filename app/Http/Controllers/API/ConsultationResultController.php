@@ -16,12 +16,12 @@ class ConsultationResultController extends Controller
         $this->consultationResultService = $consultationResultService;
     }
 
-    public function getMyDoctorReply($patientId,$consultationId)
+    public function getMyDoctorReply($consultationId)
     {
 
         // $patientId = Auth::user()->patient->id;
         // dd($consultationId);
-        $reply = $this->consultationResultService->getReplyForSpecificConsultation($patientId, $consultationId);
+        $reply = $this->consultationResultService->getReplyForSpecificConsultation($consultationId);
         // dd($reply->toArray());
         if (!$reply) {
             return response()->json([

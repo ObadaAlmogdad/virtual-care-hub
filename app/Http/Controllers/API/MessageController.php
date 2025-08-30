@@ -181,7 +181,7 @@ class MessageController extends Controller
      */
     private function getMessageType($extension)
     {
-        $imageExtensions = ['jpg', 'jpeg', 'png', 'gif'];
+    $imageExtensions = ['jpg', 'jpeg', 'png', 'gif'];
     $fileExtensions  = ['pdf', 'doc', 'docx', 'txt'];
     $audioExtensions = ['mp3', 'wav', 'm4a'];
     $videoExtensions = ['mp4', 'mov', 'avi', 'mkv'];
