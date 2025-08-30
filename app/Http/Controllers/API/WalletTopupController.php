@@ -124,7 +124,7 @@ class WalletTopupController extends Controller
 
             return response()->json([
                 'success' => true,
-                'message' => '✅ تم شحن المحفظة بنجاح (تجريبي)',
+                'message' => '✅ تم شحن المحفظة بنجاح ',
                 'data' => [
                     'amount_added' => $amount,
                     'new_balance' => $wallet->balance,
@@ -144,7 +144,57 @@ class WalletTopupController extends Controller
             Log::error('Test wallet topup failed: ' . $e->getMessage());
             return response()->json([
                 'success' => false,
-                'error' => 'فشل في شحن المحفظة التجريبي',
+                'error' => 'فشل في شحن المحفظة ',
+                'message' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * عرض رصيد محفظة المستخدم
+     */
+    public function getBalance(Request $request)
+    {
+        try {
+            $user = Auth::user();
+            
+            // البحث عن محفظة المستخدم أو إنشاؤها إذا لم تكن موجودة
+            $wallet = Wallet::firstOrCreate(
+                ['user_id' => $user->id],
+                ['balance' => 0]
+            );
+
+            // جلب آخر 5 معاملات للمحفظة
+            $recentTransactions = $wallet->transactions()
+                ->orderBy('created_at', 'desc')
+                ->take(5)
+                ->get();
+
+            return response()->json([
+                'success' => true,
+                'data' => [
+                    'wallet_id' => $wallet->id,
+                    'user_id' => $user->id,
+                    'current_balance' => $wallet->balance,
+                    'recent_transactions' => $recentTransactions->map(function ($transaction) {
+                        return [
+                            'id' => $transaction->id,
+                            'type' => $transaction->type,
+                            'amount' => $transaction->amount,
+                            'description' => $transaction->description,
+                            'created_at' => $transaction->created_at->format('Y-m-d H:i:s'),
+                            'reference_type' => $transaction->reference_type
+                        ];
+                    }),
+                    'total_transactions' => $wallet->transactions()->count()
+                ]
+            ]);
+
+        } catch (\Exception $e) {
+            Log::error('Get wallet balance failed: ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'error' => 'فشل في جلب رصيد المحفظة',
                 'message' => $e->getMessage()
             ], 500);
         }
