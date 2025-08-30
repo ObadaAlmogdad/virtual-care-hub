@@ -121,7 +121,16 @@ Route::middleware(['auth:sanctum'])->prefix('medical-tags')->group(function () {
 });
 
 //admin api
-Route::post('/register-admin', [UserController::class, 'registerAdmin']);
+
+Route::middleware(['auth:sanctum'])->prefix('superAdmin')->group(function () {
+    Route::post('/register-admin', [UserController::class, 'registerAdmin']);
+    Route::get('/admins', [AdminController::class, 'index']);
+    Route::get('/admins/{id}', [AdminController::class, 'show']);
+    Route::put('/admins/{id}', [UserController::class, 'update']);
+    Route::delete('/admins/{id}', [UserController::class, 'destroy']);
+
+
+});
 Route::middleware(['auth:sanctum'])->prefix('admin')->group(function () {
 
     Route::get('/users/count-by-role', [AdminController::class, 'countUsersByRole']);

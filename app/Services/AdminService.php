@@ -21,14 +21,23 @@ class AdminService
     {
         // جلب المستخدم
         $user = $this->userRepository->findById($id);
-        
+
         if (!$user) {
             throw new \Exception('المستخدم غير موجود');
         }
 
         $this->userRepository->update($user, ['isVerified' => true]);
-        
-        // إرسال إشعار تأكيد الحساب
+
         $user->notify(new AccountVerificationNotification($user));
+    }
+
+     public function listAdmins()
+    {
+        return $this->userRepository->getAllAdmin();
+    }
+
+        public function getAdmin(int $id)
+    {
+        return $this->userRepository->findAdminById($id);
     }
 }

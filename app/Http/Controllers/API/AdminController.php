@@ -19,6 +19,16 @@ class AdminController extends Controller
         $this->adminService = $adminService;
     }
 
+    public function index()
+    {
+        return response()->json($this->adminService->listAdmins());
+    }
+
+    public function show($id)
+    {
+        return response()->json($this->adminService->getAdmin($id));
+    }
+
     public function verficat($id)
     {
         try {

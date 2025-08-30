@@ -15,4 +15,7 @@ interface UserRepositoryInterface
     public function createUser(array $data): User;
     public function updateProfile(User $user, array $userData, ?array $patientData = null, ?array $medicalData = null);
 
+    public function getAllAdmin();
+    public function findAdminById(int $id);
+
 }

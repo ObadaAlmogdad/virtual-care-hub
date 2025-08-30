@@ -77,4 +77,15 @@ class UserRepository implements UserRepositoryInterface
         }
     return $patient->load('user', 'medicalHistory');
 }
+
+    public function getAllAdmin()
+    {
+        return $this->model->where('role','Admin')->paginate(10);
+    }
+
+    public function findAdminById(int $id)
+    {
+        return $this->model->where('role', 'Admin')->findOrFail($id);
+    }
+
 }
