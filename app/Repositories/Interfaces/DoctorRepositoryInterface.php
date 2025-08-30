@@ -15,4 +15,6 @@ interface DoctorRepositoryInterface
     public function updateSpecialty($doctorId, $specialtyId, array $data);
     public function deleteSpecialty($doctorId, $specialtyId);
     public function getByMedicalTag($medicalTagId);
+    public function getUnverifiedDoctors();
+    public function rejectDoctorVerification(int $doctorId, string $reason);
 }

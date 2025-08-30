@@ -25,6 +25,7 @@ return new class extends Migration
             $table->string('role');
             $table->boolean('isVerified');
            // $table->string('stripe_account_id')->nullable();
+           $table->string('rejection_reason')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

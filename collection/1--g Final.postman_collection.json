@@ -2551,6 +2551,100 @@
 								}
 							},
 							"response": []
+						},
+						{
+							"name": "get Unverified",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "default"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "default"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer {{token}}",
+										"type": "default"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": []
+								},
+								"url": {
+									"raw": "http://127.0.0.1:8000/api/admin/doctors/unverified",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8000",
+									"path": [
+										"api",
+										"admin",
+										"doctors",
+										"unverified"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "reject Doctor Verification",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "default"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "default"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer {{token}}",
+										"type": "default"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"reason\": \"لم يتم استكمال الأوراق المطلوبة للتوثيق\"\r\n}\r\n"
+								},
+								"url": {
+									"raw": "http://127.0.0.1:8000/api/admin/doctors/176/rejectVerification",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8000",
+									"path": [
+										"api",
+										"admin",
+										"doctors",
+										"176",
+										"rejectVerification"
+									]
+								}
+							},
+							"response": []
 						}
 					]
 				}
@@ -6232,7 +6326,7 @@
 							}
 						],
 						"url": {
-							"raw": "http://127.0.0.1:8000/api/superAdmin/admins/2",
+							"raw": "http://127.0.0.1:8000/api/superAdmin/admins/382",
 							"protocol": "http",
 							"host": [
 								"127",
@@ -6245,7 +6339,7 @@
 								"api",
 								"superAdmin",
 								"admins",
-								"2"
+								"382"
 							]
 						}
 					},
@@ -6277,23 +6371,26 @@
 							"urlencoded": [
 								{
 									"key": "fullName",
-									"value": "testgvhghgffhh",
+									"value": "test111",
 									"type": "text"
 								},
 								{
 									"key": "email",
 									"value": "gffvghfhgf@example.com",
-									"type": "text"
+									"type": "text",
+									"disabled": true
 								},
 								{
 									"key": "password",
-									"value": "123123123",
-									"type": "text"
+									"value": "12312312344",
+									"type": "text",
+									"disabled": true
 								},
 								{
 									"key": "phoneNumber",
 									"value": "1234567890",
-									"type": "text"
+									"type": "text",
+									"disabled": true
 								},
 								{
 									"key": "address",
@@ -6316,7 +6413,7 @@
 							]
 						},
 						"url": {
-							"raw": "http://127.0.0.1:8000/api/superAdmin/admins/2",
+							"raw": "http://127.0.0.1:8000/api/superAdmin/admins/382",
 							"protocol": "http",
 							"host": [
 								"127",
@@ -6329,7 +6426,7 @@
 								"api",
 								"superAdmin",
 								"admins",
-								"2"
+								"382"
 							]
 						}
 					},

@@ -297,4 +297,26 @@ public function replyToAnswer(Request $request, $consultationId, $answerId=1)
             return response()->json(['message' => $e->getMessage()], $e->getCode() ?: 500);
         }
     }
+    public function unverified()
+    {
+        $doctors = $this->doctorService->getUnverifiedDoctors();
+        return response()->json(['data' => $doctors]);
+    }
+
+    public function rejectVerification(Request $request, $doctorId)
+{
+    // $this->authorize('isAdmin');
+
+    $request->validate([
+        'reason' => 'required|string|max:500',
+    ]);
+
+    $doctor = $this->doctorService->rejectDoctor($doctorId, $request->reason);
+
+    return response()->json([
+        'message' => 'تم رفض طلب التفعيل بنجاح وارسال السبب ',
+        'doctor' => $doctor
+    ]);
+}
+
 }
