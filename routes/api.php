@@ -167,6 +167,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('payments/status/{payment}', [PaymentController::class, 'getPaymentStatus']);
     Route::post('wallet/topup', [WalletTopupController::class, 'topup']);
     Route::post('/wallet/confirm', [WalletTopupController::class, 'confirmTopup']);
+    Route::post('/wallet/test-topup', [WalletTopupController::class, 'testTopup']);
+    Route::get('/wallet/balance', [WalletTopupController::class, 'getBalance']);
 });
 
 Route::post('stripe/webhook', [StripeWebhookController::class, 'handle']);
