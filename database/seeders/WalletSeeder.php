@@ -18,11 +18,14 @@ class WalletSeeder extends Seeder
         $users = User::all();
 
         foreach ($users as $user) {
-            // Create wallet for each user with random balance
-            Wallet::create([
-                'user_id' => $user->id,
-                'balance' => rand(100, 1000), // Random balance between 100-1000
-            ]);
+            // Check if wallet already exists for this user
+            if (!Wallet::where('user_id', $user->id)->exists()) {
+                // Create wallet for each user with random balance
+                Wallet::create([
+                    'user_id' => $user->id,
+                    'balance' => rand(1000, 10000), // Random balance between 100-1000
+                ]);
+            }
         }
     }
 }

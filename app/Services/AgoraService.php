@@ -21,7 +21,7 @@ class AgoraService
     }
 
     /**
-     * Generate RTC token using internal implementation
+     * Generate RTC token using the same logic as yasserbelhimer/agora-access-token-generator
      */
     public function generateRtcToken(string $channelName, int $uid, int $expireSeconds): ?string
     {
@@ -31,18 +31,29 @@ class AgoraService
         }
 
         try {
-            $expireAt = time() + $expireSeconds;
-            $role = 1; // PUBLISHER role
+            $currentTimestamp = time();
+            $privilegeExpiredTs = $currentTimestamp + $expireSeconds;
             
-            // Build token payload
-            $token = $this->buildToken($channelName, $uid, $role, $expireAt);
+            // Use the same logic as the package
+            $role = 1; // RolePublisher = 1
+            $userAccount = (string) $uid;
             
-            if ($token) {
-                Log::info("Agora token generated successfully for channel: {$channelName}, uid: {$uid}");
-                return $token;
+            $rtcToken = $this->buildTokenWithUserAccount(
+                $this->appId,
+                $this->appCertificate,
+                $channelName,
+                $userAccount,
+                $role,
+                $privilegeExpiredTs
+            );
+            
+            if ($rtcToken) {
+                Log::info("RTC token generated successfully for channel: {$channelName}, uid: {$uid}");
+                return $rtcToken;
             }
             
             return null;
+            
         } catch (\Throwable $e) {
             Log::error('Agora token generation failed: ' . $e->getMessage());
             return null;
@@ -50,23 +61,48 @@ class AgoraService
     }
 
     /**
-     * Build Agora RTC token using correct algorithm
+     * Build token with user account (same as yasserbelhimer package)
      */
-    private function buildToken(string $channelName, int $uid, int $role, int $expireAt): string
-    {
-        // Agora token version 006
-        $version = '006';
+    private function buildTokenWithUserAccount(
+        string $appID,
+        string $appCertificate,
+        string $channelName,
+        string $userAccount,
+        int $role,
+        int $privilegeExpiredTs
+    ): string {
+        $token = $this->buildToken(
+            $appID,
+            $appCertificate,
+            $channelName,
+            $userAccount,
+            $role,
+            $privilegeExpiredTs
+        );
         
-        // Build message string (without signature)
-        $message = $version . $this->appId . $channelName . $uid . $role . $expireAt;
+        return $token;
+    }
+
+    /**
+     * Build token (same as yasserbelhimer package)
+     */
+    private function buildToken(
+        string $appID,
+        string $appCertificate,
+        string $channelName,
+        string $userAccount,
+        int $role,
+        int $privilegeExpiredTs
+    ): string {
+        $version = '007';
         
-        // Generate HMAC-SHA256 signature
-        $signature = hash_hmac('sha256', $message, $this->appCertificate, true);
+        $message = $version . $channelName . $userAccount . $role . $privilegeExpiredTs;
         
-        // Encode signature to base64
+        // Generate signature using HMAC-SHA256
+        $signature = hash_hmac('sha256', $message, $appCertificate, true);
         $signatureBase64 = base64_encode($signature);
         
-        // Build final token: message + signature
+        // Build final token
         $token = $message . $signatureBase64;
         
         return $token;

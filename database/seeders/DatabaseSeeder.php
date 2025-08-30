@@ -21,6 +21,21 @@ class DatabaseSeeder extends Seeder
             WalletSeeder::class,          // Create wallets for users
             SubscriptionSeeder::class,    // Create subscriptions
             TransactionSeeder::class,     // Create financial transactions
+            
+            // Additional seeders for complete system
+            FileSeeder::class,                    // Create sample files
+            MedicalHistorySeeder::class,          // Create medical histories
+            QuestionSeeder::class,                // Create medical questions
+            QuestionMedicalTagSeeder::class,      // Link questions to tags
+            UserQuestionTagAnswerSeeder::class,   // Create user answers
+            ConsultationSeeder::class,            // Create consultations
+            ConsultationResultSeeder::class,      // Create consultation results
+            ConsultationResultHistorySeeder::class, // Create result histories
+            ConsultationAnswerSeeder::class,      // Create consultation answers
+            RatingSeeder::class,                  // Create doctor ratings
+            ComplaintSeeder::class,               // Create complaints
+            AppointmentSeeder::class,             // Create appointments
+            PaymentSeeder::class,                 // Create payments
         ]);
     }
 }

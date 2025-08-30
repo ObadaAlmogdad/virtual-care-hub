@@ -83,10 +83,11 @@ class PatientSeeder extends Seeder
             $user = User::create([
                 'fullName' => fake()->name(),
                 'email' => fake()->unique()->safeEmail(),
-                'password' => bcrypt('password'),
+                'password' => bcrypt('123123123'),
                 'role' => 'Patient',
                 'isVerified' => true,
                 'phoneNumber' => fake()->phoneNumber(),
+                'photoPath' => fake()->imageUrl(),
                 'address' => fake()->city(),
                 'birthday' => fake()->date(),
                 'gender' => fake()->randomElement(['Male', 'Female']),
