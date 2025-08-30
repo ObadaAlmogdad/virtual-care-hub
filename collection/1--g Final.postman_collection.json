@@ -6170,6 +6170,50 @@
 								}
 							},
 							"response": []
+						},
+						{
+							"name": "delete",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer 2|ytmLcZ7P8ntZqCYlGZIZ6CVpDftj9CEotbQTwWLUbc0c7236",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"name\": \"Gold\",\n  \"price\": 99.99,\n  \"duration\": 30,\n  \"is_active\": true,\n  \"priority\": 1,\n  \"expected_wait_minutes\": 5,\n  \"private_consultations_quota\": 3,\n  \"ai_consultations_quota\": 20,\n  \"max_family_members\": 4,\n  \"savings_percent\": 15\n}"
+								},
+								"url": {
+									"raw": "http://127.0.0.1:8000/api/plans/1",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8000",
+									"path": [
+										"api",
+										"plans",
+										"1"
+									]
+								}
+							},
+							"response": []
 						}
 					]
 				}

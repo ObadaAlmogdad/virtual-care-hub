@@ -67,6 +67,49 @@ class PlanController extends Controller
         $plan = $this->planService->toggleActive($plan);
         return response()->json($plan);
     }
+
+    /**
+     * حذف خطة
+     */
+    public function destroy(Plan $plan)
+    {
+        try {
+            // التحقق من وجود اشتراكات نشطة على هذه الخطة
+            $activeSubscriptions = \App\Models\Subscription::where('plan_id', $plan->id)
+                ->where('status', 'active')
+                ->count();
+
+            if ($activeSubscriptions > 0) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'لا يمكن حذف الخطة لوجود ' . $activeSubscriptions . ' اشتراك نشط عليها',
+                    'active_subscriptions_count' => $activeSubscriptions
+                ], 400);
+            }
+
+            // حذف الخطة
+            $planName = $plan->name;
+            $plan->delete();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'تم حذف الخطة "' . $planName . '" بنجاح',
+                'deleted_plan' => [
+                    'id' => $plan->id,
+                    'name' => $planName
+                ]
+            ]);
+
+        } catch (\Exception $e) {
+            \Log::error('Plan deletion failed: ' . $e->getMessage());
+            
+            return response()->json([
+                'success' => false,
+                'message' => 'فشل في حذف الخطة',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
 }
 
 

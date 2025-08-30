@@ -302,6 +302,7 @@ Route::middleware(['auth:sanctum', 'ensure.role:Admin'])->group(function () {
     Route::post('/plans', [PlanController::class, 'store']);
     Route::put('/plans/{plan}', [PlanController::class, 'update']);
     Route::patch('/plans/{plan}/toggle', [PlanController::class, 'toggle']);
+    Route::delete('/plans/{plan}', [PlanController::class, 'destroy']);
 });
 
 // Subscriptions (patient)
