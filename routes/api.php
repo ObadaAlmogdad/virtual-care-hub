@@ -10,7 +10,7 @@ use App\Http\Controllers\API\ConsultationController;
 use App\Http\Controllers\API\ConsultationResultController;
 use App\Http\Controllers\API\DoctorController;
 use App\Http\Controllers\Api\DoctorRatingController;
-use App\Http\Controllers\Api\MedicalBannerController;
+use App\Http\Controllers\API\MedicalBannerController;
 use App\Http\Controllers\API\MedicalHistoryController;
 use App\Http\Controllers\API\MedicalSpecialtyController;
 use App\Http\Controllers\API\WalletTopupController;
