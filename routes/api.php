@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\API\AdminController;
 use App\Http\Controllers\API\AppointmentController;
+use App\Http\Controllers\API\FinancialController;
 
 use App\Http\Controllers\API\ChatController;
 use App\Http\Controllers\API\ComplaintController;
@@ -147,6 +148,13 @@ Route::middleware(['auth:sanctum'])->prefix('admin')->group(function () {
 
     Route::get('web/appointments/doctors', [AppointmentController::class, 'getAllDoctorAppointments']);
 
+    // Financial APIs
+    Route::get('/financial/summary', [FinancialController::class, 'getFinancialSummary']);
+    Route::get('/financial/monthly-revenue', [FinancialController::class, 'getMonthlyRevenue']);
+    Route::get('/financial/revenue-by-specialty', [FinancialController::class, 'getRevenueBySpecialty']);
+    Route::get('/financial/transactions', [FinancialController::class, 'getTransactionRecords']);
+    Route::get('/financial/debug', [FinancialController::class, 'debugTransactions']);
+
 
     Route::get('/notifications', function (Request $request) {
         return $request->user()->notifications;
@@ -276,6 +284,12 @@ Route::get('/doctors/top-rated', [DoctorRatingController::class, 'topRatedDoctor
 // Public Articles
 Route::get('/articles', [MedicalArticleController::class, 'index']);
 Route::get('/articles/{id}', [MedicalArticleController::class, 'show']);
+
+// Debug routes (temporary, remove in production)
+Route::get('/debug/transactions', [FinancialController::class, 'debugTransactions']);
+Route::get('/debug/financial-summary', [FinancialController::class, 'getFinancialSummary']);
+Route::get('/debug/monthly-revenue', [FinancialController::class, 'getMonthlyRevenue']);
+Route::get('/test/financial', [TestFinancialController::class, 'testTransactions']);
 
 // Plans (public list, admin manage)
 Route::get('/plans', [PlanController::class, 'index']);
