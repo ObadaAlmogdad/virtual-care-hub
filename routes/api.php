@@ -136,6 +136,8 @@ Route::middleware(['auth:sanctum'])->prefix('admin')->group(function () {
     Route::get('/users/count-by-role', [AdminController::class, 'countUsersByRole']);
     Route::get('/doctors', [AdminController::class, 'getAllDoctors']);
     Route::get('/patients', [AdminController::class, 'getAllPatients']);
+    Route::get('/plans', [AdminController::class, 'getAllPlans']);
+    Route::get('/subscriptions', [AdminController::class, 'getAllSubscriptions']);
     Route::get('/consultations/general/count', [ConsultationController::class, 'GeneralConsultationsCount']);
     Route::get('/consultations/special/count', [ConsultationController::class, 'SpecialConsultationsCount']);
     Route::get('/complaintsByType', [ComplaintController::class, 'complaintsByType']);

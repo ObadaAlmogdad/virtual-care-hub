@@ -224,4 +224,74 @@ class AdminController extends Controller
             'total' => $patients->total(),
         ]);
     }
+
+    /**
+     * Get all plans (including inactive ones) for admin
+     */
+    public function getAllPlans(Request $request)
+    {
+        $plans = \App\Models\Plan::all();
+
+        return response()->json([
+            'status' => 'success',
+            'data' => $plans,
+
+        ]);
+    }
+
+    /**
+     * Get all patient subscriptions with details for admin
+     */
+    public function getAllSubscriptions(Request $request)
+    {
+        $subscriptions = \App\Models\Subscription::with(['user', 'plan', 'members'])
+            ->paginate(30);
+
+        $result = $subscriptions->map(function ($subscription) {
+            $user = $subscription->user;
+            $plan = $subscription->plan;
+            $members = $subscription->members;
+            
+            return [
+                'id' => $subscription->id,
+                'patient' => [
+                    'id' => $user ? $user->id : null,
+                    'name' => $user ? $user->fullName : null,
+                    'email' => $user ? $user->email : null,
+                ],
+                'plan' => [
+                    'id' => $plan ? $plan->id : null,
+                    'name' => $plan ? $plan->name : null,
+                    'price' => $plan ? $plan->price : null,
+                ],
+                'subscription_details' => [
+                    'start_date' => $subscription->start_date,
+                    'end_date' => $subscription->end_date,
+                    'status' => $subscription->status,
+                    'payment_method' => $subscription->payment_method,
+                    'remaining_private_consultations' => $subscription->remaining_private_consultations,
+                    'remaining_ai_consultations' => $subscription->remaining_ai_consultations,
+                    'family_code' => $subscription->family_code,
+                    'max_family_members' => $subscription->max_family_members,
+                ],
+                'family_members' => $members->map(function ($member) {
+                    return [
+                        'id' => $member->id,
+                        'name' => $member->fullName,
+                        'email' => $member->email,
+                    ];
+                }),
+                'created_at' => $subscription->created_at,
+            ];
+        });
+
+        return response()->json([
+            'status' => 'success',
+            'data' => $result,
+            'current_page' => $subscriptions->currentPage(),
+            'last_page' => $subscriptions->lastPage(),
+            'per_page' => $subscriptions->perPage(),
+            'total' => $subscriptions->total(),
+        ]);
+    }
 }
