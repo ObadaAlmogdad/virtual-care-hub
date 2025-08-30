@@ -88,4 +88,65 @@ class WalletTopupController extends Controller
             return response()->json(['error' => 'فشل تأكيد الدفع'], 500);
         }
     }
+
+
+    public function testTopup(Request $request)
+    {
+        try {
+            $request->validate([
+                'amount' => 'required|numeric|min:1|max:10000',
+            ]);
+
+            $user = Auth::user();
+            $amount = $request->amount;
+
+            // إنشاء أو تحديث المحفظة
+            $wallet = Wallet::firstOrCreate(
+                ['user_id' => $user->id],
+                ['balance' => 0]
+            );
+
+            // إضافة الرصيد إلى المحفظة
+            $wallet->increment('balance', $amount);
+
+            // إنشاء معاملة تجريبية
+            $transaction = \App\Models\Transaction::create([
+                'wallet_id' => $wallet->id,
+                'type' => 'charge',
+                'amount' => $amount,
+                'reference_id' => 'TEST_' . time() . '_' . $user->id,
+                'reference_type' => 'test_topup',
+                'description' => 'شحن  للمحفظة ',
+            ]);
+
+            // تحديث رصيد المحفظة
+            $wallet->refresh();
+
+            return response()->json([
+                'success' => true,
+                'message' => '✅ تم شحن المحفظة بنجاح (تجريبي)',
+                'data' => [
+                    'amount_added' => $amount,
+                    'new_balance' => $wallet->balance,
+                    'transaction_id' => $transaction->id,
+                    'wallet_id' => $wallet->id,
+                    'user_id' => $user->id,
+                    'note' => 'هذه عملية تجريبية للتطوير والاختبار فقط'
+                ]
+            ]);
+
+        } catch (ValidationException $e) {
+            return response()->json([
+                'success' => false,
+                'errors' => $e->errors()
+            ], 422);
+        } catch (\Exception $e) {
+            Log::error('Test wallet topup failed: ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'error' => 'فشل في شحن المحفظة التجريبي',
+                'message' => $e->getMessage()
+            ], 500);
+        }
+    }
 }
