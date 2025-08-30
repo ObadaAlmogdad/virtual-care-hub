@@ -294,7 +294,6 @@ Route::get('/articles/{id}', [MedicalArticleController::class, 'show']);
 Route::get('/debug/transactions', [FinancialController::class, 'debugTransactions']);
 Route::get('/debug/financial-summary', [FinancialController::class, 'getFinancialSummary']);
 Route::get('/debug/monthly-revenue', [FinancialController::class, 'getMonthlyRevenue']);
-Route::get('/test/financial', [TestFinancialController::class, 'testTransactions']);
 
 // Plans (public list, admin manage)
 Route::get('/plans', [PlanController::class, 'index']);
