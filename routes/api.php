@@ -274,7 +274,11 @@ Route::middleware('auth:sanctum')->group(function () {
 });
 
 //banner
-Route::apiResource('medical-banners', MedicalBannerController::class);
+Route::get('/medical-banners', [MedicalBannerController::class, 'index']);
+Route::get('/medical-banners/{id}', [MedicalBannerController::class, 'show']);
+Route::post('/medical-banners', [MedicalBannerController::class, 'store']);
+Route::put('/medical-banners/{id}', [MedicalBannerController::class, 'update']);
+Route::delete('/medical-banners/{id}', [MedicalBannerController::class, 'destroy']);
 Route::patch('medical-banners/{id}/toggle-active', [MedicalBannerController::class, 'toggleActive']);
 // end //banner
 
