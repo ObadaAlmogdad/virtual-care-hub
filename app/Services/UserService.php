@@ -143,6 +143,7 @@ class UserService
 
     public function updateUser($id, array $data)
     {
+        $user=User::findOrFail($id);
         $validator = Validator::make($data, [
             'fullName' => 'sometimes|required|string|max:255',
             'email' => 'sometimes|required|string|email|max:255|unique:users,email,' . $id,
@@ -159,8 +160,8 @@ class UserService
         if (isset($data['password'])) {
             $data['password'] = Hash::make($data['password']);
         }
-
-        $user = $this->userRepository->update($id, $data);
+        $user = $this->userRepository->update($user, $data);
+        // dd($user);
         return ['success' => true, 'user' => $user];
     }
 

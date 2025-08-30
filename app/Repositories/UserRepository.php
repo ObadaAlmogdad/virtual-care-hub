@@ -38,14 +38,18 @@ class UserRepository implements UserRepositoryInterface
         return User::create($data);
     }
 
-    public function update(User $user, array $data): bool
+    public function update(User $user, array $data)
     {
-        return $user->update($data);
+        $admin = $this->findById($user->id);
+        $admin->update($data);
+        $admin->save();
+        return $admin;
     }
 
-    public function delete(User $user): bool
+    public function delete($id): bool
     {
-        return $user->delete();
+        $admin = $this->findById($id);
+        return $admin->delete();
     }
 
     public function createUser(array $data): User

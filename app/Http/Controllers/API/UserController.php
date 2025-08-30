@@ -193,6 +193,7 @@ class UserController extends Controller
 
     public function update(Request $request, $id)
     {
+        // dd($request->toArray());
         $result = $this->userService->updateUser($id, $request->all());
 
         if (!$result['success']) {
