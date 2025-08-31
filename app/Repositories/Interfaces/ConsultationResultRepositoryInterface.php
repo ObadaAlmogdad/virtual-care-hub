@@ -4,5 +4,5 @@ namespace App\Repositories\Interfaces;
 
 interface ConsultationResultRepositoryInterface
 {
-    public function getDoctorReplyForSpecificConsultation($patientId, $consultationId);
+    public function getDoctorReplyForSpecificConsultation($consultationId);
 }

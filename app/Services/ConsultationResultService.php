@@ -13,8 +13,8 @@ class ConsultationResultService
         $this->consultationResultRepository = $consultationResultRepository;
     }
 
-    public function getReplyForSpecificConsultation($patientId, $consultationId)
+    public function getReplyForSpecificConsultation($consultationId)
     {
-        return $this->consultationResultRepository->getDoctorReplyForSpecificConsultation($patientId, $consultationId);
+        return $this->consultationResultRepository->getDoctorReplyForSpecificConsultation( $consultationId);
     }
 }

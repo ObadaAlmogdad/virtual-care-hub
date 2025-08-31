@@ -14,13 +14,12 @@ class ConsultationResultRepository implements ConsultationResultRepositoryInterf
         $this->model = $model;
     }
 
-    public function getDoctorReplyForSpecificConsultation($patientId, $consultationId)
+    public function getDoctorReplyForSpecificConsultation($consultationId)
     {
         // dd("asdkashdk");
         return $this->model
-            ->whereHas('consultation', function ($q) use ($patientId, $consultationId) {
-                $q->where('patient_id', $patientId)
-                  ->where('id', $consultationId);
+            ->whereHas('consultation', function ($q) use ($consultationId) {
+                $q->where('id', $consultationId);
             })
             ->with(['consultation', 'consultation.doctor.user'])
             ->first();

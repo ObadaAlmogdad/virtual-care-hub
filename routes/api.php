@@ -85,7 +85,7 @@ Route::prefix('public')->group(function () {
     Route::get('medical-specialties/{id}/doctors', [MedicalSpecialtyController::class, 'getDoctorsBySpecialty']);
 
     // Consultation API
-    Route::get('/patient/{patientId}/consultations/{consultationId}/reply', [ConsultationResultController::class, 'getMyDoctorReply']);
+    Route::get('/patient/consultations/{consultationId}/reply', [ConsultationResultController::class, 'getMyDoctorReply']);
 });
 
 Route::prefix('all')->group(function () {

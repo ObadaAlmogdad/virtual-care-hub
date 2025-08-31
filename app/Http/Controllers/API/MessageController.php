@@ -19,7 +19,7 @@ class MessageController extends Controller
     public function sendMessage(Request $request, $chat_id)
     {
         $user = Auth::user();
-        
+
         // التحقق من وجود المحادثة والصلاحية
         $chat = Chat::with(['doctor.user', 'patient.user'])
             ->where('id', $chat_id)
@@ -41,7 +41,7 @@ class MessageController extends Controller
 
         $request->validate([
             'message_content' => 'required_without:file',
-            'file' => 'nullable|file|mimes:jpg,jpeg,png,gif,pdf,doc,docx,txt|max:10240', // 10MB max
+            'file' => 'nullable|file|mimes:jpg,jpeg,png,gif,pdf,doc,docx,txt,mp3,wav,m4a,mp4,mov,avi,mkv|max:51200', // 10MB max
         ]);
 
         $messageData = [
@@ -58,7 +58,7 @@ class MessageController extends Controller
 
             $messageData['file_path'] = $filePath;
             $messageData['message_type'] = $this->getMessageType($file->getClientOriginalExtension());
-            
+
             // إذا كان هناك نص مع الملف، احفظه في message_content
             if ($request->filled('message_content')) {
                 $messageData['message_content'] = $request->message_content;
@@ -102,7 +102,7 @@ class MessageController extends Controller
     public function getMessages(Request $request, $chat_id)
     {
         $user = Auth::user();
-        
+
         // التحقق من وجود المحادثة والصلاحية
         $chat = Chat::with(['doctor.user', 'patient.user'])
             ->where('id', $chat_id)
@@ -150,7 +150,7 @@ class MessageController extends Controller
     public function deleteMessage(Request $request, $chat_id, $message_id)
     {
         $user = Auth::user();
-        
+
         $message = Message::where('id', $message_id)
             ->where('chat_id', $chat_id)
             ->where('sender_id', $user->id)
@@ -181,17 +181,23 @@ class MessageController extends Controller
      */
     private function getMessageType($extension)
     {
-        $imageExtensions = ['jpg', 'jpeg', 'png', 'gif'];
-        $fileExtensions = ['pdf', 'doc', 'docx', 'txt'];
-        
-        $extension = strtolower($extension);
-        
-        if (in_array($extension, $imageExtensions)) {
-            return 'image';
-        } elseif (in_array($extension, $fileExtensions)) {
-            return 'file';
-        }
-        
+    $imageExtensions = ['jpg', 'jpeg', 'png', 'gif'];
+    $fileExtensions  = ['pdf', 'doc', 'docx', 'txt'];
+    $audioExtensions = ['mp3', 'wav', 'm4a'];
+    $videoExtensions = ['mp4', 'mov', 'avi', 'mkv'];
+
+    $extension = strtolower($extension);
+
+    if (in_array($extension, $imageExtensions)) {
+        return 'image';
+    } elseif (in_array($extension, $fileExtensions)) {
+        return 'file';
+    } elseif (in_array($extension, $audioExtensions)) {
+        return 'audio';
+    } elseif (in_array($extension, $videoExtensions)) {
+        return 'video';
+    }
+
         return 'file'; // افتراضي
     }
 }
